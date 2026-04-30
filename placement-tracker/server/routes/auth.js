@@ -1,12 +1,48 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const crypto = require('crypto');
 const User = require('../models/User');
 const { protect } = require('../middleware/auth');
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET || 'fallback_secret', { expiresIn: '7d' });
 };
+
+const googleClientId = process.env.GOOGLE_CLIENT_ID;
+const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
+const googleCallbackUrl = process.env.GOOGLE_CALLBACK_URL || `${process.env.SERVER_URL || process.env.API_URL || 'http://localhost:5000'}/api/auth/google/callback`;
+
+router.use(passport.initialize());
+
+if (googleClientId && googleClientSecret) {
+  passport.use(new GoogleStrategy({
+    clientID: googleClientId,
+    clientSecret: googleClientSecret,
+    callbackURL: googleCallbackUrl,
+  }, async (accessToken, refreshToken, profile, done) => {
+    try {
+      const email = profile.emails?.[0]?.value;
+      if (!email) return done(new Error('Google account did not return email')); 
+
+      let user = await User.findOne({ email });
+      if (!user) {
+        const randomPassword = crypto.randomBytes(20).toString('hex');
+        user = await User.create({
+          name: profile.displayName || `${profile.name?.givenName || 'Google'} ${profile.name?.familyName || 'User'}`,
+          email,
+          password: randomPassword,
+          role: 'viewer',
+        });
+      }
+      return done(null, user);
+    } catch (err) {
+      return done(err);
+    }
+  }));
+}
 
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
@@ -48,6 +84,29 @@ router.post('/login', async (req, res) => {
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
+});
+
+// GET /api/auth/google
+router.get('/google', (req, res, next) => {
+  if (!googleClientId || !googleClientSecret) {
+    const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
+    return res.redirect(`${clientUrl}/login?error=google_not_configured`);
+  }
+  return passport.authenticate('google', { scope: ['profile', 'email'], session: false })(req, res, next);
+});
+
+// GET /api/auth/google/callback
+router.get('/google/callback', passport.authenticate('google', {
+  session: false,
+  failureRedirect: `${process.env.CLIENT_URL || 'http://localhost:3000'}/login?error=google_auth_failed`,
+}), (req, res) => {
+  const user = req.user;
+  const token = generateToken(user._id);
+  const redirectUrl = new URL(process.env.CLIENT_URL || 'http://localhost:3000');
+  redirectUrl.pathname = '/login';
+  redirectUrl.searchParams.set('token', token);
+  redirectUrl.searchParams.set('user', JSON.stringify({ _id: user._id, name: user.name, email: user.email, role: user.role }));
+  res.redirect(redirectUrl.toString());
 });
 
 // GET /api/auth/me
