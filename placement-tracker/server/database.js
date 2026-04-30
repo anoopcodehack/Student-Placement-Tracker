@@ -5,7 +5,7 @@ let connectionURI = null;
 let mongoServer = null;
 
 async function connectDB() {
-  const envURI = process.env.MONGO_URI;
+  const envURI = process.env.MONGO_URI || process.env.MONGODB_URI;
   connectionURI = envURI;
 
   try {
