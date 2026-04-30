@@ -43,9 +43,15 @@ export default function AddStudent() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    const payload = { ...form };
+    ['cgpa', 'tenthPercent', 'twelfthPercent'].forEach((key) => {
+      if (payload[key] === '' || Number.isNaN(payload[key])) {
+        delete payload[key];
+      }
+    });
     try {
-      if (isEdit) { await axios.put(`/api/students/${id}`, form); toast.success('Student updated!'); }
-      else { await axios.post('/api/students', form); toast.success('Student added!'); }
+      if (isEdit) { await axios.put(`/api/students/${id}`, payload); toast.success('Student updated!'); }
+      else { await axios.post('/api/students', payload); toast.success('Student added!'); }
       navigate('/students');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Save failed');
@@ -131,27 +137,27 @@ export default function AddStudent() {
                 <div className="col-md-4">
                   <label className="form-label">Graduation Year *</label>
                   <input type="number" className={inputClass} min="2020" max="2030" value={form.batch}
-                    onChange={e=>setForm({...form,batch:parseInt(e.target.value)})} required />
+                    onChange={e=>setForm({...form,batch:e.target.value === '' ? '' : parseInt(e.target.value)})} required />
                 </div>
                 <div className="col-md-4">
                   <label className="form-label">CGPA <span style={{fontSize:'0.72rem',color:'#94a3b8'}}>(out of 10)</span></label>
                   <input type="number" className={inputClass} placeholder="8.5" min="0" max="10" step="0.01" value={form.cgpa}
-                    onChange={e=>setForm({...form,cgpa:parseFloat(e.target.value)})} />
+                    onChange={e=>setForm({...form,cgpa:e.target.value === '' ? '' : parseFloat(e.target.value)})} />
                 </div>
                 <div className="col-md-4">
                   <label className="form-label">10th Percentage</label>
                   <input type="number" className={inputClass} placeholder="90.5" min="0" max="100" step="0.1" value={form.tenthPercent}
-                    onChange={e=>setForm({...form,tenthPercent:parseFloat(e.target.value)})} />
+                    onChange={e=>setForm({...form,tenthPercent:e.target.value === '' ? '' : parseFloat(e.target.value)})} />
                 </div>
                 <div className="col-md-4">
                   <label className="form-label">12th Percentage</label>
                   <input type="number" className={inputClass} placeholder="88.0" min="0" max="100" step="0.1" value={form.twelfthPercent}
-                    onChange={e=>setForm({...form,twelfthPercent:parseFloat(e.target.value)})} />
+                    onChange={e=>setForm({...form,twelfthPercent:e.target.value === '' ? '' : parseFloat(e.target.value)})} />
                 </div>
                 <div className="col-md-4">
                   <label className="form-label">Active Backlogs</label>
                   <input type="number" className={inputClass} min="0" value={form.backlogs}
-                    onChange={e=>setForm({...form,backlogs:parseInt(e.target.value)})} />
+                    onChange={e=>setForm({...form,backlogs:e.target.value === '' ? 0 : parseInt(e.target.value)})} />
                 </div>
               </div>
             </div>

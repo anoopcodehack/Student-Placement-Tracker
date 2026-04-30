@@ -36,7 +36,14 @@ const PORT = process.env.PORT || 5000;
 connectDB()
   .then(() => seedDatabase())
   .then(() => {
-    app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+    const server = app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+    server.on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        console.error(`❌ Port ${PORT} is already in use. Please stop the process using that port or set PORT to a different value.`);
+        process.exit(1);
+      }
+      throw err;
+    });
   })
   .catch(err => {
     console.error('❌ MongoDB connection error:', err.message);
