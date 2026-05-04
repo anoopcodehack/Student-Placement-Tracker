@@ -6,9 +6,25 @@ require('dotenv').config();
 
 const app = express();
 
+app.use('/api/profile', require('./routes/profile'));
+app.use('/uploads', express.static('uploads')); // serve resume files
+
 // Middleware
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'http://192.168.32.1:3001',
+      process.env.CLIENT_URL
+    ].filter(Boolean);
+    
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 app.use(express.json());

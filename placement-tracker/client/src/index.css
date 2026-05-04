@@ -558,6 +558,77 @@ a { text-decoration: none; }
   height: 3px;
 }
 
+
+/* ═══════════════════════════════════════
+   DARK MODE
+═══════════════════════════════════════ */
+[data-theme="dark"] {
+  --bg:       #0f172a;
+  --surface:  #1e293b;
+  --border:   #334155;
+  --text:     #f1f5f9;
+  --text-muted: #94a3b8;
+  --text-subtle: #64748b;
+}
+
+[data-theme="dark"] .sidebar {
+  background: #020617;
+  border-right: 1px solid #1e293b;
+}
+
+[data-theme="dark"] .data-table,
+[data-theme="dark"] .form-card,
+[data-theme="dark"] .stat-card,
+[data-theme="dark"] .chart-card,
+[data-theme="dark"] .company-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .table thead th {
+  background: #0f172a;
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .table td {
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .table tbody tr:hover {
+  background: #273449;
+}
+
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .form-control::placeholder {
+  color: #475569;
+}
+
+[data-theme="dark"] .metric-box {
+  background: #0f172a;
+}
+
+[data-theme="dark"] .btn-outline-secondary {
+  color: #94a3b8;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .auth-card {
+  background: #1e293b;
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .modal-content {
+  background: #1e293b;
+  color: #f1f5f9;
+}
+
 /* ═══════════════════════════════════════
    ANIMATIONS
 ═══════════════════════════════════════ */
