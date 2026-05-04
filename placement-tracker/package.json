@@ -9,7 +9,7 @@
     "client": "cd client && npm start",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "start": "npm run dev"
-  },
+    },
   "devDependencies": {
     "concurrently": "^8.2.0"
   },
