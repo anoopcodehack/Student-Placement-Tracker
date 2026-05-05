@@ -6,7 +6,6 @@ require('dotenv').config();
 
 const app = express();
 
-app.use('/api/profile', require('./routes/profile'));
 app.use('/uploads', express.static('uploads')); // serve resume files
 
 // Middleware
@@ -29,6 +28,7 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/api/profile', require('./routes/profile'));
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));

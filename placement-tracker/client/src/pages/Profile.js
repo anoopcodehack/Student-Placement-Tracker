@@ -977,7 +977,7 @@ import { useAuth } from '../context/AuthContext';
 const cgpaColor = c => c >= 8 ? '#059669' : c >= 6 ? '#d97706' : '#dc2626';
 
 export default function Profile() {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const [profile, setProfile]   = useState(null);
   const [student, setStudent]   = useState(null);
   const [loading, setLoading]   = useState(true);
@@ -1011,6 +1011,7 @@ export default function Profile() {
     setSaving(true);
     try {
       await axios.put('/api/profile', editForm);
+      updateUser({ ...user, name: editForm.name }); // Update global state
       toast.success('Profile updated! ✅');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Update failed');
@@ -1250,7 +1251,7 @@ export default function Profile() {
               </form>
 
               {/* Info box for normal viewer */}
-              {!isStudent && (
+              {!isStudent && profile?.role !== 'admin' && (
                 <div style={{ marginTop: '1.5rem', padding: '1rem', background: '#fffbeb', borderRadius: 10, border: '1px solid #fde68a' }}>
                   <div style={{ fontWeight: 700, fontSize: '0.85rem', color: '#92400e', marginBottom: 4 }}>
                     <i className="bi bi-info-circle me-1"></i> Viewer Account

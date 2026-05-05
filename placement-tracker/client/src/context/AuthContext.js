@@ -129,6 +129,12 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  // ── Update User ── ✅ used to update global user state
+  const updateUser = (updatedUser) => {
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+    setUser(updatedUser);
+  };
+
   return (
     <AuthContext.Provider value={{
       user,
@@ -136,6 +142,7 @@ export const AuthProvider = ({ children }) => {
       register,
       authenticate,
       logout,
+      updateUser, // ✅ expose updateUser
       loading,
       isAdmin:   user?.role === 'admin',
       isStudent: user?.isStudent === true, // ✅ expose isStudent globally

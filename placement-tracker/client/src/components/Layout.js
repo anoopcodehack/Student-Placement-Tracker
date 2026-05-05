@@ -414,7 +414,9 @@ export default function Layout() {
               >
                 {user?.name}
               </div>
-              <div className="user-role">{user?.role}</div>
+              <div className="user-role" style={{ textTransform: 'capitalize' }}>
+                {user?.isStudent ? '🎓 Student' : user?.role}
+              </div>
             </div>
 
             {/* Profile button */}
