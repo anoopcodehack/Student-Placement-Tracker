@@ -912,28 +912,6 @@ export default function Login() {
                   : <><i className="bi bi-box-arrow-in-right me-2"></i>Sign In</>}
               </button>
             </form>
-
-            {/* Demo accounts */}
-            <div className="mt-4 pt-3" style={{ borderTop: '1px solid #e2e8f0' }}>
-              <p style={{ fontSize: '0.72rem', color: '#94a3b8', textAlign: 'center', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>
-                Quick Demo Access
-              </p>
-              <div className="d-flex gap-2">
-                <button onClick={() => fillDemo('admin')}
-                  className="btn btn-outline-primary btn-sm w-50"
-                  style={{ fontSize: '0.78rem', borderRadius: 8 }}>
-                  <i className="bi bi-shield-lock-fill me-1"></i>Admin
-                </button>
-                <button onClick={() => fillDemo('viewer')}
-                  className="btn btn-outline-secondary btn-sm w-50"
-                  style={{ fontSize: '0.78rem', borderRadius: 8 }}>
-                  <i className="bi bi-eye-fill me-1"></i>Viewer
-                </button>
-              </div>
-              <p style={{ fontSize: '0.7rem', color: '#94a3b8', textAlign: 'center', margin: '10px 0 0' }}>
-                Admin: full access · Viewer: read only
-              </p>
-            </div>
           </>
         )}
 
