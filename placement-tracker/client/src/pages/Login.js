@@ -432,10 +432,19 @@ export default function Login() {
     window.location.href = `${backendUrl}/api/auth/google`;
   };
 
-  const fillDemo = (role) => {
-    setTab('login');
-    if (role === 'admin') setForm({ email: 'admin@college.edu', password: 'admin123' });
-    else setForm({ email: 'viewer@college.edu', password: 'viewer123' });
+  const fillDemo = async (role) => {
+    const email = role === 'admin' ? 'admin@college.edu' : 'viewer@college.edu';
+    const password = role === 'admin' ? 'admin123' : 'viewer123';
+    setLoading(true);
+    try {
+      await login(email, password);
+      toast.success(`Welcome ${role === 'admin' ? 'Administrator' : 'Viewer'}! 🎉`);
+      navigate('/');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Demo login failed');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const GoogleIcon = () => (
@@ -611,7 +620,7 @@ export default function Login() {
                   <input className="form-control" style={{ paddingLeft: 36 }}
                     placeholder="e.g. 4SF24CS021"
                     value={signupForm.rollNo}
-                    onChange={e => setSignupForm({ ...signupForm, rollNo: e.target.value })} required />
+                    onChange={setSignupForm({ ...signupForm, rollNo: e.target.value })} required />
                 </div>
               </div>
             )}
