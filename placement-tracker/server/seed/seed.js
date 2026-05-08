@@ -29,19 +29,28 @@ const firstNames = ['Aarav', 'Priya', 'Rohan', 'Neha', 'Arjun', 'Divya', 'Karan'
 const lastNames = ['Sharma', 'Patel', 'Kumar', 'Singh', 'Gupta', 'Joshi', 'Agarwal', 'Verma', 'Reddy', 'Nair', 'Shah', 'Mehta', 'Iyer', 'Pillai', 'Das'];
 
 async function seedDatabase() {
-  // Check if already seeded
-  const existingUsers = await User.countDocuments();
-  if (existingUsers > 0) {
-    console.log('📦 Database already seeded, skipping...');
-    return;
+  // Always ensure Admin and Viewer exist
+  const adminEmail = 'admin@college.edu';
+  const viewerEmail = 'viewer@college.edu';
+
+  const adminExists = await User.findOne({ email: adminEmail });
+  if (!adminExists) {
+    await User.create({ name: 'Admin User', email: adminEmail, password: 'admin123', role: 'admin' });
+    console.log('👤 Admin user created');
   }
 
-  console.log('🌱 Seeding database...');
+  const viewerExists = await User.findOne({ email: viewerEmail });
+  if (!viewerExists) {
+    await User.create({ name: 'Viewer User', email: viewerEmail, password: 'viewer123', role: 'viewer' });
+    console.log('👤 Viewer user created');
+  }
 
-  // Create admin user
-  await User.create({ name: 'Admin User', email: 'admin@college.edu', password: 'admin123', role: 'admin' });
-  await User.create({ name: 'Viewer User', email: 'viewer@college.edu', password: 'viewer123', role: 'viewer' });
-  console.log('👤 Users created — admin@college.edu / admin123');
+  // Check if we need to seed the rest of the data
+  const studentCount = await Student.countDocuments();
+  if (studentCount > 0) {
+    console.log('📦 Students/Companies already exist, skipping sample data seeding...');
+    return;
+  }
 
   // Create companies
   const companies = await Company.insertMany(companiesData);
