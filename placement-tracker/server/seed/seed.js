@@ -37,12 +37,22 @@ async function seedDatabase() {
   if (!adminExists) {
     await User.create({ name: 'Admin User', email: adminEmail, password: 'admin123', role: 'admin' });
     console.log('👤 Admin user created');
+  } else {
+    // Force reset password to ensure it matches admin123
+    adminExists.password = 'admin123';
+    adminExists.role = 'admin'; // Ensure role is correct too
+    await adminExists.save();
+    console.log('👤 Admin password ensured');
   }
 
   const viewerExists = await User.findOne({ email: viewerEmail });
   if (!viewerExists) {
     await User.create({ name: 'Viewer User', email: viewerEmail, password: 'viewer123', role: 'viewer' });
     console.log('👤 Viewer user created');
+  } else {
+    viewerExists.password = 'viewer123';
+    await viewerExists.save();
+    console.log('👤 Viewer password ensured');
   }
 
   // Check if we need to seed the rest of the data
