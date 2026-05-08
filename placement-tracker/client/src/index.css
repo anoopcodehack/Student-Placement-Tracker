@@ -293,7 +293,8 @@ a { text-decoration: none; }
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   border: 1px solid var(--border);
-  overflow: hidden;
+  overflow-x: auto; /* Enable horizontal scroll on mobile */
+  -webkit-overflow-scrolling: touch;
 }
 .data-table .table { margin: 0; font-size: 0.875rem; }
 .data-table .table thead th {
@@ -671,4 +672,7 @@ a { text-decoration: none; }
 @media (max-width: 576px) {
   .main-content { padding: 1rem; }
   .page-title { font-size: 1.25rem; }
+  .auth-card { padding: 1.75rem 1.25rem; }
+  .stat-card { padding: 1rem; }
+  .stat-value { font-size: 1.5rem; }
 }
