@@ -64,7 +64,7 @@ npm start                   # Start on http://localhost:3000
 
 | Role   | Email                    | Password   |
 |--------|--------------------------|------------|
-| Admin  | admin@college.edu        | admin123   |
+| Admin  | 
 | Viewer | viewer@college.edu       | viewer123  |
 
 **Admin** can Add / Edit / Delete students, companies, placements.  
