@@ -97,20 +97,25 @@ export default function StudentDetail() {
             )}
           </div>
 
-          {/* Skills */}
-          {student.skills?.length>0 && (
+          {student.skills?.length > 0 ? (
             <div className="form-card mb-3">
-              <h6 style={{fontFamily:'Syne,sans-serif',fontWeight:700,marginBottom:'0.75rem'}}>
+              <h6 style={{ fontFamily: 'Syne,sans-serif', fontWeight: 700, marginBottom: '0.75rem' }}>
                 <i className="bi bi-lightning-charge-fill text-warning me-2"></i>Skills
               </h6>
               <div className="d-flex flex-wrap gap-2">
-                {student.skills.map((s,i)=>(
+                {student.skills.map((s, i) => (
                   <span key={i} style={{
-                    fontSize:'0.75rem',padding:'4px 12px',borderRadius:20,
-                    background:'#eff6ff',color:'#1a56db',border:'1px solid #bfdbfe',fontWeight:600
+                    fontSize: '0.75rem', padding: '4px 12px', borderRadius: 20,
+                    background: '#eff6ff', color: '#1a56db', border: '1px solid #bfdbfe', fontWeight: 600
                   }}>{s}</span>
                 ))}
               </div>
+            </div>
+          ) : (
+            <div className="form-card text-center py-4" style={{ background: '#f8fafc', border: '2px dashed #e2e8f0' }}>
+              <i className="bi bi-lightning-charge" style={{ fontSize: '2.5rem', color: '#cbd5e1' }}></i>
+              <h6 style={{ fontFamily: 'Syne,sans-serif', marginTop: 12, color: '#64748b' }}>No Skills Listed</h6>
+              <p style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: 0 }}>This student hasn't listed any skills yet.</p>
             </div>
           )}
 
@@ -132,6 +137,32 @@ export default function StudentDetail() {
               </div>
             ))}
           </div>
+          
+          {/* Resume */}
+          {student.resume && (
+            <div className="form-card mt-3">
+              <h6 style={{ fontFamily: 'Syne,sans-serif', fontWeight: 700, marginBottom: '0.75rem' }}>
+                <i className="bi bi-file-earmark-pdf-fill text-danger me-2"></i>Resume
+              </h6>
+              <div className="d-flex gap-2">
+                <a 
+                  href={`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${student.resume}`} 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="btn btn-outline-primary btn-sm w-100"
+                >
+                  <i className="bi bi-eye me-1"></i>View
+                </a>
+                <a 
+                  href={`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${student.resume}`} 
+                  download
+                  className="btn btn-primary btn-sm w-100"
+                >
+                  <i className="bi bi-download me-1"></i>Download
+                </a>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Right col */}
@@ -203,10 +234,10 @@ export default function StudentDetail() {
               </div>
             </div>
           ) : (
-            <div className="form-card text-center py-4" style={{background:'#f8fafc',border:'2px dashed #e2e8f0'}}>
-              <i className="bi bi-briefcase" style={{fontSize:'2.5rem',color:'#cbd5e1'}}></i>
-              <h6 style={{fontFamily:'Syne,sans-serif',marginTop:12,color:'#64748b'}}>Not Placed Yet</h6>
-              <p style={{fontSize:'0.85rem',color:'#94a3b8',marginBottom:0}}>This student hasn't received a placement offer yet.</p>
+            <div className="form-card text-center py-4" style={{ background: '#f8fafc', border: '2px dashed #e2e8f0' }}>
+              <i className="bi bi-briefcase" style={{ fontSize: '2.5rem', color: '#cbd5e1' }}></i>
+              <h6 style={{ fontFamily: 'Syne,sans-serif', marginTop: 12, color: '#64748b' }}>Not Placed Yet</h6>
+              <p style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: 0 }}>This student hasn't received a placement offer yet.</p>
               {isAdmin && (
                 <Link to="/placements/add" className="btn btn-primary btn-sm mt-3">
                   <i className="bi bi-award me-1"></i>Add Placement
@@ -214,6 +245,8 @@ export default function StudentDetail() {
               )}
             </div>
           )}
+
+
         </div>
       </div>
 

@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
 import ConfirmModal from '../components/ConfirmModal';
+import { exportToExcel, exportToPDF } from '../utils/exportUtils';
+import { Download } from 'lucide-react';
 
 const BRANCHES = ['CSE','ECE','EEE','ME','CE','IT','AIDS','AIML','CSD'];
 
@@ -41,6 +43,48 @@ export default function Students() {
     } catch (err) { toast.error(err.response?.data?.message || 'Delete failed'); }
   };
 
+  const handleExport = async (type) => {
+    try {
+      toast.info(`Preparing ${type.toUpperCase()} report...`);
+      const params = { ...filters, limit: 10000 }; // Get all matching students
+      Object.keys(params).forEach(k => !params[k] && params[k] !== 0 && delete params[k]);
+      const res = await axios.get('/api/students', { params });
+      const allData = res.data.data;
+
+      if (type === 'excel') {
+        const excelData = allData.map(s => ({
+          'Name': s.name,
+          'Roll No': s.rollNo,
+          'Email': s.email,
+          'Branch': s.branch,
+          'Batch': s.batch,
+          'CGPA': s.cgpa,
+          'Backlogs': s.backlogs,
+          'Status': s.isPlaced ? 'Placed' : 'Unplaced',
+          'Company': s.placementDetails?.company?.name || 'N/A',
+          'Package (LPA)': s.placementDetails?.package || 'N/A',
+          'Role': s.placementDetails?.role || 'N/A'
+        }));
+        exportToExcel(excelData, 'Students_Placement_Report');
+      } else {
+        const cols = ['Name', 'Roll No', 'Branch', 'Batch', 'CGPA', 'Status', 'Company', 'Package'];
+        const pdfData = allData.map(s => [
+          s.name,
+          s.rollNo,
+          s.branch,
+          s.batch,
+          s.cgpa,
+          s.isPlaced ? 'Placed' : 'Unplaced',
+          s.placementDetails?.company?.name || 'N/A',
+          s.placementDetails?.package ? `${s.placementDetails.package} LPA` : 'N/A'
+        ]);
+        exportToPDF(cols, pdfData, 'Students Placement Report', 'Students_Placement_Report');
+      }
+    } catch (err) {
+      toast.error('Export failed');
+    }
+  };
+
   const setFilter = (key, val) => { setFilters(f => ({...f,[key]:val})); setPage(1); };
   const clearFilters = () => { setFilters({ branch:'',batch:'',isPlaced:'',search:'' }); setPage(1); };
 
@@ -55,9 +99,28 @@ export default function Students() {
           <p className="page-sub">{total.toLocaleString()} total students</p>
         </div>
         {isAdmin && (
-          <Link to="/students/add" className="btn btn-primary">
-            <i className="bi bi-person-plus-fill me-2"></i>Add Student
-          </Link>
+          <div className="d-flex gap-2">
+            <div className="dropdown">
+              <button className="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                <i className="bi bi-download me-2"></i>Export
+              </button>
+              <ul className="dropdown-menu dropdown-menu-end shadow-sm border-0">
+                <li>
+                  <button className="dropdown-item d-flex align-items-center gap-2 py-2" onClick={() => handleExport('excel')}>
+                    <i className="bi bi-file-earmark-excel-fill text-success"></i> Export to Excel
+                  </button>
+                </li>
+                <li>
+                  <button className="dropdown-item d-flex align-items-center gap-2 py-2" onClick={() => handleExport('pdf')}>
+                    <i className="bi bi-file-earmark-pdf-fill text-danger"></i> Export to PDF
+                  </button>
+                </li>
+              </ul>
+            </div>
+            <Link to="/students/add" className="btn btn-primary">
+              <i className="bi bi-person-plus-fill me-2"></i>Add Student
+            </Link>
+          </div>
         )}
       </div>
 
@@ -161,7 +224,14 @@ export default function Students() {
                               onClick={()=>navigate(`/students/${s._id}`)}>
                               {s.name}
                             </div>
-                            <div style={{fontSize:'0.72rem',color:'#94a3b8'}}>{s.email}</div>
+                            <div style={{fontSize:'0.72rem',color:'#94a3b8', display:'flex', alignItems:'center'}}>
+                              {s.email}
+                              {s.resume && (
+                                <span className="ms-2" title="Resume Uploaded" style={{color:'#dc2626'}}>
+                                  <i className="bi bi-file-earmark-pdf-fill"></i>
+                                </span>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </td>

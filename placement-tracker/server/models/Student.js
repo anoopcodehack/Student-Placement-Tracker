@@ -27,6 +27,7 @@ const studentSchema = new mongoose.Schema({
   gender: { type: String, enum: ['Male', 'Female', 'Other'] },
   linkedin: { type: String },
   github: { type: String },
+  resume: { type: String, default: '' },
 }, { timestamps: true });
 
 module.exports = mongoose.model('Student', studentSchema);

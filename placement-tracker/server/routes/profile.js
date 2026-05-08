@@ -60,6 +60,9 @@ router.put('/', protect, async (req, res) => {
 // POST /api/profile/resume — upload resume
 router.post('/resume', protect, upload.single('resume'), async (req, res) => {
   try {
+    if (!req.user.isStudent || !req.user.studentRef) {
+      return res.status(400).json({ success: false, message: 'Resume upload is only allowed for linked student accounts' });
+    }
     if (!req.file) return res.status(400).json({ success: false, message: 'No file uploaded' });
     const resumeUrl = `/uploads/resumes/${req.file.filename}`;
     await Student.findByIdAndUpdate(req.user.studentRef, { resume: resumeUrl });

@@ -7,6 +7,7 @@ import {
   Title, Tooltip, Legend, Filler
 } from 'chart.js';
 import { toast } from 'react-toastify';
+import { exportToExcel, exportToPDF } from '../utils/exportUtils';
 
 ChartJS.register(CategoryScale,LinearScale,BarElement,PointElement,LineElement,ArcElement,RadialLinearScale,Title,Tooltip,Legend,Filler);
 
@@ -42,6 +43,33 @@ export default function Analytics() {
       setBatches(bl.data.data);
     } catch { toast.error('Failed to load analytics'); }
     finally { setLoading(false); }
+  };
+
+  const handleExportSummary = (type) => {
+    try {
+      if (type === 'excel') {
+        const data = branchData.map(b => ({
+          'Branch': b._id,
+          'Total Students': b.total,
+          'Placed': b.placed,
+          'Unplaced': b.total - b.placed,
+          'Placement Rate (%)': b.total ? ((b.placed / b.total) * 100).toFixed(1) : 0,
+          'Avg CGPA': b.avgCGPA?.toFixed(2) || 'N/A'
+        }));
+        exportToExcel(data, 'Branch_Wise_Placement_Summary');
+      } else {
+        const cols = ['Branch', 'Total', 'Placed', 'Unplaced', 'Placement %', 'Avg CGPA'];
+        const data = branchData.map(b => [
+          b._id,
+          b.total,
+          b.placed,
+          b.total - b.placed,
+          b.total ? `${((b.placed / b.total) * 100).toFixed(1)}%` : '0%',
+          b.avgCGPA?.toFixed(2) || 'N/A'
+        ]);
+        exportToPDF(cols, data, 'Branch-wise Placement Summary', 'Branch_Wise_Summary');
+      }
+    } catch { toast.error('Export failed'); }
   };
 
   useEffect(()=>{ fetchAll(); },[]);
@@ -124,6 +152,23 @@ export default function Analytics() {
           <option value="">All Batches</option>
           {batches.map(b=><option key={b} value={b}>Batch {b}</option>)}
         </select>
+        <div className="dropdown">
+          <button className="btn btn-outline-primary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown">
+            <i className="bi bi-download me-2"></i>Export Summary
+          </button>
+          <ul className="dropdown-menu dropdown-menu-end shadow-sm border-0">
+            <li>
+              <button className="dropdown-item d-flex align-items-center gap-2 py-2" onClick={() => handleExportSummary('excel')}>
+                <i className="bi bi-file-earmark-excel-fill text-success"></i> Export to Excel
+              </button>
+            </li>
+            <li>
+              <button className="dropdown-item d-flex align-items-center gap-2 py-2" onClick={() => handleExportSummary('pdf')}>
+                <i className="bi bi-file-earmark-pdf-fill text-danger"></i> Export to PDF
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
 
       {/* KPI Row */}
