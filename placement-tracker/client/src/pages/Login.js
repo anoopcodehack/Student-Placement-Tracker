@@ -716,6 +716,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { LogIn, UserPlus } from 'lucide-react';
 
 export default function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -847,7 +848,10 @@ export default function Login() {
                 boxShadow: tab === t ? '0 1px 4px rgba(0,0,0,0.1)' : 'none',
                 transition: 'all 0.15s', textTransform: 'capitalize',
               }}>
-              {t === 'login' ? '🔑 Sign In' : '✨ Sign Up'}
+              <div className="d-flex align-items-center justify-content-center gap-2">
+                {t === 'login' ? <LogIn size={16} /> : <UserPlus size={16} />}
+                {t === 'login' ? 'Sign In' : 'Sign Up'}
+              </div>
             </button>
           ))}
         </div>
