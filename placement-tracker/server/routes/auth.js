@@ -321,4 +321,18 @@ router.get('/me', protect, async (req, res) => {
   res.json({ success: true, user: req.user });
 });
 
+// ══════════════════════════════════════════
+// GET /api/auth/force-seed
+// ── Use this to force seed admin/viewer if they are missing
+// ══════════════════════════════════════════
+router.get('/force-seed', async (req, res) => {
+  try {
+    const { seedDatabase } = require('../seed/seed');
+    await seedDatabase();
+    res.json({ success: true, message: 'Database seeded successfully!' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 module.exports = router;
