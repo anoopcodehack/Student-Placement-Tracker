@@ -7,7 +7,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
-app.use('/api/interviews', require('./routes/interviews'));
+
 
 // Configure Axios
 axios.defaults.baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
