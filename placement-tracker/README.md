@@ -149,9 +149,10 @@ npm start           # Starts on http://localhost:3000
 
 | Role | Email | Password | Access |
 |------|-------|----------|--------|
-| 🛡️ Admin || Full access — add / edit / delete |
+| 🛡️ Admin | | | Full access — add / edit / delete |
 | 👁️ Viewer | viewer@college.edu | viewer123 | Read only — view data & analytics |
 | 🎓 Student | Sign up with Roll No | — | Own profile, resume, placement status |
+
 
 ---
 
