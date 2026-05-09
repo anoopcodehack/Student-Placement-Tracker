@@ -1,6 +1,54 @@
 # 🎓 PlaceTrack — Student Placement Tracker
 
-A full stack **MERN** app (MongoDB, Express, React, Node.js) with Bootstrap 5 for tracking college campus placements.
+> A full-stack **MERN** web application for digitizing and managing college campus placements — built with MongoDB, Express.js, React.js, Node.js and Bootstrap 5.
+
+---
+
+## 🚀 Live Demo
+
+| | Link |
+|---|---|
+| 🔗 Frontend | [https://student-placement-tracker-navy.vercel.app/] |
+
+
+---
+
+## 📸 Screenshots
+
+> Dashboard · Students · Analytics · Profile
+
+
+<img width="1910" height="921" alt="Screenshot 2026-05-08 233657" src="https://github.com/user-attachments/assets/de466b15-6595-4df2-baf2-259e57e1a589" />
+
+---
+
+## 🧩 Features
+
+| Module | What it does |
+|--------|-------------|
+| 📊 **Dashboard** | KPI cards, placement rate banner, branch-wise chart, donut chart, top companies table |
+| 👥 **Students** | Full list with search, branch / batch / status filters, pagination, clickable profiles |
+| 🏢 **Companies** | Card grid with package range, roles offered, eligibility criteria, hired count |
+| 🏆 **Placements** | Offer records with auto status update, package highlights, offer type badges |
+| 📈 **Analytics** | 7+ charts — bar, line, doughnut, radar, dual-axis trend, company breakdown |
+| 👤 **Profile** | Student tabs — Academic, Resume upload, Placement status, Change password |
+| 🔐 **Auth** | JWT login, Google OAuth, role-based access (Admin / Student / Viewer) |
+| 🌙 **Dark Mode** | Full dark / light mode toggle with localStorage persistence |
+| 🌱 **Seed Script** | 120 students, 12 companies, ~78 placement records auto-generated |
+
+---
+
+## ⚙️ Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| **Frontend** | React 18, Bootstrap 5, Chart.js, react-chartjs-2 |
+| **Backend** | Node.js, Express.js |
+| **Database** | MongoDB + Mongoose |
+| **Auth** | JWT (JSON Web Tokens) + Google OAuth (Passport.js) |
+| **File Upload** | Multer (Resume PDF upload) |
+| **Charts** | Chart.js / react-chartjs-2 |
+| **Styling** | Bootstrap 5 + Custom CSS |
 
 ---
 
@@ -8,120 +56,217 @@ A full stack **MERN** app (MongoDB, Express, React, Node.js) with Bootstrap 5 fo
 
 ```
 placement-tracker/
-├── server/          ← Express + MongoDB backend
-│   ├── models/      ← Mongoose schemas
-│   ├── routes/      ← REST API routes
-│   ├── middleware/  ← JWT auth middleware
-│   ├── seed/        ← Demo data seeder
-│   └── index.js     ← Entry point
+├── server/                  ← Express + MongoDB backend
+│   ├── models/              ← Mongoose schemas
+│   │   ├── User.js
+│   │   ├── Student.js
+│   │   ├── Company.js
+│   │   └── Placement.js
+│   ├── routes/              ← REST API routes
+│   │   ├── auth.js
+│   │   ├── students.js
+│   │   ├── companies.js
+│   │   ├── placements.js
+│   │   ├── stats.js
+│   │   └── profile.js
+│   ├── middleware/
+│   │   └── auth.js          ← JWT middleware
+│   ├── seed/
+│   │   └── seed.js          ← Demo data seeder
+│   ├── uploads/             ← Resume PDF storage
+│   └── index.js             ← Entry point
 │
-└── client/          ← React frontend
+└── client/                  ← React frontend
     └── src/
-        ├── pages/   ← Dashboard, Students, Companies, Placements, Analytics
-        ├── components/ ← Layout, Sidebar
-        └── context/ ← Auth context (JWT)
+        ├── pages/           ← Dashboard, Students, Companies,
+        │                       Placements, Analytics, Profile
+        ├── components/      ← Layout, Sidebar, Modals
+        └── context/         ← AuthContext, ThemeContext
 ```
 
 ---
 
-## ⚙️ Tech Stack
+## 🛠️ Setup & Run
 
-| Layer      | Tech                          |
-|------------|-------------------------------|
-| Frontend   | React 18, Bootstrap 5, Chart.js |
-| Backend    | Node.js, Express.js           |
-| Database   | MongoDB + Mongoose            |
-| Auth       | JWT (JSON Web Tokens)         |
-| Charts     | react-chartjs-2               |
+### Prerequisites
+- Node.js v16+
+- MongoDB running locally **OR** MongoDB Atlas URI
 
 ---
 
-## 🚀 Setup & Run
+### 1️⃣ Clone the repo
 
-### 1. Prerequisites
-- Node.js v16+
-- MongoDB running locally OR MongoDB Atlas URI
+```bash
+git clone https://github.com/YOUR_USERNAME/placement-tracker.git
+cd placement-tracker
+```
 
-### 2. Backend Setup
+---
+
+### 2️⃣ Backend Setup
+
 ```bash
 cd server
 npm install
-cp .env.example .env        # Edit MONGO_URI if needed
-npm run seed                # Load 120 students + 12 companies + placements
-npm run dev                 # Start on http://localhost:5000
+cp .env.example .env
 ```
 
-### 3. Frontend Setup
+Edit `.env` file:
+
+```env
+PORT=5000
+MONGO_URI=mongodb+srv://youruser:yourpassword@cluster0.xxxxx.mongodb.net/placement_tracker
+JWT_SECRET=your_secret_key_here
+CLIENT_URL=http://localhost:3000
+NODE_ENV=development
+```
+
+Load demo data:
+
 ```bash
-cd client
+npm run seed        # Loads 120 students + 12 companies + ~78 placements
+```
+
+Start backend:
+
+```bash
+npm run dev         # Starts on http://localhost:5000
+```
+
+---
+
+### 3️⃣ Frontend Setup
+
+```bash
+cd ../client
 npm install
-npm start                   # Start on http://localhost:3000
+npm start           # Starts on http://localhost:3000
 ```
 
 ---
 
 ## 🔐 Demo Login Credentials
 
-| Role   | Email                    | Password   |
-|--------|--------------------------|------------|
-| Admin  | admin@college.edu        | admin123   |
-| Viewer | viewer@college.edu       | viewer123  |
-
-**Admin** can Add / Edit / Delete students, companies, placements.  
-**Viewer** can only view data & analytics.
-
----
-
-## 📊 Features
-
-- **Dashboard** — KPI cards, branch-wise chart, placement donut, top companies table
-- **Students** — Full list with search, branch/batch/status filters, pagination
-- **Companies** — Card view with package range, roles, hired count
-- **Placements** — Offer records with student + company info, package highlights
-- **Analytics** — 7+ charts: bar, line, doughnut, radar, dual-axis trend, company breakdown
-- **Auth** — JWT login, role-based access (admin vs viewer)
-- **Seed Script** — 120 students, 12 companies, ~78 placement records auto-generated
+| Role | Email | Password | Access |
+|------|-------|----------|--------|
+| 🛡️ Admin || Full access — add / edit / delete |
+| 👁️ Viewer | viewer@college.edu | viewer123 | Read only — view data & analytics |
+| 🎓 Student | Sign up with Roll No | — | Own profile, resume, placement status |
 
 ---
 
 ## 🌐 API Endpoints
 
+### Auth
 ```
-POST   /api/auth/login
-POST   /api/auth/register
-GET    /api/auth/me
+POST   /api/auth/register        ← Register (with rollNo for student)
+POST   /api/auth/login           ← Login
+GET    /api/auth/me              ← Get current user
+GET    /api/auth/google          ← Google OAuth
+```
 
-GET    /api/students          ?search= &branch= &batch= &isPlaced= &page=
-POST   /api/students
-PUT    /api/students/:id
-DELETE /api/students/:id
+### Students
+```
+GET    /api/students             ← Get all (filters: search, branch, batch, isPlaced, page)
+POST   /api/students             ← Add student (admin)
+PUT    /api/students/:id         ← Update student (admin)
+DELETE /api/students/:id         ← Delete student (admin)
+```
 
-GET    /api/companies         ?search= &industry=
-POST   /api/companies
-DELETE /api/companies/:id
+### Companies
+```
+GET    /api/companies            ← Get all (filters: search, industry)
+POST   /api/companies            ← Add company (admin)
+DELETE /api/companies/:id        ← Delete company (admin)
+```
 
-GET    /api/placements        ?offerType= &status=
-POST   /api/placements
-DELETE /api/placements/:id
+### Placements
+```
+GET    /api/placements           ← Get all (filters: offerType, status)
+POST   /api/placements           ← Record placement — auto updates student (admin)
+DELETE /api/placements/:id       ← Remove placement (admin)
+```
 
-GET    /api/stats/overview    ?batch=
-GET    /api/stats/branch-wise
-GET    /api/stats/package-distribution
-GET    /api/stats/monthly-trend
-GET    /api/stats/company-wise
-GET    /api/stats/batches
+### Analytics
+```
+GET    /api/stats/overview       ← KPI numbers (batch filter)
+GET    /api/stats/branch-wise    ← Branch placement counts
+GET    /api/stats/package-distribution  ← Package brackets
+GET    /api/stats/monthly-trend  ← Monthly offer trend
+GET    /api/stats/company-wise   ← Top companies
+GET    /api/stats/batches        ← Available batch years
+```
+
+### Profile
+```
+GET    /api/profile              ← Get my profile + student data
+PUT    /api/profile              ← Update name, phone, linkedin, github
+POST   /api/profile/resume       ← Upload resume PDF (student only)
+PUT    /api/profile/change-password  ← Change password
 ```
 
 ---
 
-## 🏗️ Deploy
+## 🎯 User Roles Explained
 
-**Backend** → Railway / Render / Heroku  
-**Frontend** → Vercel / Netlify (set `REACT_APP_API_URL` to backend URL)  
-**Database** → MongoDB Atlas (free tier)
+```
+Admin      →  Full access. Add students, companies, placements. View everything.
+Viewer     →  Read only. View dashboard, students, analytics. No edit access.
+Student    →  Sign up with Roll No → auto-linked to student profile
+               → View own CGPA, skills, placement status
+               → Upload / download resume PDF
+               → Change password
+```
+
+---
+
+## 📊 Analytics Dashboard Includes
+
+- ✅ Overall placement rate banner
+- ✅ Branch-wise placement bar chart
+- ✅ Placed vs Unplaced doughnut chart
+- ✅ Package distribution bar chart
+- ✅ Monthly offer trend line chart (dual axis)
+- ✅ Top companies by offers bar chart
+- ✅ Avg CGPA by branch radar chart
+- ✅ Company-wise breakdown table with share %
+
+---
+
+## 🌍 Societal Impact & SDGs
+
+| SDG | Mapping |
+|-----|---------|
+| 🎓 SDG 4 — Quality Education | Improves placement process transparency in institutions |
+| 💼 SDG 8 — Decent Work & Economic Growth | Connects students to employment opportunities efficiently |
+| 🏗️ SDG 9 — Industry, Innovation & Infrastructure | Promotes digital infrastructure in educational institutions |
+
+---
+
+## 🔮 Future Scope
+
+- [ ] Email notifications to eligible students when company visits
+- [ ] Eligibility auto-filter based on CGPA, branch, backlogs
+- [ ] Export placement report as Excel / PDF
+- [ ] Placement prediction using ML scoring
+- [ ] Interview experience section for placed students
+- [ ] Mobile app using React Native
 
 ---
 
 ## 👨‍💻 Built With
 
-React · Express · MongoDB · Bootstrap 5 · Chart.js · JWT · Mongoose
+**React · Express · MongoDB · Bootstrap 5 · Chart.js · JWT · Passport.js · Multer · Mongoose**
+
+---
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+---
+
+<div align="center">
+  <p>⭐ Star this repo if you found it helpful!</p>
+  <p>Made with ❤️ to solve a real problem</p>
+</div>

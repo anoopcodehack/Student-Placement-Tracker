@@ -83,6 +83,7 @@ import AddPlacement from './pages/AddPlacement';
 import Analytics from './pages/Analytics';
 import NotFound from './pages/NotFound';
 import Profile from './pages/Profile';
+import Interviews from './pages/Interviews';
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -139,6 +140,7 @@ export default function App() {
               <Route path="placements" element={<Placements />} />
               <Route path="placements/add" element={<AddPlacement />} />
               <Route path="analytics" element={<Analytics />} />
+              <Route path="interviews" element={<Interviews />} />
               <Route path="profile" element={<Profile />} />
             </Route>
             <Route path="*" element={<NotFound />} />

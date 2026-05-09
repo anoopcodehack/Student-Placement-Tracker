@@ -259,6 +259,7 @@ const mainNav = [
   { to: '/companies', icon: 'bi-building-fill', label: 'Companies' },
   { to: '/placements', icon: 'bi-briefcase-fill', label: 'Placements' },
   { to: '/analytics', icon: 'bi-bar-chart-fill', label: 'Analytics' },
+  { to: '/interviews', icon: 'bi-chat-quote-fill', label: 'Experiences' },
 ];
 
 const adminNav = [
