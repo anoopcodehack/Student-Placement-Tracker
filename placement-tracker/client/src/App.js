@@ -84,6 +84,7 @@ import Analytics from './pages/Analytics';
 import NotFound from './pages/NotFound';
 import Profile from './pages/Profile';
 import Interviews from './pages/Interviews';
+import CalendarPage from './pages/CalendarPage';
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -140,6 +141,7 @@ export default function App() {
               <Route path="placements" element={<Placements />} />
               <Route path="placements/add" element={<AddPlacement />} />
               <Route path="analytics" element={<Analytics />} />
+              <Route path="calendar" element={<CalendarPage />} />
               <Route path="interviews" element={<Interviews />} />
               <Route path="profile" element={<Profile />} />
             </Route>

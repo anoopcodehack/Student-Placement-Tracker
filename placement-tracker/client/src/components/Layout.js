@@ -260,6 +260,7 @@ const mainNav = [
   { to: '/placements', icon: 'bi-briefcase-fill', label: 'Placements' },
   { to: '/analytics', icon: 'bi-bar-chart-fill', label: 'Analytics' },
   { to: '/interviews', icon: 'bi-chat-quote-fill', label: 'Experiences' },
+  { to: '/calendar', icon: 'bi-calendar-event-fill', label: 'Drive Calendar' },
 ];
 
 const adminNav = [
