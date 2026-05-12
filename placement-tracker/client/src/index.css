@@ -171,6 +171,51 @@ a { text-decoration: none; }
 }
 .logout-btn:hover { color: #ef4444; }
 
+
+/* ── SIDEBAR FIX — make nav scrollable ── */
+.sidebar {
+  width: var(--sidebar-w);
+  min-height: 100vh;
+  height: 100vh;           /* ✅ add this */
+  background: var(--sidebar-bg);
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(255,255,255,0.04);
+  overflow: hidden;        /* ✅ add this */
+}
+
+/* ── Make nav section scroll ── */
+.sidebar-nav {
+  padding: 0.75rem 0;
+  flex: 1;
+  overflow-y: auto;        /* ✅ this is the key fix */
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #1e293b transparent;
+}
+
+/* ── Sidebar scrollbar styling ── */
+.sidebar-nav::-webkit-scrollbar {
+  width: 4px;
+}
+.sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+
+/* ── Footer always stays at bottom ── */
+.sidebar-footer {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;          /* ✅ add this — never shrinks */
+}
+
 /* ═══════════════════════════════════════
    MAIN LAYOUT
 ═══════════════════════════════════════ */
@@ -204,6 +249,7 @@ a { text-decoration: none; }
   color: var(--text-muted);
   margin-top: 2px;
 }
+
 
 /* ═══════════════════════════════════════
    CARDS
