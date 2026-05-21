@@ -85,6 +85,7 @@ import NotFound from './pages/NotFound';
 import Profile from './pages/Profile';
 import Interviews from './pages/Interviews';
 import CalendarPage from './pages/CalendarPage';
+import Contact from './pages/Contact';
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -143,6 +144,7 @@ export default function App() {
               <Route path="analytics" element={<Analytics />} />
               <Route path="calendar" element={<CalendarPage />} />
               <Route path="interviews" element={<Interviews />} />
+              <Route path="contact" element={<Contact />} />
               <Route path="profile" element={<Profile />} />
             </Route>
             <Route path="*" element={<NotFound />} />
