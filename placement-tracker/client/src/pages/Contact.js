@@ -5,16 +5,17 @@ export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
   const [sending, setSending] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSending(true);
-    // Simulate send — connect to your email backend if needed
-    setTimeout(() => {
-      toast.success('Message sent! We will get back to you shortly 📬');
-      setForm({ name: '', email: '', phone: '', subject: '', message: '' });
-      setSending(false);
-    }, 1500);
-  };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setSending(true);
+  try {
+    await axios.post('/api/contact', form);
+    toast.success('Message sent! We will get back to you shortly 📬');
+    setForm({ name:'', email:'', phone:'', subject:'', message:'' });
+  } catch (err) {
+    toast.error('Failed to send message');
+  } finally { setSending(false); }
+};
 
   const contactCards = [
     {
