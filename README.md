@@ -8,7 +8,7 @@
 
 | | Link |
 |---|---|
-| 🔗 Frontend | [https://student-placement-tracker-navy.vercel.app/] |
+| 🔗 Frontend | [https://student-placement-tracker-navy.vercel.app/login] |
 
 
 ---
