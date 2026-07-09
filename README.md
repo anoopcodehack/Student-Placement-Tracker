@@ -1,6 +1,6 @@
 # 🎓 PlaceTrack — Student Placement Tracker
 
-> A full-stack **MERN** web application for digitizing and managing college campus placements — built with MongoDB, Express.js, React.js, Node.js and Bootstrap 5.
+> A full-stack **MERN** web application for digitizing and managing college campus placements, built with MongoDB, Express.js, React.js, Node.js, Bootstrap 5, and Socket.IO to deliver real-time notifications and instant placement status updates
 
 ---
 
