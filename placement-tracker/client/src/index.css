@@ -699,6 +699,59 @@ a { text-decoration: none; }
 ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
+
+/* added new */
+/* ═══════════════════════════════════════
+   COLLAPSIBLE SIDEBAR
+═══════════════════════════════════════ */
+.sidebar {
+  transition: width 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+
+.sidebar.collapsed {
+  width: 64px;
+}
+
+.sidebar.collapsed .brand-name,
+.sidebar.collapsed .brand-sub,
+.sidebar.collapsed .nav-section-label,
+.sidebar.collapsed .nav-item-custom span,
+.sidebar.collapsed .user-name,
+.sidebar.collapsed .user-role {
+  display: none;
+}
+
+.sidebar.collapsed .nav-item-custom {
+  justify-content: center;
+  padding: 0.7rem;
+}
+
+.sidebar.collapsed .user-chip {
+  justify-content: center;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sidebar.collapsed .logout-btn {
+  margin-left: 0;
+}
+
+.sidebar.collapsed .logo-wrap {
+  justify-content: center;
+}
+
+.sidebar.collapsed .logo-icon {
+  margin: 0 auto;
+}
+
+.main-content {
+  transition: margin-left 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+
+.main-content.collapsed {
+  margin-left: 64px;
+}
+
 /* ═══════════════════════════════════════
    RESPONSIVE
 ═══════════════════════════════════════ */
