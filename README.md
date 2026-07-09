@@ -18,7 +18,8 @@
 > Dashboard · Students · Analytics · Profile
 
 
-<img width="1910" height="921" alt="Screenshot 2026-05-08 233657" src="https://github.com/user-attachments/assets/de466b15-6595-4df2-baf2-259e57e1a589" />
+<img width="1897" height="857" alt="image" src="https://github.com/user-attachments/assets/ed8bf8d0-a068-4bd9-84e4-3a82f72a80ef" />
+
 
 ---
 
