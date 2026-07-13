@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
 import ConfirmModal from '../components/ConfirmModal';
 
+
 const cgpaColor = c => c>=8?'#059669':c>=6?'#d97706':'#dc2626';
 const fmtDate   = d => d ? new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : '—';
 
@@ -164,6 +165,8 @@ export default function StudentDetail() {
             </div>
           )}
         </div>
+       
+      
 
         {/* Right col */}
         <div className="col-lg-8">

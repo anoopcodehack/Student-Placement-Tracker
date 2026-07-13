@@ -973,6 +973,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
+import ATSScorer from '../components/ATSScorer';
 
 const cgpaColor = c => c >= 8 ? '#059669' : c >= 6 ? '#d97706' : '#dc2626';
 
@@ -1390,6 +1391,7 @@ export default function Profile() {
                     onChange={handleResumeUpload} disabled={uploading} />
                 </div>
               </label>
+               <ATSScorer student={student} />
             </div>
           )}
 
