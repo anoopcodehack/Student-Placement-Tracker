@@ -147,6 +147,7 @@ app.use('/api/interviews', require('./routes/interviews'));
 app.use('/api/stats', require('./routes/stats'));
 app.use('/api/contact', require('./routes/contact'));
 app.use('/api/ats', require('./routes/ats'));
+app.use('/api/mock-interview', require('./routes/mockInterview'));
 
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'OK', message: 'Placement Tracker API running' }));

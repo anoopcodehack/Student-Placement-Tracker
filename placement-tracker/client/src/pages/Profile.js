@@ -974,6 +974,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
 import ATSScorer from '../components/ATSScorer';
+import MockInterview from '../components/MockInterview';
 
 const cgpaColor = c => c >= 8 ? '#059669' : c >= 6 ? '#d97706' : '#dc2626';
 
@@ -1067,18 +1068,20 @@ export default function Profile() {
   const isStudent = profile?.isStudent && student; // true only if linked student
 
   // ── Tabs based on role ──
-  const tabs = isStudent
-    ? [
-        { key: 'profile',   icon: 'bi-person-fill',               label: 'Profile'   },
-        { key: 'academic',  icon: 'bi-mortarboard-fill',           label: 'Academic'  },
-        { key: 'resume',    icon: 'bi-file-earmark-pdf-fill',      label: 'Resume'    },
-        { key: 'placement', icon: 'bi-trophy-fill',                label: 'Placement' },
-        { key: 'password',  icon: 'bi-lock-fill',                  label: 'Password'  },
-      ]
-    : [
-        { key: 'profile',   icon: 'bi-person-fill',  label: 'Profile'  },
-        { key: 'password',  icon: 'bi-lock-fill',    label: 'Password' },
-      ];
+ const tabs = isStudent
+  ? [
+      { key: 'profile',        icon: 'bi-person-fill',          label: 'Profile'        },
+      { key: 'academic',       icon: 'bi-mortarboard-fill',      label: 'Academic'       },
+      { key: 'resume',         icon: 'bi-file-earmark-pdf-fill', label: 'Resume'         },
+      { key: 'mock-interview', icon: 'bi-mic-fill',              label: 'Mock Interview' }, // ← ADD
+      { key: 'ats',            icon: 'bi-robot',                 label: 'ATS Scorer'     }, // ← ADD
+      { key: 'placement',      icon: 'bi-trophy-fill',           label: 'Placement'      },
+      { key: 'password',       icon: 'bi-lock-fill',             label: 'Password'       },
+    ]
+  : [
+      { key: 'profile',  icon: 'bi-person-fill', label: 'Profile'  },
+      { key: 'password', icon: 'bi-lock-fill',   label: 'Password' },
+    ];
 
   return (
     <div>
@@ -1150,6 +1153,7 @@ export default function Profile() {
                     <i className="bi bi-github me-1"></i>GitHub
                   </a>
                 )}
+                
               </div>
             )}
           </div>
@@ -1391,7 +1395,8 @@ export default function Profile() {
                     onChange={handleResumeUpload} disabled={uploading} />
                 </div>
               </label>
-               <ATSScorer student={student} />
+              
+              
             </div>
           )}
 
@@ -1461,6 +1466,24 @@ export default function Profile() {
               )}
             </div>
           )}
+
+          {/* ══════════════════════════════
+    TAB: MOCK INTERVIEW
+══════════════════════════════ */}
+{activeTab === 'mock-interview' && isStudent && (
+  <div className="fade-in">
+    <MockInterview student={student} />
+  </div>
+)}
+
+{/* ══════════════════════════════
+    TAB: ATS SCORER
+══════════════════════════════ */}
+{activeTab === 'ats' && isStudent && (
+  <div className="fade-in">
+    <ATSScorer student={student} />
+  </div>
+)}
 
           {/* ══════════════════════════════
               TAB: PASSWORD (all users)
