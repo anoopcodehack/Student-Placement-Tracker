@@ -336,17 +336,21 @@ export default function LandingPage() {
 
           {/* Headline */}
           <h1 style={{
-            fontFamily: "'Syne',sans-serif", fontWeight: 800,
-            fontSize: "clamp(2.8rem,6vw,5rem)", lineHeight: 1.05,
-            marginBottom: "1.25rem", maxWidth: 820,
-            background: d
-              ? "linear-gradient(135deg,#fff 30%,#93c5fd 70%,#06b6d4 100%)"
-              : "linear-gradient(135deg,#0f172a 30%,#1a56db 70%,#06b6d4 100%)",
-            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-            letterSpacing: "-0.02em",
-          }}>
-            Sahyadri's Smartest<br />Placement Portal
-          </h1>
+  fontFamily: "'Syne',sans-serif", fontWeight: 800,
+  fontSize: "clamp(2.8rem,6vw,5rem)", lineHeight: 1.05,
+  marginBottom: "1.25rem", maxWidth: 820,
+  background: d
+    ? "linear-gradient(135deg,#fff 30%,#93c5fd 70%,#06b6d4 100%)"
+    : "linear-gradient(135deg,#0f172a 30%,#1a56db 70%,#06b6d4 100%)",
+  WebkitBackgroundClip: "text",
+  backgroundClip: "text",
+  WebkitTextFillColor: "transparent",
+  color: "transparent",
+  display: "inline-block",   // helps some renderers compute clip box correctly
+  letterSpacing: "-0.02em",
+}}>
+  Sahyadri's Smartest<br />Placement Portal
+</h1>
 
           <p style={{ fontSize: "1.1rem", color: muted, maxWidth: 520, lineHeight: 1.8, marginBottom: "2.5rem" }}>
             Track placements, analyze trends, and get AI-powered career tools — all in one place built for Sahyadri students.
