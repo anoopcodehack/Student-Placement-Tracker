@@ -5,6 +5,8 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { LogIn, UserPlus } from 'lucide-react';
+//
+
 
 export default function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -97,8 +99,115 @@ export default function Login() {
   );
 
   return (
-    <div className="auth-wrapper">
-      <div className="auth-card fade-in" style={{ maxWidth: 440 }}>
+  <div
+  className={`auth-wrapper ${tab === "signup" ? "swap" : ""}`}
+  style={{
+    minHeight: "100vh",
+    display: "grid",
+    gridTemplateColumns: "1.2fr 0.8fr",
+    background: "#0f172a",
+  }}
+>
+
+  {/* LEFT SIDE */}
+  <div
+  className="left-panel"
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      padding: "70px",
+      color: "white",
+      background:
+        "linear-gradient(135deg,#0f172a 0%,#1e3a8a 60%,#2563eb 100%)",
+    }}
+  >
+
+    <div
+      style={{
+        width: 70,
+        height: 70,
+        borderRadius: 20,
+        background: "rgba(255,255,255,.12)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        fontSize: 30,
+        marginBottom: 30
+      }}
+    >
+      🎓
+    </div>
+
+    <h1
+      style={{
+        fontSize: "3.2rem",
+        fontWeight: 800,
+        marginBottom: 15,
+        fontFamily: "Syne"
+      }}
+    >
+      PlaceTrack
+    </h1>
+
+    <p
+      style={{
+        fontSize: 20,
+        color: "#cbd5e1",
+        maxWidth: 520,
+        lineHeight: 1.7
+      }}
+    >
+      Smart Placement Management Portal for Colleges.
+      Manage students, companies, applications,
+      placement drives and analytics from one dashboard.
+    </p>
+
+    <div style={{ marginTop: 50 }}>
+
+      <div style={{ marginBottom: 18,fontSize:18 }}>
+        ✅ Company Drive Management
+      </div>
+
+      <div style={{ marginBottom: 18,fontSize:18 }}>
+        ✅ Student Performance Analytics
+      </div>
+
+      <div style={{ marginBottom: 18,fontSize:18 }}>
+        ✅ Resume & Placement Tracking
+      </div>
+
+      <div style={{ marginBottom: 18,fontSize:18 }}>
+        ✅ Real-time Dashboard
+      </div>
+
+    </div>
+
+  </div>
+
+  {/* RIGHT SIDE */}
+  <div
+  className="right-panel"
+    style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      background: "#f8fafc"
+    }}
+  >
+
+      <div
+        className="auth-card fade-in"
+        style={{
+          width: 450,
+          borderRadius: 24,
+          padding: 40,
+          background: "#fff",
+          boxShadow: "0 25px 60px rgba(0,0,0,.15)"
+        }}
+      >
+
+       
         <div className="text-center mb-4">
           <div style={{
             width: 56, height: 56, borderRadius: 16,
@@ -305,6 +414,7 @@ export default function Login() {
           </form>
         )}
       </div>
+    </div>
     </div>
   );
 }
