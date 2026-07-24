@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
 import ConfirmModal from '../components/ConfirmModal';
+import EligibilityChecker from '../components/EligibilityChecker';
 
 const INDUSTRY_COLORS = {
   IT:'#1a56db', Product:'#059669', Finance:'#d97706',
@@ -160,7 +161,12 @@ export default function Companies() {
           })}
         </div>
       )}
-
+      {/* ← ADD THIS — Eligibility Engine for admin only */}
+      {isAdmin && !loading && companies.length > 0 && (
+        <div className="mt-4">
+          <EligibilityChecker companies={companies} />
+        </div>
+      )}
       <ConfirmModal
         show={!!deleteTarget}
         title="Delete Company"
