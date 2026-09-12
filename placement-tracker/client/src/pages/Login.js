@@ -423,6 +423,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../utils/runtimeConfig';
 import {
   Mail, Lock, Eye, EyeOff, User, Hash, ShieldCheck, GraduationCap,
   CheckCircle2, XCircle, Loader2, ArrowLeft, Target, FileSearch, Mic,
@@ -625,8 +626,7 @@ export default function Login() {
   };
 
   const handleGoogleLogin = () => {
-    const backendUrl = (typeof process !== 'undefined' && process.env && process.env.REACT_APP_API_URL) || 'http://localhost:5000';
-    goTo(`${backendUrl}/api/auth/google`);
+    window.location.assign(`${API_BASE_URL}/api/auth/google`);
   };
 
   const fillDemo = (role) => {

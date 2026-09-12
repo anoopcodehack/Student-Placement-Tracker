@@ -15,8 +15,11 @@ const generateToken = (id) => {
 
 const googleClientId     = process.env.GOOGLE_CLIENT_ID;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
-const googleCallbackUrl  = process.env.GOOGLE_CALLBACK_URL ||
-  `${process.env.SERVER_URL || process.env.API_URL || 'http://localhost:5000'}/api/auth/google/callback`;
+const trimUrl = value => value?.replace(/\/+$/, '');
+const clientUrl = trimUrl(process.env.CLIENT_URL || process.env.FRONTEND_URL || 'http://localhost:3000');
+const serverUrl = trimUrl(process.env.SERVER_URL || process.env.API_URL || 'http://localhost:5000');
+const googleCallbackUrl  = trimUrl(process.env.GOOGLE_CALLBACK_URL) ||
+  `${serverUrl}/api/auth/google/callback`;
 
 router.use(passport.initialize());
 
@@ -124,6 +127,7 @@ router.post('/register', async (req, res) => {
         role:      user.role,
         isStudent: user.isStudent,
         rollNo:    user.rollNo,
+        profileImage: user.profileImage,
       }
     });
 
@@ -171,7 +175,6 @@ router.post('/login', async (req, res) => {
 // ══════════════════════════════════════════
 router.get('/google', (req, res, next) => {
   if (!googleClientId || !googleClientSecret) {
-    const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
     return res.redirect(`${clientUrl}/login?error=google_not_configured`);
   }
   return passport.authenticate('google', {
@@ -186,12 +189,12 @@ router.get('/google', (req, res, next) => {
 router.get('/google/callback',
   passport.authenticate('google', {
     session: false,
-    failureRedirect: `${process.env.CLIENT_URL || 'http://localhost:3000'}/login?error=google_auth_failed`,
+    failureRedirect: `${clientUrl}/login?error=google_auth_failed`,
   }),
   (req, res) => {
     const user  = req.user;
     const token = generateToken(user._id);
-    const redirectUrl = new URL(process.env.CLIENT_URL || 'http://localhost:3000');
+    const redirectUrl = new URL(clientUrl);
     redirectUrl.pathname = '/login';
     redirectUrl.searchParams.set('token', token);
     redirectUrl.searchParams.set('user', JSON.stringify({
@@ -200,6 +203,8 @@ router.get('/google/callback',
       email:     user.email,
       role:      user.role,
       isStudent: user.isStudent,
+      rollNo:     user.rollNo,
+      profileImage: user.profileImage,
     }));
     res.redirect(redirectUrl.toString());
   }
