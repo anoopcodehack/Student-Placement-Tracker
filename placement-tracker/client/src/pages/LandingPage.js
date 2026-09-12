@@ -4,6 +4,21 @@ import {
   ArrowUpRight, Menu, X,
 } from "lucide-react";
 
+const PUBLIC_AERIAL_IMG = "/collegeaerial.webp";
+const PUBLIC_ENTRANCE_IMG = "/Sahyadri-College.jpg";
+const PUBLIC_LOGO_IMG = "/Sayhadri-Logo-02.jpg";
+const STUDENT_IMAGES = ["/image1.png", "/image2.png", "/image3.png"];
+const COMPANY_LOGOS = {
+  Google: "/Google-Emblema.png",
+  Amazon: "/amazon.webp",
+  Microsoft: "/microsoft.png",
+  Swiggy: "/swiggy.webp",
+  PhonePe: "/phonepay.jpg",
+  TCS: "/tcs.webp",
+  BHEL: "/bhel.png",
+  Wipro: "/Wipro-logo.jpg",
+};
+
 /* ============================================================
    Assets — Sahyadri campus photography + crest, embedded so the
    page is self-contained.
@@ -51,14 +66,14 @@ const PLACED_STUDENTS = [
 ];
 
 const TOP_COMPANIES = [
-  { name: "Google", offers: 6, avg: "₹31.7 LPA" },
-  { name: "Amazon", offers: 8, avg: "₹24.8 LPA" },
-  { name: "Microsoft", offers: 7, avg: "₹23.2 LPA" },
-  { name: "Swiggy", offers: 10, avg: "₹16.0 LPA" },
-  { name: "PhonePe", offers: 7, avg: "₹17.8 LPA" },
-  { name: "TCS", offers: 10, avg: "₹5.6 LPA" },
-  { name: "BHEL", offers: 9, avg: "₹8.7 LPA" },
-  { name: "Wipro", offers: 5, avg: "₹4.9 LPA" },
+  { name: "Google", logo: "/Google-Emblema.png", offers: 6, avg: "₹31.7 LPA" },
+  { name: "Amazon", logo: "/amazon.webp", offers: 8, avg: "₹24.8 LPA" },
+  { name: "Microsoft", logo: "/microsoft.png", offers: 7, avg: "₹23.2 LPA" },
+  { name: "Swiggy", logo: "/swiggy.webp", offers: 10, avg: "₹16.0 LPA" },
+  { name: "PhonePe", logo: "/phonepay.jpg", offers: 7, avg: "₹17.8 LPA" },
+  { name: "TCS", logo: "/tcs.webp", offers: 10, avg: "₹5.6 LPA" },
+  { name: "BHEL", logo: "/bhel.png", offers: 9, avg: "₹8.7 LPA" },
+  { name: "Wipro", logo: "/Wipro-logo.jpg", offers: 5, avg: "₹4.9 LPA" },
 ];
 
 const FEATURES = [
@@ -178,7 +193,7 @@ function Preloader({ onCurtainUp, onFinished }) {
       transition: "opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1)",
       pointerEvents: stage === "exit" ? "none" : "all",
     }}>
-      <img src={CREST_IMG} alt="Sahyadri crest" style={{
+      <img src={PUBLIC_LOGO_IMG} alt="Sahyadri crest" style={{
         width: 76, height: "auto", display: "block",
         animation: "pt-crest-drop 1s cubic-bezier(0.34,1.35,0.64,1) both",
       }} />
@@ -220,6 +235,7 @@ export default function LandingPage() {
   const [loading, setLoading] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const [statsStarted, setStatsStarted] = useState(false);
+  const [inquirySent, setInquirySent] = useState(false);
   const statsRef = useRef(null);
 
   const [aboutTextRef, aboutTextShown] = useReveal();
@@ -256,6 +272,7 @@ export default function LandingPage() {
     { label: "Numbers", id: "numbers" },
     { label: "Recruiters", id: "recruiters" },
     { label: "Features", id: "features" },
+    { label: "Inquiry", id: "inquiry" },
   ];
 
   const scrollToId = (id) => {
@@ -287,15 +304,21 @@ export default function LandingPage() {
           100% { transform: translateY(0) scale(1); }
         }
         @keyframes pt-scrolldot { 0%,100% { transform: translateY(0); opacity: 0.5; } 50% { transform: translateY(8px); opacity: 1; } }
+        @keyframes pt-student-rail { from { transform: translateX(0); } to { transform: translateX(-50%); } }
         .pt-ticker-track:hover { animation-play-state: paused; }
+        .pt-student-rail:hover { animation-play-state: paused; }
         .pt-row { transition: background 0.2s ease; }
         .pt-row:hover { background: rgba(255,255,255,0.03); }
+        .pt-row:hover .pt-company-logo { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,0.18); }
         .pt-row-light:hover { background: rgba(19,26,16,0.03); }
         .pt-desktop-links { display: flex; align-items: center; gap: 36px; }
         .pt-hamburger { display: none; }
         @media (max-width: 880px) {
           .pt-desktop-links { display: none; }
           .pt-hamburger { display: flex; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .pt-student-rail { animation: none !important; }
         }
       `}</style>
 
@@ -317,7 +340,7 @@ export default function LandingPage() {
         transition: "all 0.3s ease",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <img src={CREST_IMG} alt="Sahyadri crest" style={{ height: 34, width: "auto" }} />
+          <img src={PUBLIC_LOGO_IMG} alt="Sahyadri crest" style={{ height: 34, width: "auto" }} />
           <div>
             <div style={{ fontFamily: display, fontWeight: 600, fontSize: "1.15rem", color: scrollY > 40 ? C.text : "#fff", lineHeight: 1 }}>
               PlaceTrack
@@ -390,7 +413,7 @@ export default function LandingPage() {
 
       {/* ============ HERO ============ */}
       <section style={{ position: "relative", height: "92vh", minHeight: 560, overflow: "hidden" }}>
-        <img src={AERIAL_IMG} alt="Sahyadri College campus, Adyar, Mangaluru" style={{
+        <img src={PUBLIC_AERIAL_IMG} alt="Sahyadri College campus, Adyar, Mangaluru" style={{
           position: "absolute", inset: 0, width: "100%", height: "100%",
           objectFit: "cover",
           transform: heroIn ? "scale(1)" : "scale(1.08)",
@@ -481,7 +504,12 @@ export default function LandingPage() {
             <div key={i} style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "0 1.75rem" }}>
               <span style={{ fontFamily: display, fontSize: "0.85rem", fontWeight: 600, color: "#fff" }}>{s.name}</span>
               <span style={{ fontSize: "0.72rem", color: C.mutedOnDark }}>placed at</span>
-              <span style={{ fontSize: "0.82rem", fontWeight: 600, color: "#9FE6BE" }}>{s.company}</span>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 7, fontSize: "0.82rem", fontWeight: 600, color: "#9FE6BE" }}>
+                <span style={{ width: 22, height: 22, padding: 3, display: "inline-flex", alignItems: "center", justifyContent: "center", background: "#fff", borderRadius: "50%" }}>
+                  <img src={COMPANY_LOGOS[s.company]} alt={`${s.company} logo`} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                </span>
+                {s.company}
+              </span>
               <span style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.6)" }}>{s.pkg}</span>
               <span style={{ color: C.hairlineDark, marginLeft: 6 }}>·</span>
             </div>
@@ -520,7 +548,7 @@ export default function LandingPage() {
             transition: "opacity 0.8s cubic-bezier(0.16,1,0.3,1) 0.12s, transform 0.8s cubic-bezier(0.16,1,0.3,1) 0.12s",
           }}>
             <div style={{ borderRadius: 4, overflow: "hidden", boxShadow: "0 24px 48px rgba(19,26,16,0.16)" }}>
-              <img src={ENTRANCE_IMG} alt="Sahyadri College of Engineering & Management, main entrance" style={{ width: "100%", display: "block", height: 300, objectFit: "cover" }} />
+              <img src={PUBLIC_ENTRANCE_IMG} alt="Sahyadri College of Engineering & Management, main entrance" style={{ width: "100%", display: "block", height: 300, objectFit: "cover" }} />
             </div>
             <div style={{ fontSize: "0.78rem", color: C.muted, marginTop: 12, lineHeight: 1.6 }}>
               Sahyadri College of Engineering &amp; Management, Adyar — on the banks of the Nethravathi.
@@ -555,6 +583,32 @@ export default function LandingPage() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ============ TOP STUDENTS ============ */}
+      <section aria-labelledby="top-students-title" style={{ padding: "clamp(4rem,8vw,6rem) 0", background: C.paperDeep, overflow: "hidden" }}>
+        <div style={{ maxWidth: 1180, margin: "0 auto", padding: "0 clamp(20px,4vw,56px)" }}>
+          <div style={{ maxWidth: 560, marginBottom: 34 }}>
+            <div style={{ fontSize: "0.72rem", letterSpacing: "0.14em", textTransform: "uppercase", color: C.clay, fontWeight: 600, marginBottom: 14 }}>
+              Student Success Stories
+            </div>
+            <h2 id="top-students-title" style={{ fontFamily: display, fontWeight: 600, fontSize: "clamp(1.9rem,3.4vw,2.7rem)", marginBottom: 14 }}>
+              Our top students, going places
+            </h2>
+            <p style={{ color: C.muted, fontSize: "0.95rem", lineHeight: 1.7 }}>
+              Celebrating the talent and achievements of Sahyadri students.
+            </p>
+          </div>
+        </div>
+        <div style={{ overflow: "hidden", maskImage: "linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)", WebkitMaskImage: "linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)" }}>
+          <div className="pt-student-rail" style={{ display: "flex", gap: 20, width: "max-content", animation: "pt-student-rail 32s linear infinite" }}>
+            {[...STUDENT_IMAGES, ...STUDENT_IMAGES].map((image, index) => (
+              <div key={`${image}-${index}`} style={{ width: "clamp(280px,38vw,460px)", flexShrink: 0, background: C.paper, border: `1px solid ${C.hairline}`, borderRadius: 8, padding: 10, boxShadow: "0 16px 34px rgba(19,26,16,0.1)" }}>
+                <img src={image} alt={`Sahyadri placement achievers ${index % STUDENT_IMAGES.length + 1}`} style={{ width: "100%", display: "block", aspectRatio: "1.75 / 1", objectFit: "cover", borderRadius: 4 }} />
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -625,13 +679,13 @@ export default function LandingPage() {
                 <div style={{ fontFamily: display, fontSize: "0.85rem", color: C.mutedOnDark, width: 28 }}>
                   {String(i + 1).padStart(2, "0")}
                 </div>
-                <div style={{
-                  width: 44, height: 44, borderRadius: "50%", flexShrink: 0,
-                  background: "rgba(241,243,234,0.06)", border: `1px solid ${C.hairlineDark}`,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontFamily: display, fontWeight: 600, fontSize: "0.85rem",
+                <div className="pt-company-logo" style={{
+                  width: 52, height: 52, borderRadius: 8, flexShrink: 0,
+                  background: "#fff", border: `1px solid ${C.hairlineDark}`,
+                  display: "flex", alignItems: "center", justifyContent: "center", padding: 8,
+                  transition: "transform 0.25s ease, box-shadow 0.25s ease",
                 }}>
-                  {c.name.slice(0, 2).toUpperCase()}
+                  <img src={c.logo} alt={`${c.name} logo`} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
                 </div>
                 <div style={{ fontFamily: display, fontWeight: 600, fontSize: "1.1rem", flex: 1, minWidth: 140 }}>
                   {c.name}
@@ -679,20 +733,68 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ============ PLACEMENT INQUIRY ============ */}
+      <section id="inquiry" aria-labelledby="inquiry-title" style={{ background: C.paperDeep, color: C.text, display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)" }} className="pt-inquiry">
+        <div style={{ padding: "clamp(3.5rem,8vw,6rem) clamp(20px,7vw,7rem)" }}>
+          <div style={{ maxWidth: 620 }}>
+            <div style={{ fontSize: "0.72rem", letterSpacing: "0.14em", textTransform: "uppercase", color: C.clay, fontWeight: 600, marginBottom: 14 }}>
+              Connect With The Placement Cell
+            </div>
+            <h2 id="inquiry-title" style={{ fontFamily: display, fontWeight: 600, fontSize: "clamp(2rem,4vw,3.2rem)", lineHeight: 1.08, marginBottom: 14 }}>
+              Placement Inquiry
+            </h2>
+            <p style={{ color: C.muted, fontSize: "0.95rem", lineHeight: 1.7, maxWidth: 480, marginBottom: 34 }}>
+              Have a question about placements, campus drives, or student opportunities? Send a message to our team.
+            </p>
+            {inquirySent ? (
+              <div style={{ border: `1px solid ${C.green}55`, background: `${C.green}12`, padding: "18px 20px", color: C.greenDeep, maxWidth: 560 }}>
+                Thanks for reaching out. The Sahyadri placement team will get back to you soon.
+              </div>
+            ) : (
+              <form onSubmit={(event) => { event.preventDefault(); setInquirySent(true); }} style={{ display: "grid", gap: 24, maxWidth: 620 }}>
+                {[{ label: "Name", type: "text", placeholder: "Your name" }, { label: "Email", type: "email", placeholder: "you@example.com" }, { label: "Phone", type: "tel", placeholder: "+91 00000 00000" }].map((field) => (
+                  <label key={field.label} style={{ display: "grid", gap: 9, color: C.text, fontSize: "0.82rem", fontWeight: 600 }}>
+                    {field.label}
+                    <input type={field.type} placeholder={field.placeholder} required style={{ width: "100%", border: "none", borderBottom: `1px solid ${C.green}66`, background: "transparent", color: C.text, padding: "10px 0", outline: "none", font: `500 0.95rem ${body}` }} />
+                  </label>
+                ))}
+                <label style={{ display: "grid", gap: 9, color: C.text, fontSize: "0.82rem", fontWeight: 600 }}>
+                  Message
+                  <textarea placeholder="How can we help?" required rows="3" style={{ width: "100%", resize: "vertical", border: "none", borderBottom: `1px solid ${C.green}66`, background: "transparent", color: C.text, padding: "10px 0", outline: "none", font: `500 0.95rem ${body}` }} />
+                </label>
+                <button type="submit" style={{ justifySelf: "start", background: C.green, color: "#fff", border: "none", borderRadius: 999, padding: "14px 32px", font: `700 0.95rem ${body}`, cursor: "pointer" }}>
+                  Send Inquiry
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+        <div style={{ minHeight: 480, position: "relative", background: "#dbe3e9" }}>
+          <iframe title="Sahyadri College location" src="https://www.google.com/maps?q=Sahyadri%20College%20of%20Engineering%20and%20Management%2C%20Mangaluru&output=embed" style={{ width: "100%", height: "100%", minHeight: 480, border: 0, filter: "grayscale(0.25)" }} loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+          <a href="https://maps.app.goo.gl/2h8ztRUFWdHeoeMF9" target="_blank" rel="noreferrer" style={{ position: "absolute", left: 24, bottom: 24, background: "#fff", color: C.ink, padding: "12px 16px", borderRadius: 4, fontSize: "0.82rem", fontWeight: 600, boxShadow: "0 8px 24px rgba(19,26,16,0.16)" }}>
+            Open in Google Maps <ArrowUpRight size={14} style={{ verticalAlign: "-2px", marginLeft: 5 }} />
+          </a>
+        </div>
+      </section>
+
       {/* ============ FOOTER ============ */}
       <footer style={{ background: C.ink, color: C.onDark, position: "relative", overflow: "hidden" }}>
         <div style={{
           maxWidth: 1180, margin: "0 auto", padding: "3.5rem clamp(20px,4vw,56px) 2rem",
-          display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 40,
+          display: "grid", gridTemplateColumns: "minmax(280px, 1.25fr) repeat(2, minmax(130px, 0.5fr))", gap: 48,
         }}>
           <div style={{ maxWidth: 320 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
-              <img src={CREST_IMG} alt="Sahyadri crest" style={{ height: 30, width: "auto" }} />
-              <span style={{ fontFamily: display, fontWeight: 600, fontSize: "1.1rem" }}>PlaceTrack</span>
+              <img src={PUBLIC_LOGO_IMG} alt="Sahyadri College logo" style={{ height: 70, width: "auto", maxWidth: 300, objectFit: "contain", background: "#fff", borderRadius: 3 }} />
             </div>
-            <p style={{ fontSize: "0.82rem", color: C.mutedOnDark, lineHeight: 1.7 }}>
-              Sahyadri College of Engineering &amp; Management, Adyar, Mangaluru.
+            <p style={{ fontSize: "0.82rem", color: C.mutedOnDark, lineHeight: 1.7, marginBottom: 18 }}>
+              PlaceTrack · Sahyadri College of Engineering &amp; Management, Mangaluru.
             </p>
+            <div style={{ display: "grid", gap: 8, fontSize: "0.82rem", color: C.mutedOnDark, lineHeight: 1.5 }}>
+              <a href="tel:+918242277722" style={{ color: "inherit" }}>+91 824 2277722 / 333</a>
+              <a href="mailto:info@sahyadri.edu.in" style={{ color: "inherit" }}>info@sahyadri.edu.in</a>
+              <span>Sahyadri Campus, Adyar, Mangaluru, Karnataka, India - 575007</span>
+            </div>
           </div>
 
           <div style={{ display: "flex", gap: 56, flexWrap: "wrap" }}>
@@ -705,8 +807,9 @@ export default function LandingPage() {
               ))}
             </div>
             <div>
-              <div style={{ fontSize: "0.68rem", letterSpacing: "0.1em", textTransform: "uppercase", color: C.mutedOnDark, marginBottom: 14 }}>Portal</div>
+                <div style={{ fontSize: "0.68rem", letterSpacing: "0.1em", textTransform: "uppercase", color: C.mutedOnDark, marginBottom: 14 }}>Portal</div>
               <div onClick={() => goTo("/login")} style={{ fontSize: "0.85rem", cursor: "pointer", color: "rgba(241,243,234,0.85)" }}>Login</div>
+                <div onClick={() => scrollToId("inquiry")} style={{ fontSize: "0.85rem", marginTop: 10, cursor: "pointer", color: "rgba(241,243,234,0.85)" }}>Placement inquiry</div>
             </div>
           </div>
         </div>
@@ -733,6 +836,10 @@ export default function LandingPage() {
         @media (max-width: 820px) {
           .pt-grid-2 { grid-template-columns: 1fr !important; }
           .pt-grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
+          .pt-inquiry { grid-template-columns: 1fr !important; }
+          .pt-inquiry > div:last-child { min-height: 360px !important; }
+          .pt-inquiry iframe { min-height: 360px !important; }
+          footer > div:first-child { grid-template-columns: 1fr !important; gap: 32px !important; }
         }
       `}</style>
     </div>
