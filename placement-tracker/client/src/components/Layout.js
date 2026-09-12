@@ -43,7 +43,7 @@ export default function Layout() {
               style={{ cursor: 'pointer', flexShrink: 0 }}
               title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
             >
-              <i className={`bi ${collapsed ? 'bi-layout-sidebar' : 'bi-mortarboard-fill'}`}></i>
+              <img src="/Sayhadri-Logo-02.jpg" alt="Sahyadri College logo" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 8, background: '#fff', padding: 2 }} />
             </div>
             {!collapsed && (
               <div>
@@ -156,31 +156,24 @@ export default function Layout() {
               onClick={() => navigate('/profile')}
               style={{ cursor: 'pointer' }}
             >
-              {initials}
+              {user?.profileImage ? (
+                <img
+                  src={`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${user.profileImage}`}
+                  alt="Profile"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
+                />
+              ) : initials}
             </div>
 
             {!collapsed && (
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div
-                  className="user-name"
-                  onClick={() => navigate('/profile')}
-                  style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', cursor: 'pointer' }}
-                >
-                  {user?.name}
-                </div>
-                <div className="user-role" style={{ textTransform: 'capitalize' }}>
-                  {user?.isStudent ? '🎓 Student' : user?.role}
+              <div style={{ flex: 1, minWidth: 0, textAlign: 'center' }}>
+                <div className="user-role" style={{ textTransform: 'capitalize', fontWeight: 700 }}>
+                  {user?.isStudent ? 'Student' : user?.role}
                 </div>
               </div>
             )}
 
             {!collapsed && <NotificationBell />}
-
-            {!collapsed && (
-              <button className="logout-btn" title="My Profile" onClick={() => navigate('/profile')}>
-                <i className="bi bi-person-circle"></i>
-              </button>
-            )}
 
             <button
               className="logout-btn"

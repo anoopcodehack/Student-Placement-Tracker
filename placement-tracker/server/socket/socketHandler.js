@@ -1,10 +1,21 @@
-// helper to emit notifications cleanly from anywhere
-const emitNotification = (io, userId, notification) => {
-  io.to(userId).emit('notification', {
+const Notification = require('../models/Notification');
+
+// Persist first so the notification is available after refresh, then deliver it live.
+const emitNotification = async (io, userId, notification) => {
+  const saved = await Notification.create({
+    user: userId,
     message: notification.message,
-    type: notification.type,   // 'drive' | 'result' | 'interview'
-    link: notification.link,
-    timestamp: new Date()
+    type: notification.type,
+    link: notification.link || '',
+  });
+
+  io.to(userId).emit('notification', {
+    _id: saved._id,
+    message: notification.message,
+    type: notification.type,
+    link: notification.link || '',
+    read: false,
+    timestamp: saved.createdAt,
   });
 };
 

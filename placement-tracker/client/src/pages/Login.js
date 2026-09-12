@@ -421,13 +421,8 @@
 
 
 import React, { useState, useEffect } from 'react';
-/* ------------------------------------------------------------------
-   In your actual project, remove the three stand-ins below and use:
-     import { useAuth } from '../context/AuthContext';
-     import { useNavigate } from 'react-router-dom';
-     import { toast } from 'react-toastify';
-   They're mocked here only so this file can run standalone as a preview.
-   ------------------------------------------------------------------ */
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import {
   Mail, Lock, Eye, EyeOff, User, Hash, ShieldCheck, GraduationCap,
   CheckCircle2, XCircle, Loader2, ArrowLeft, Target, FileSearch, Mic,
@@ -466,17 +461,11 @@ function goTo(path) {
   if (typeof window !== "undefined") window.location.href = path;
 }
 
-/* ---- preview stand-ins (delete when wiring into the real app) ---- */
-function useAuth() {
-  return {
-    login: (email, password) => new Promise((res) => setTimeout(() => res({ email }), 900)),
-    register: (name, email, password, rollNo) => new Promise((res) => setTimeout(res, 900)),
-    authenticate: () => {},
-  };
+function getPostLoginPath(user) {
+  if (user?.isStudent === true) return '/profile';
+  return '/';
 }
-function useNavigate() {
-  return (path) => goTo(path === '/' ? '/' : path);
-}
+
 function useToastStack() {
   const [items, setItems] = useState([]);
   const push = (type, message) => {
@@ -486,8 +475,6 @@ function useToastStack() {
   };
   return [items, { success: (m) => push('success', m), error: (m) => push('error', m) }];
 }
-/* -------------------------------------------------------------- */
-
 const GoogleIcon = () => (
   <svg width="18" height="18" viewBox="0 0 48 48">
     <path fill="#FFC107" d="M43.6 20H24v8h11.3C33.7 32.8 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 19.7-8 19.7-20 0-1.3-.1-2.7-.1-4z" />
@@ -603,7 +590,7 @@ export default function Login() {
       try {
         const user = JSON.parse(userData);
         authenticate(token, user);
-        navigate('/');
+        navigate(getPostLoginPath(user), { replace: true });
       } catch { toast.error('Google authentication failed.'); }
     }
     if (token || userData || error) window.history.replaceState({}, document.title, '/login');
@@ -614,9 +601,9 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
     try {
-      await login(form.email, form.password);
+      const user = await login(form.email, form.password);
       toast.success('Welcome back!');
-      navigate('/');
+      navigate(getPostLoginPath(user), { replace: true });
     } catch (err) {
       toast.error(err.response?.data?.message || 'Invalid email or password');
     } finally { setLoading(false); }
@@ -629,9 +616,9 @@ export default function Login() {
     if (signupForm.accountType === 'student' && !signupForm.rollNo) return toast.error('Please enter your roll number!');
     setLoading(true);
     try {
-      await register(signupForm.name, signupForm.email, signupForm.password, signupForm.rollNo);
+      const user = await register(signupForm.name, signupForm.email, signupForm.password, signupForm.rollNo);
       toast.success('Account created! Welcome.');
-      navigate('/');
+      navigate(getPostLoginPath(user), { replace: true });
     } catch (err) {
       toast.error(err.response?.data?.message || 'Signup failed');
     } finally { setLoading(false); }

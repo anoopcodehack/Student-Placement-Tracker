@@ -17,17 +17,15 @@ const NotificationBell = () => {
         className="logout-btn"
         title="Notifications"
       >
-        🔔
+        <i className="bi bi-bell-fill" aria-hidden="true"></i>
         {unread > 0 && (
           <span style={{
-            position: 'absolute', top: -6, right: -6,
-            background: 'red', color: 'white',
+            position: 'absolute', top: -2, right: -2,
+            background: '#d7e36f', color: '#153f28',
             borderRadius: '50%', fontSize: 11,
-            width: 18, height: 18,
+            width: 9, height: 9,
             display: 'flex', alignItems: 'center', justifyContent: 'center'
-          }}>
-            {unread}
-          </span>
+          }} aria-label={`${unread} unread notifications`} />
         )}
       </button>
     </div>

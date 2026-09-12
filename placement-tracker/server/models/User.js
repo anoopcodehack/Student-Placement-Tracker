@@ -37,6 +37,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true, lowercase: true, trim: true },
   password: { type: String, required: true, minlength: 6 },
   role: { type: String, enum: ['admin', 'viewer'], default: 'viewer' },
+  profileImage: { type: String, default: '' },
 
   // ── Student link ──
   // If this viewer is also a student, link their Student document here

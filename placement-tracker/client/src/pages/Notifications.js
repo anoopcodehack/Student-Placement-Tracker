@@ -2,15 +2,15 @@ import { useNotifications } from '../context/NotificationProvider';
 import { useNavigate } from 'react-router-dom';
 
 export default function Notifications() {
-  const { notifications, markAllRead } = useNotifications();
+  const { notifications, unread, markAllRead, removeNotification, clearNotifications } = useNotifications();
   const navigate = useNavigate();
 
   const typeIcon = (type) => {
-    if (type === 'company') return '🏢';
-    if (type === 'result') return '🎉';
-    if (type === 'drive') return '📋';
-    if (type === 'interview') return '🗓️';
-    return '🔔';
+    if (type === 'company') return 'bi-building-fill';
+    if (type === 'result') return 'bi-trophy-fill';
+    if (type === 'drive') return 'bi-clipboard2-check-fill';
+    if (type === 'interview') return 'bi-calendar-event-fill';
+    return 'bi-bell-fill';
   };
 
   return (
@@ -18,18 +18,19 @@ export default function Notifications() {
       <div className="topbar">
         <div>
           <h1 className="page-title">Notifications</h1>
-          <p className="page-sub">{notifications.length} total notifications</p>
+          <p className="page-sub">{notifications.length} total notifications{unread > 0 ? ` · ${unread} unread` : ''}</p>
         </div>
         {notifications.length > 0 && (
-          <button className="btn btn-outline-secondary" onClick={markAllRead}>
-            Mark all read
-          </button>
+            <div className="d-flex gap-2">
+              {unread > 0 && <button className="btn btn-outline-primary" onClick={markAllRead}><i className="bi bi-check2-all me-1"></i>Mark all read</button>}
+              <button className="btn btn-outline-danger" onClick={clearNotifications}><i className="bi bi-trash3 me-1"></i>Clear history</button>
+            </div>
         )}
       </div>
 
       {notifications.length === 0 ? (
         <div className="text-center py-5">
-          <div style={{ fontSize: '3rem' }}>🔔</div>
+          <i className="bi bi-bell-slash" style={{ fontSize: '3rem', color: '#a6b296' }}></i>
           <h6 className="mt-3 text-muted">No notifications yet</h6>
           <p className="text-muted" style={{ fontSize: '0.85rem' }}>
             You'll be notified when companies, drives or results are added
@@ -39,7 +40,7 @@ export default function Notifications() {
         <div style={{ maxWidth: 650 }}>
           {notifications.map((n, i) => (
             <div
-              key={i}
+              key={n._id || i}
               onClick={() => n.link && navigate(n.link)}
               style={{
                 display: 'flex',
@@ -49,7 +50,8 @@ export default function Notifications() {
                 marginBottom: 10,
                 background: 'white',
                 borderRadius: 12,
-                border: '1px solid #e2e8f0',
+                border: n.read ? '1px solid #e2e8f0' : '1px solid #d7e36f',
+                background: n.read ? 'white' : '#fbfdea',
                 cursor: n.link ? 'pointer' : 'default',
                 transition: 'box-shadow 0.2s',
               }}
@@ -61,9 +63,9 @@ export default function Notifications() {
                 width: 42, height: 42, borderRadius: 10,
                 background: '#f1f5f9',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '1.3rem', flexShrink: 0
+                fontSize: '1.05rem', color: '#1f5c3a', flexShrink: 0
               }}>
-                {typeIcon(n.type)}
+                <i className={`bi ${typeIcon(n.type)}`}></i>
               </div>
 
               {/* Content */}
@@ -83,6 +85,16 @@ export default function Notifications() {
               {n.link && (
                 <i className="bi bi-chevron-right" style={{ color: '#cbd5e1', alignSelf: 'center' }}></i>
               )}
+              <button
+                type="button"
+                title="Delete notification"
+                aria-label="Delete notification"
+                className="btn btn-sm btn-link text-danger"
+                onClick={(event) => { event.stopPropagation(); removeNotification(n._id); }}
+                style={{ alignSelf: 'center', padding: '4px 6px' }}
+              >
+                <i className="bi bi-trash3"></i>
+              </button>
             </div>
           ))}
         </div>

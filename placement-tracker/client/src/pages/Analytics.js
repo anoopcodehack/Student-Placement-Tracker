@@ -11,7 +11,7 @@ import { exportToExcel, exportToPDF } from '../utils/exportUtils';
 
 ChartJS.register(CategoryScale,LinearScale,BarElement,PointElement,LineElement,ArcElement,RadialLinearScale,Title,Tooltip,Legend,Filler);
 
-const COLORS = ['#1a56db','#06b6d4','#8b5cf6','#f59e0b','#10b981','#ef4444','#f97316','#6366f1','#ec4899','#14b8a6'];
+const COLORS = ['#1f5c3a','#6fb58c','#d7e36f','#a8462b','#9fe6be','#71806a','#c27a53','#b8dfbf','#d99a4e','#3f6c51'];
 
 export default function Analytics() {
   const [overview, setOverview]     = useState(null);
@@ -87,8 +87,8 @@ export default function Analytics() {
   const branchBar = {
     labels: branchData.map(b=>b._id),
     datasets:[
-      { label:'Total', data:branchData.map(b=>b.total), backgroundColor:'rgba(26,86,219,0.12)', borderColor:'#1a56db', borderWidth:2, borderRadius:6 },
-      { label:'Placed', data:branchData.map(b=>b.placed), backgroundColor:'#1a56db', borderRadius:6 },
+      { label:'Total', data:branchData.map(b=>b.total), backgroundColor:'rgba(31,92,58,0.14)', borderColor:'#1f5c3a', borderWidth:2, borderRadius:6 },
+      { label:'Placed', data:branchData.map(b=>b.placed), backgroundColor:'#1f5c3a', borderRadius:6 },
     ]
   };
 
@@ -105,20 +105,20 @@ export default function Analytics() {
   const donut = {
     labels:['Placed','Unplaced'],
     datasets:[{ data:[overview?.placedStudents,overview?.unplacedStudents],
-      backgroundColor:['#1a56db','#e2e8f0'], borderWidth:0, hoverOffset:6 }]
+      backgroundColor:['#1f5c3a','#d9e1d2'], borderWidth:0, hoverOffset:6 }]
   };
 
   const pkgBar = {
     labels: pkgDist.map(p=>p.range+' LPA'),
     datasets:[{ label:'Students', data:pkgDist.map(p=>p.count),
-      backgroundColor:['#dbeafe','#93c5fd','#60a5fa','#3b82f6','#1d4ed8'], borderRadius:8 }]
+      backgroundColor:['#e6eada','#b8dfbf','#9fe6be','#6fb58c','#1f5c3a'], borderRadius:8 }]
   };
 
   const lineData = {
     labels: monthly.map(m=>m.month),
     datasets:[
-      { label:'Offers', data:monthly.map(m=>m.offers), borderColor:'#1a56db', backgroundColor:'rgba(26,86,219,0.07)', fill:true, tension:0.4, pointBackgroundColor:'#1a56db', pointRadius:4 },
-      { label:'Avg Pkg (LPA)', data:monthly.map(m=>m.avgPackage), borderColor:'#06b6d4', backgroundColor:'rgba(6,182,212,0.05)', fill:true, tension:0.4, pointBackgroundColor:'#06b6d4', pointRadius:4, yAxisID:'y1' },
+      { label:'Offers', data:monthly.map(m=>m.offers), borderColor:'#1f5c3a', backgroundColor:'rgba(31,92,58,0.07)', fill:true, tension:0.4, pointBackgroundColor:'#1f5c3a', pointRadius:4 },
+      { label:'Avg Pkg (LPA)', data:monthly.map(m=>m.avgPackage), borderColor:'#a8462b', backgroundColor:'rgba(168,70,43,0.05)', fill:true, tension:0.4, pointBackgroundColor:'#a8462b', pointRadius:4, yAxisID:'y1' },
     ]
   };
 
@@ -127,8 +127,8 @@ export default function Analytics() {
     datasets:[{
       label:'Avg CGPA',
       data: branchData.map(b=>b.avgCGPA?+b.avgCGPA.toFixed(2):0),
-      backgroundColor:'rgba(26,86,219,0.12)', borderColor:'#1a56db',
-      pointBackgroundColor:'#1a56db', pointRadius:4,
+      backgroundColor:'rgba(31,92,58,0.12)', borderColor:'#1f5c3a',
+      pointBackgroundColor:'#1f5c3a', pointRadius:4,
     }]
   };
 
@@ -174,7 +174,7 @@ export default function Analytics() {
       {/* KPI Row */}
       <div className="row g-3 mb-4">
         {[
-          { label:'Total Students', val:overview?.totalStudents, icon:'bi-people-fill', color:'#1a56db', bg:'#eff6ff' },
+          { label:'Total Students', val:overview?.totalStudents, icon:'bi-people-fill', color:'#1f5c3a', bg:'#e6eada' },
           { label:'Placed', val:overview?.placedStudents, icon:'bi-trophy-fill', color:'#059669', bg:'#f0fdf4', sub:`${overview?.placementRate}% rate` },
           { label:'Unplaced', val:overview?.unplacedStudents, icon:'bi-person-x-fill', color:'#dc2626', bg:'#fff1f2' },
           { label:'Avg Package', val:`₹${overview?.avgPackage}`, icon:'bi-currency-rupee', color:'#d97706', bg:'#fffbeb', sub:'LPA' },
@@ -208,7 +208,7 @@ export default function Analytics() {
             </div>
             <div style={{marginTop:14,height:10,background:'rgba(255,255,255,0.1)',borderRadius:8,overflow:'hidden'}}>
               <div style={{width:`${overview?.placementRate}%`,height:'100%',
-                background:'linear-gradient(90deg,#3b82f6,#06b6d4)',borderRadius:8,transition:'width 1s ease'}}/>
+                background:'linear-gradient(90deg,#9fe6be,#d7e36f)',borderRadius:8,transition:'width 1s ease'}}/>
             </div>
           </div>
           <div className="col-md-7 mt-3 mt-md-0">
@@ -246,7 +246,7 @@ export default function Analytics() {
             <div className="chart-title w-100">Placed vs Unplaced</div>
             <Doughnut data={donut} options={{plugins:{legend:{position:'bottom'}},cutout:'72%'}}/>
             <div className="text-center mt-2">
-              <div style={{fontFamily:'Syne,sans-serif',fontWeight:800,fontSize:'1.8rem',color:'#1a56db'}}>{overview?.placementRate}%</div>
+              <div style={{fontFamily:'Syne,sans-serif',fontWeight:800,fontSize:'1.8rem',color:'#1f5c3a'}}>{overview?.placementRate}%</div>
               <div style={{fontSize:'0.72rem',color:'#94a3b8'}}>placement rate</div>
             </div>
           </div>
@@ -346,7 +346,7 @@ export default function Analytics() {
                     </div>
                   </td>
                   <td><span className="badge badge-industry rounded-pill px-2">{c.industry}</span></td>
-                  <td><span style={{fontWeight:800,color:'#1a56db',fontSize:'0.95rem'}}>{c.offers}</span></td>
+                  <td><span style={{fontWeight:800,color:'#1f5c3a',fontSize:'0.95rem'}}>{c.offers}</span></td>
                   <td style={{fontWeight:600}}>₹{c.avgPackage?.toFixed(1)} LPA</td>
                   <td><span style={{fontSize:'0.72rem',fontWeight:700,padding:'3px 10px',borderRadius:20,background:'#fffbeb',color:'#92400e'}}>₹{c.maxPackage} LPA</span></td>
                   <td style={{minWidth:130}}>

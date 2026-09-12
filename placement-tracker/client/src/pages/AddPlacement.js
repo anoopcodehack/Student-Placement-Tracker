@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-const pkgColor = p => p>=20?'#7c3aed':p>=10?'#1a56db':p>=5?'#059669':'#64748b';
+const pkgColor = p => p>=20?'#6b4a9a':p>=10?'#1f5c3a':p>=5?'#6fb58c':'#647861';
 
 export default function AddPlacement() {
   const [form, setForm] = useState({
@@ -40,7 +40,7 @@ export default function AddPlacement() {
     setLoading(true);
     try {
       await axios.post('/api/placements', form);
-      toast.success('🎉 Placement recorded!');
+      toast.success('Placement recorded successfully');
       navigate('/placements');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Save failed');
@@ -152,7 +152,7 @@ export default function AddPlacement() {
               </h6>
 
               {selectedStudent ? (
-                <div style={{background:'#eff6ff',borderRadius:10,padding:'0.85rem',marginBottom:12}}>
+                <div style={{background:'#e6eada',borderRadius:10,padding:'0.85rem',marginBottom:12}}>
                   <div style={{fontWeight:700,fontSize:'0.9rem'}}>{selectedStudent.name}</div>
                   <div style={{fontSize:'0.75rem',color:'#1e40af',marginTop:3}}>
                     {selectedStudent.rollNo} · {selectedStudent.branch} · CGPA {selectedStudent.cgpa}
@@ -181,7 +181,7 @@ export default function AddPlacement() {
 
               {form.package && (
                 <div style={{
-                  background:'linear-gradient(135deg,#eff6ff,#f0fdf4)',
+                  background:'linear-gradient(135deg,#e6eada,#f0fdf4)',
                   borderRadius:12,padding:'1.25rem',textAlign:'center',
                   border:'1px solid #bfdbfe'
                 }}>

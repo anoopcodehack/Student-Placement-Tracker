@@ -237,7 +237,7 @@ export default function MockInterview({ student }) {
           </div>
           {q?.hint && (
             <div style={{ marginTop: 10, fontSize: '0.75rem', color: '#94a3b8' }}>
-              💡 Hint: {q.hint}
+              <><i className="bi bi-lightbulb-fill me-1"></i>Hint: {q.hint}</>
             </div>
           )}
         </div>
@@ -319,9 +319,9 @@ export default function MockInterview({ student }) {
             <div style={{ fontSize: '0.65rem', color: sc, fontWeight: 700 }}>OUT OF 10</div>
           </div>
           <div style={{ marginTop: 12, fontFamily: 'Syne,sans-serif', fontWeight: 700, fontSize: '1.1rem' }}>
-            {Number(avgScore) >= 8 ? '🎉 Excellent Performance!' :
+            {Number(avgScore) >= 8 ? 'Excellent Performance' :
               Number(avgScore) >= 6 ? '👍 Good Performance!' :
-                Number(avgScore) >= 4 ? '📈 Needs Improvement' : '💪 Keep Practicing!'}
+                Number(avgScore) >= 4 ? 'Needs Improvement' : 'Keep Practicing'}
           </div>
           {result?.overallFeedback && (
             <p style={{ fontSize: '0.85rem', color: '#64748b', marginTop: 8 }}>

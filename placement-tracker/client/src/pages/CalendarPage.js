@@ -8,9 +8,15 @@ import { useAuth } from '../context/AuthContext';
 import ConfirmModal from '../components/ConfirmModal';
 
 const INDUSTRY_COLORS = {
-  IT: '#1a56db', Product: '#059669', Finance: '#d97706',
+  IT: '#1f5c3a', Product: '#6fb58c', Finance: '#d97706',
   Consulting: '#0891b2', Core: '#64748b', Startup: '#dc2626',
   PSU: '#7c3aed', Service: '#6366f1', Other: '#94a3b8',
+};
+
+const COMPANY_LOGOS = {
+  Google: '/Google-Emblema.png', Amazon: '/amazon.webp', Microsoft: '/microsoft.png',
+  Swiggy: '/swiggy.webp', PhonePe: '/phonepay.jpg', TCS: '/tcs.webp',
+  BHEL: '/bhel.png', Wipro: '/Wipro-logo.jpg',
 };
 
 export default function Companies() {
@@ -151,6 +157,7 @@ export default function Companies() {
         <div className="row g-3">
           {companies.map((c) => {
             const color = INDUSTRY_COLORS[c.industry] || '#94a3b8';
+            const logo = COMPANY_LOGOS[c.name];
             return (
               <div key={c._id} className="col-md-6 col-xl-4 fade-in">
                 <div className="company-card h-100">
@@ -161,9 +168,10 @@ export default function Companies() {
                     <div className="d-flex align-items-center gap-3">
                       <div className="avatar" style={{
                         width: 46, height: 46, fontSize: '1rem', fontWeight: 800,
-                        background: `${color}15`, color, borderRadius: 12,
+                        background: logo ? '#fff' : `${color}15`, color, borderRadius: 12,
+                        padding: logo ? 7 : 0, border: logo ? '1px solid #d9e1d2' : 'none',
                       }}>
-                        {c.name.slice(0, 2).toUpperCase()}
+                        {logo ? <img src={logo} alt={`${c.name} logo`} style={{width:'100%',height:'100%',objectFit:'contain'}} /> : c.name.slice(0, 2).toUpperCase()}
                       </div>
                       <div>
                         <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#1e293b' }}>{c.name}</div>
@@ -179,7 +187,7 @@ export default function Companies() {
                   {/* Stats */}
                   <div className="row g-2 mb-3">
                     {[
-                      { label: 'Hired', val: c.studentsHired, color: '#1a56db' },
+                      { label: 'Hired', val: c.studentsHired, color: '#1f5c3a' },
                       { label: 'Min Pkg', val: c.packageRange?.min ? `₹${c.packageRange.min}L` : '—', color: '#059669' },
                       { label: 'Max Pkg', val: c.packageRange?.max ? `₹${c.packageRange.max}L` : '—', color: '#d97706' },
                     ].map((m, i) => (
@@ -209,7 +217,7 @@ export default function Companies() {
                   <div style={{
                     padding: '0.6rem 0.75rem',
                     borderRadius: 8,
-                    background: isToday(c.visitDate) ? '#eff6ff' :
+                    background: isToday(c.visitDate) ? '#e6eada' :
                                 isUpcoming(c.visitDate) ? '#f0fdf4' :
                                 isPast(c.visitDate) ? '#f8fafc' : '#fafafa',
                     border: `1px solid ${isToday(c.visitDate) ? '#bfdbfe' :
@@ -224,7 +232,7 @@ export default function Companies() {
                             <div style={{
                               fontSize: '0.68rem', fontWeight: 700, textTransform: 'uppercase',
                               letterSpacing: '0.06em',
-                              color: isToday(c.visitDate) ? '#1a56db' :
+                              color: isToday(c.visitDate) ? '#1f5c3a' :
                                      isUpcoming(c.visitDate) ? '#059669' : '#94a3b8',
                             }}>
                               {isToday(c.visitDate) ? '🔴 TODAY' :
@@ -301,7 +309,7 @@ export default function Companies() {
                   />
 
                   {newDate && (
-                    <div style={{ marginTop: 12, padding: '10px 14px', background: '#eff6ff', borderRadius: 10, fontSize: '0.82rem', color: '#1e40af' }}>
+                    <div style={{ marginTop: 12, padding: '10px 14px', background: '#e6eada', borderRadius: 10, fontSize: '0.82rem', color: '#153f28' }}>
                       <i className="bi bi-calendar-check me-1"></i>
                       Drive will be shown as: <strong>{fmtDate(newDate)}</strong>
                     </div>

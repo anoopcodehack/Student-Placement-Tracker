@@ -182,8 +182,8 @@ export default function AddStudent() {
               </div>
               <div style={{
                 fontSize:'0.78rem',padding:'8px 12px',borderRadius:8,
-                background:form.skills.length>0?'#eff6ff':'#f8fafc',
-                color:form.skills.length>0?'#1a56db':'#94a3b8',
+                background:form.skills.length>0?'#e6eada':'#f8fafc',
+                color:form.skills.length>0?'#1f5c3a':'#94a3b8',
                 border:`1px solid ${form.skills.length>0?'#bfdbfe':'#e2e8f0'}`
               }}>
                 <i className="bi bi-check-circle me-1"></i>
@@ -192,11 +192,11 @@ export default function AddStudent() {
 
               {/* Live preview */}
               {(form.name||form.branch||form.cgpa) && (
-                <div style={{marginTop:'1rem',padding:'0.85rem',background:'linear-gradient(135deg,#0f172a,#1e3a5f)',borderRadius:10,color:'#fff'}}>
+                <div style={{marginTop:'1rem',padding:'0.85rem',background:'linear-gradient(135deg,#153f28,#1f5c3a)',borderRadius:10,color:'#fff'}}>
                   <div style={{fontSize:'0.62rem',color:'#64748b',textTransform:'uppercase',letterSpacing:'0.1em',marginBottom:6}}>Preview</div>
                   <div style={{fontFamily:'Syne,sans-serif',fontWeight:700,fontSize:'0.95rem'}}>{form.name||'Student Name'}</div>
                   <div style={{fontSize:'0.72rem',color:'#94a3b8',marginTop:2}}>{form.branch} · Batch {form.batch}</div>
-                  {form.cgpa && <div style={{fontFamily:'Syne,sans-serif',fontWeight:800,fontSize:'1.4rem',marginTop:6,color:'#06b6d4'}}>{form.cgpa} <span style={{fontSize:'0.7rem',color:'#475569'}}>CGPA</span></div>}
+                  {form.cgpa && <div style={{fontFamily:'Syne,sans-serif',fontWeight:800,fontSize:'1.4rem',marginTop:6,color:'#9fe6be'}}>{form.cgpa} <span style={{fontSize:'0.7rem',color:'#a6b296'}}>CGPA</span></div>}
                 </div>
               )}
             </div>

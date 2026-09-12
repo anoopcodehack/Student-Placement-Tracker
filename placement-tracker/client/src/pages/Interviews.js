@@ -12,7 +12,7 @@ const DIFFICULTY_COLORS = {
 const VERDICT_COLORS = {
   Selected: { bg: '#dcfce7', color: '#166534' },
   Rejected: { bg: '#fee2e2', color: '#991b1b' },
-  'On Hold': { bg: '#eff6ff', color: '#1e40af' },
+  'On Hold': { bg: '#e6eada', color: '#153f28' },
 };
 
 const defaultForm = {
@@ -80,7 +80,7 @@ export default function Interviews() {
     setSubmitting(true);
     try {
       await axios.post('/api/interviews', form);
-      toast.success('Experience shared! 🎉 It will help juniors a lot!');
+      toast.success('Experience shared successfully');
       setForm(defaultForm);
       setShowForm(false);
       fetchInterviews();
@@ -179,7 +179,7 @@ export default function Interviews() {
                 {form.rounds.map((round, idx) => (
                   <div key={idx} className="p-3 mb-2" style={{ background: '#f8fafc', borderRadius: 10, border: '1px solid #e2e8f0' }}>
                     <div className="d-flex align-items-center gap-2 mb-2">
-                      <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#1a56db', background: '#eff6ff', padding: '2px 10px', borderRadius: 20 }}>
+                      <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#1f5c3a', background: '#e6eada', padding: '2px 10px', borderRadius: 20 }}>
                         Round {round.roundNo}
                       </span>
                       <input className="form-control form-control-sm" placeholder="Round name e.g. Aptitude Test, Technical Round"
@@ -253,7 +253,7 @@ export default function Interviews() {
 
       {/* Not a student — info box */}
       {!isStudent && (
-        <div className="mb-3 p-3" style={{ background: '#eff6ff', borderRadius: 10, border: '1px solid #bfdbfe', fontSize: '0.85rem', color: '#1e40af' }}>
+        <div className="mb-3 p-3" style={{ background: '#e6eada', borderRadius: 10, border: '1px solid #b8c8ae', fontSize: '0.85rem', color: '#153f28' }}>
           <i className="bi bi-info-circle me-2"></i>
           Only placed students can share experiences. Sign up with your roll number to contribute!
         </div>
@@ -276,7 +276,7 @@ export default function Interviews() {
       {/* Stats row */}
       <div className="row g-3 mb-3">
         {[
-          { label: 'Total Experiences', val: interviews.length, icon: 'bi-chat-quote-fill', color: '#1a56db', bg: '#eff6ff' },
+          { label: 'Total Experiences', val: interviews.length, icon: 'bi-chat-quote-fill', color: '#1f5c3a', bg: '#e6eada' },
           { label: 'Companies Covered', val: [...new Set(interviews.map(i => i.company?._id))].length, icon: 'bi-building-fill', color: '#7c3aed', bg: '#f5f3ff' },
           { label: 'Selected', val: interviews.filter(i => i.verdict === 'Selected').length, icon: 'bi-trophy-fill', color: '#059669', bg: '#f0fdf4' },
           { label: 'Total Helpful Votes', val: interviews.reduce((s, i) => s + (i.likes || 0), 0), icon: 'bi-hand-thumbs-up-fill', color: '#d97706', bg: '#fffbeb' },
@@ -326,7 +326,7 @@ export default function Interviews() {
                     {/* Company avatar */}
                     <div className="avatar" style={{
                       width: 46, height: 46, borderRadius: 12, fontSize: '0.9rem', fontWeight: 800,
-                      background: '#eff6ff', color: '#1a56db', flexShrink: 0,
+                      background: '#e6eada', color: '#1f5c3a', flexShrink: 0,
                     }}>
                       {exp.company?.name?.slice(0, 2).toUpperCase()}
                     </div>
@@ -341,7 +341,7 @@ export default function Interviews() {
 
                   <div className="d-flex align-items-center gap-2 flex-shrink-0">
                     {exp.package && (
-                      <span style={{ fontFamily: 'Syne,sans-serif', fontWeight: 800, fontSize: '0.95rem', color: '#1a56db' }}>
+                      <span style={{ fontFamily: 'Syne,sans-serif', fontWeight: 800, fontSize: '0.95rem', color: '#1f5c3a' }}>
                         ₹{exp.package} LPA
                       </span>
                     )}
@@ -369,7 +369,7 @@ export default function Interviews() {
                           <div key={i} className="d-flex gap-3 mb-2">
                             <div style={{
                               width: 28, height: 28, borderRadius: '50%', flexShrink: 0,
-                              background: '#eff6ff', color: '#1a56db',
+                              background: '#e6eada', color: '#1f5c3a',
                               display: 'flex', alignItems: 'center', justifyContent: 'center',
                               fontSize: '0.75rem', fontWeight: 800,
                             }}>{r.roundNo}</div>
@@ -398,7 +398,7 @@ export default function Interviews() {
                     {exp.tips && (
                       <div className="mb-3 p-3" style={{ background: '#f0fdf4', borderRadius: 10, border: '1px solid #bbf7d0' }}>
                         <div style={{ fontWeight: 700, fontSize: '0.85rem', marginBottom: 6, color: '#166534' }}>
-                          <i className="bi bi-lightbulb-fill me-1"></i>Tips for Juniors 💡
+                          <i className="bi bi-lightbulb-fill me-1"></i>Tips for Juniors
                         </div>
                         <p style={{ fontSize: '0.85rem', color: '#166534', margin: 0, whiteSpace: 'pre-line' }}>
                           {exp.tips}

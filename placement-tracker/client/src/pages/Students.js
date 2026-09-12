@@ -164,7 +164,7 @@ export default function Students() {
       {/* Summary pills */}
       <div className="d-flex gap-2 mb-3 flex-wrap">
         {[
-          { label:'Total', val:total, color:'#1a56db' },
+          { label:'Total', val:total, color:'#1f5c3a' },
           { label:'Placed', val:students.filter(s=>s.isPlaced).length + (page>1?'…':''), color:'#059669' },
           { label:'Unplaced', val:students.filter(s=>!s.isPlaced).length + (page>1?'…':''), color:'#dc2626' },
         ].map((p,i)=>(
@@ -214,7 +214,7 @@ export default function Students() {
                         <div className="d-flex align-items-center gap-2">
                           <div className="avatar" style={{
                             width:36,height:36,fontSize:'0.72rem',
-                            background:s.isPlaced?'linear-gradient(135deg,#1a56db,#06b6d4)':'#e2e8f0',
+                            background:s.isPlaced?'linear-gradient(135deg,#1f5c3a,#9fe6be)':'#d9e1d2',
                             color:s.isPlaced?'#fff':'#64748b'
                           }}>
                             {s.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase()}
@@ -255,7 +255,7 @@ export default function Students() {
                       </td>
                       <td>
                         {s.isPlaced && s.placementDetails?.package
-                          ? <span style={{fontWeight:800,color:'#1a56db',fontSize:'0.875rem'}}>₹{s.placementDetails.package} <span style={{fontSize:'0.7rem',color:'#94a3b8',fontWeight:400}}>LPA</span></span>
+                          ? <span style={{fontWeight:800,color:'#1f5c3a',fontSize:'0.875rem'}}>₹{s.placementDetails.package} <span style={{fontSize:'0.7rem',color:'#94a3b8',fontWeight:400}}>LPA</span></span>
                           : <span style={{color:'#cbd5e1'}}>—</span>}
                       </td>
                       <td onClick={e=>e.stopPropagation()}>

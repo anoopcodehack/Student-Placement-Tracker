@@ -66,7 +66,7 @@ export default function StudentDetail() {
               display:'flex',alignItems:'center',justifyContent:'center',
               fontSize:'1.8rem',fontWeight:800,fontFamily:'Syne,sans-serif',
               background:student.isPlaced
-                ?'linear-gradient(135deg,#1a56db,#06b6d4)'
+                ?'linear-gradient(135deg,#1f5c3a,#9fe6be)'
                 :'linear-gradient(135deg,#64748b,#94a3b8)',
               color:'#fff',
             }}>{initials}</div>
@@ -107,7 +107,7 @@ export default function StudentDetail() {
                 {student.skills.map((s, i) => (
                   <span key={i} style={{
                     fontSize: '0.75rem', padding: '4px 12px', borderRadius: 20,
-                    background: '#eff6ff', color: '#1a56db', border: '1px solid #bfdbfe', fontWeight: 600
+                    background: '#e6eada', color: '#1f5c3a', border: '1px solid #b8c8ae', fontWeight: 600
                   }}>{s}</span>
                 ))}
               </div>
@@ -130,7 +130,7 @@ export default function StudentDetail() {
               {icon:'bi-phone-fill',label:'Phone',val:student.phone||'—'},
             ].map((item,i)=>(
               <div key={i} className="d-flex align-items-center gap-3 mb-2 p-3" style={{background:'#f8fafc',borderRadius:10}}>
-                <i className={`bi ${item.icon}`} style={{color:'#1a56db',fontSize:'1rem'}}></i>
+                <i className={`bi ${item.icon}`} style={{color:'#1f5c3a',fontSize:'1rem'}}></i>
                 <div>
                   <div style={{fontSize:'0.65rem',color:'#94a3b8',textTransform:'uppercase',letterSpacing:'0.06em'}}>{item.label}</div>
                   <div style={{fontWeight:600,fontSize:'0.855rem'}}>{item.val}</div>
@@ -206,13 +206,13 @@ export default function StudentDetail() {
 
           {/* Placement */}
           {student.isPlaced && student.placementDetails?.package ? (
-            <div className="form-card" style={{background:'linear-gradient(135deg,#eff6ff,#f0fdf4)',border:'1px solid #bfdbfe'}}>
+            <div className="form-card" style={{background:'linear-gradient(135deg,#e6eada,#f0fdf4)',border:'1px solid #b8c8ae'}}>
               <h6 style={{fontFamily:'Syne,sans-serif',fontWeight:700,marginBottom:'1rem',paddingBottom:'0.75rem',borderBottom:'1px solid #bfdbfe'}}>
                 <i className="bi bi-trophy-fill text-warning me-2"></i>Placement Details
               </h6>
               <div className="row g-3 align-items-center">
                 <div className="col-md-4 text-center">
-                  <div style={{fontFamily:'Syne,sans-serif',fontWeight:800,fontSize:'2.8rem',color:'#1a56db',lineHeight:1}}>
+                  <div style={{fontFamily:'Syne,sans-serif',fontWeight:800,fontSize:'2.8rem',color:'#1f5c3a',lineHeight:1}}>
                     ₹{student.placementDetails.package}
                   </div>
                   <div style={{fontSize:'0.75rem',color:'#64748b',marginTop:4}}>LPA Package</div>

@@ -8,6 +8,12 @@ import {
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
+const COMPANY_LOGOS = {
+  Google: '/Google-Emblema.png', Amazon: '/amazon.webp', Microsoft: '/microsoft.png',
+  Swiggy: '/swiggy.webp', PhonePe: '/phonepay.jpg', TCS: '/tcs.webp',
+  BHEL: '/bhel.png', Wipro: '/Wipro-logo.jpg',
+};
+
 ChartJS.register(CategoryScale,LinearScale,BarElement,PointElement,LineElement,ArcElement,Title,Tooltip,Legend,Filler);
 
 export default function Dashboard() {
@@ -57,29 +63,29 @@ export default function Dashboard() {
   const branchChart = {
     labels: branchData.map(b=>b._id),
     datasets: [
-      { label:'Total', data:branchData.map(b=>b.total), backgroundColor:'rgba(26,86,219,0.12)', borderColor:'#1a56db', borderWidth:2, borderRadius:6 },
-      { label:'Placed', data:branchData.map(b=>b.placed), backgroundColor:'#1a56db', borderRadius:6 },
+      { label:'Total', data:branchData.map(b=>b.total), backgroundColor:'rgba(31,92,58,0.14)', borderColor:'#1f5c3a', borderWidth:2, borderRadius:6 },
+      { label:'Placed', data:branchData.map(b=>b.placed), backgroundColor:'#1f5c3a', borderRadius:6 },
     ]
   };
 
   const doughnutData = {
     labels:['Placed','Unplaced'],
     datasets:[{ data:[overview?.placedStudents,overview?.unplacedStudents],
-      backgroundColor:['#1a56db','#e2e8f0'], borderWidth:0, hoverOffset:6 }]
+      backgroundColor:['#1f5c3a','#d9e1d2'], borderWidth:0, hoverOffset:6 }]
   };
 
   const pkgChart = {
     labels: packageDist.map(p=>p.range+' LPA'),
     datasets:[{ label:'Students', data:packageDist.map(p=>p.count),
-      backgroundColor:['#dbeafe','#93c5fd','#60a5fa','#3b82f6','#1d4ed8'], borderRadius:8 }]
+      backgroundColor:['#e6eada','#b8dfbf','#9fe6be','#6fb58c','#1f5c3a'], borderRadius:8 }]
   };
 
   const lineChart = {
     labels: monthlyTrend.map(m=>m.month),
     datasets:[{
       label:'Offers', data:monthlyTrend.map(m=>m.offers),
-      borderColor:'#1a56db', backgroundColor:'rgba(26,86,219,0.07)',
-      fill:true, tension:0.4, pointBackgroundColor:'#1a56db', pointRadius:4
+      borderColor:'#1f5c3a', backgroundColor:'rgba(31,92,58,0.08)',
+      fill:true, tension:0.4, pointBackgroundColor:'#1f5c3a', pointRadius:4
     }]
   };
 
@@ -126,7 +132,7 @@ export default function Dashboard() {
             </div>
             <div style={{marginTop:16,height:8,background:'rgba(255,255,255,0.1)',borderRadius:8,overflow:'hidden'}}>
               <div style={{width:`${overview?.placementRate}%`,height:'100%',
-                background:'linear-gradient(90deg,#3b82f6,#06b6d4)',borderRadius:8,transition:'width 1s ease'}}/>
+                background:'linear-gradient(90deg,#9fe6be,#d7e36f)',borderRadius:8,transition:'width 1s ease'}}/>
             </div>
           </div>
           <div className="col-md-6 mt-3 mt-md-0">
@@ -152,7 +158,7 @@ export default function Dashboard() {
       {/* KPI cards */}
       <div className="row g-3 mb-4">
         {[
-          { icon:'bi-people-fill', bg:'#eff6ff', color:'#1a56db', val:overview?.totalStudents, label:'Total Students', link:'/students' },
+          { icon:'bi-people-fill', bg:'#e6eada', color:'#1f5c3a', val:overview?.totalStudents, label:'Total Students', link:'/students' },
           { icon:'bi-trophy-fill', bg:'#f0fdf4', color:'#059669', val:overview?.placedStudents, label:'Placed', link:'/students?isPlaced=true' },
           { icon:'bi-person-x-fill', bg:'#fff1f2', color:'#e11d48', val:overview?.unplacedStudents, label:'Unplaced', link:'/students?isPlaced=false' },
           { icon:'bi-building-fill', bg:'#f5f3ff', color:'#7c3aed', val:overview?.totalCompanies, label:'Companies', link:'/companies' },
@@ -185,7 +191,7 @@ export default function Dashboard() {
             <div className="chart-title w-100">Placed vs Unplaced</div>
             <Doughnut data={doughnutData} options={{plugins:{legend:{position:'bottom'}},cutout:'72%'}}/>
             <div className="text-center mt-2">
-              <div style={{fontFamily:'Syne,sans-serif',fontWeight:800,fontSize:'1.8rem',color:'#1a56db'}}>{overview?.placementRate}%</div>
+              <div style={{fontFamily:'Syne,sans-serif',fontWeight:800,fontSize:'1.8rem',color:'#1f5c3a'}}>{overview?.placementRate}%</div>
               <div style={{fontSize:'0.72rem',color:'#94a3b8'}}>placement rate</div>
             </div>
           </div>
@@ -240,14 +246,14 @@ export default function Dashboard() {
                 </td>
                 <td>
                   <div className="d-flex align-items-center gap-2">
-                    <div className="avatar" style={{width:32,height:32,fontSize:'0.68rem',background:'#eff6ff',color:'#1a56db',fontWeight:800}}>
-                      {c.name.slice(0,2).toUpperCase()}
+                    <div className="avatar" style={{width:32,height:32,fontSize:'0.68rem',background:COMPANY_LOGOS[c.name]?'#fff':'#e6eada',color:'#1f5c3a',fontWeight:800,padding:COMPANY_LOGOS[c.name]?5:0}}>
+                      {COMPANY_LOGOS[c.name] ? <img src={COMPANY_LOGOS[c.name]} alt={`${c.name} logo`} style={{width:'100%',height:'100%',objectFit:'contain'}} /> : c.name.slice(0,2).toUpperCase()}
                     </div>
                     <span style={{fontWeight:600,fontSize:'0.875rem'}}>{c.name}</span>
                   </div>
                 </td>
                 <td><span className="badge badge-industry rounded-pill px-2">{c.industry}</span></td>
-                <td><span style={{fontWeight:800,color:'#1a56db',fontSize:'0.95rem'}}>{c.offers}</span></td>
+                <td><span style={{fontWeight:800,color:'#1f5c3a',fontSize:'0.95rem'}}>{c.offers}</span></td>
                 <td style={{fontWeight:600}}>₹{c.avgPackage?.toFixed(1)} LPA</td>
                 <td>
                   <span style={{

@@ -26,7 +26,7 @@ export default function EligibilityChecker({ companies = [] }) {
     setNotifying(true);
     try {
       const { data } = await axios.post(`/api/eligibility/${selectedCompany}/notify`);
-      alert(`✅ Notified ${data.notified} students!`);
+      alert(`Notified ${data.notified} students successfully.`);
     } catch (err) {
       alert('Notification failed');
     } finally {
@@ -79,7 +79,7 @@ export default function EligibilityChecker({ companies = [] }) {
                 📊 CGPA ≥ {result.company.eligibilityCriteria.minCGPA}
               </span>
               <span style={{ fontSize: '0.75rem', padding: '4px 12px', borderRadius: 20, background: '#dbeafe', color: '#1e40af', fontWeight: 600 }}>
-                ⚠️ Backlogs ≤ {result.company.eligibilityCriteria.maxBacklogs}
+                <><i className="bi bi-exclamation-triangle-fill me-1"></i>Backlogs ≤ {result.company.eligibilityCriteria.maxBacklogs}</>
               </span>
               {result.company.eligibilityCriteria.branches?.map((b, i) => (
                 <span key={i} style={{ fontSize: '0.75rem', padding: '4px 12px', borderRadius: 20, background: '#dbeafe', color: '#1e40af', fontWeight: 600 }}>

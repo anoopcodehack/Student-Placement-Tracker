@@ -5,7 +5,12 @@ import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
 import ConfirmModal from '../components/ConfirmModal';
 
-const pkgColor = p => p>=20?'#7c3aed':p>=10?'#1a56db':p>=5?'#059669':'#64748b';
+const pkgColor = p => p>=20?'#6b4a9a':p>=10?'#1f5c3a':p>=5?'#6fb58c':'#647861';
+const COMPANY_LOGOS = {
+  Google: '/Google-Emblema.png', Amazon: '/amazon.webp', Microsoft: '/microsoft.png',
+  Swiggy: '/swiggy.webp', PhonePe: '/phonepay.jpg', TCS: '/tcs.webp',
+  BHEL: '/bhel.png', Wipro: '/Wipro-logo.jpg',
+};
 const fmtDate  = d => d ? new Date(d).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : '—';
 
 export default function Placements() {
@@ -60,7 +65,7 @@ export default function Placements() {
       {/* Quick stats */}
       <div className="row g-3 mb-3">
         {[
-          { label:'Total Offers', val:placements.length, icon:'bi-award-fill', bg:'#eff6ff', color:'#1a56db' },
+          { label:'Total Offers', val:placements.length, icon:'bi-award-fill', bg:'#e6eada', color:'#1f5c3a' },
           { label:'Avg Package', val:`₹${avgPkg} LPA`, icon:'bi-currency-rupee', bg:'#fffbeb', color:'#d97706' },
           { label:'Highest Pkg', val:`₹${maxPkg} LPA`, icon:'bi-star-fill', bg:'#f5f3ff', color:'#7c3aed' },
           { label:'FTE Offers', val:placements.filter(p=>p.offerType==='FTE').length, icon:'bi-briefcase-fill', bg:'#f0fdf4', color:'#059669' },
@@ -127,7 +132,7 @@ export default function Placements() {
                       <div className="d-flex align-items-center gap-2">
                         <div className="avatar" style={{
                           width:34,height:34,fontSize:'0.68rem',
-                          background:'linear-gradient(135deg,#1a56db,#06b6d4)',color:'#fff'
+                          background:'linear-gradient(135deg,#1f5c3a,#9fe6be)',color:'#fff'
                         }}>
                           {p.student?.name?.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase()}
                         </div>
@@ -140,7 +145,10 @@ export default function Placements() {
                       </div>
                     </td>
                     <td>
-                      <div style={{fontWeight:600,fontSize:'0.855rem'}}>{p.company?.name}</div>
+                      <div className="d-flex align-items-center gap-2" style={{fontWeight:600,fontSize:'0.855rem'}}>
+                        {COMPANY_LOGOS[p.company?.name] && <img src={COMPANY_LOGOS[p.company.name]} alt={`${p.company.name} logo`} style={{width:24,height:24,objectFit:'contain',padding:3,background:'#fff',borderRadius:6,border:'1px solid #d9e1d2'}} />}
+                        {p.company?.name}
+                      </div>
                       <div style={{fontSize:'0.7rem',color:'#94a3b8'}}>{p.company?.industry}</div>
                     </td>
                     <td style={{fontSize:'0.855rem',color:'#475569'}}>{p.role}</td>

@@ -18,6 +18,7 @@ export default function Profile() {
   const [editForm, setEditForm] = useState({ name: '', phone: '', linkedin: '', github: '' });
   const [pwForm, setPwForm]     = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
   const [uploading, setUploading] = useState(false);
+  const [avatarUploading, setAvatarUploading] = useState(false);
   const [saving, setSaving]     = useState(false);
 
   // ── Fetch profile on mount ──
@@ -45,7 +46,7 @@ export default function Profile() {
     try {
       await axios.put('/api/profile', editForm);
       updateUser({ ...user, name: editForm.name }); // Update global state
-      toast.success('Profile updated! ✅');
+      toast.success('Profile updated successfully');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Update failed');
     } finally { setSaving(false); }
@@ -65,10 +66,46 @@ export default function Profile() {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setStudent(s => ({ ...s, resume: res.data.resumeUrl }));
-      toast.success('Resume uploaded! 🎉');
+      toast.success('Resume uploaded successfully');
     } catch {
       toast.error('Upload failed');
     } finally { setUploading(false); }
+  };
+
+  const handleAvatarUpload = async (e) => {
+    const file = e.target.files[0];
+    e.target.value = '';
+    if (!file) return;
+    if (!file.type.startsWith('image/')) return toast.error('Please choose an image file');
+    if (file.size > 2 * 1024 * 1024) return toast.error('Image too large! Max 2MB');
+
+    const formData = new FormData();
+    formData.append('avatar', file);
+    setAvatarUploading(true);
+    try {
+      const res = await axios.post('/api/profile/avatar', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      const nextProfile = { ...profile, profileImage: res.data.avatarUrl };
+      setProfile(nextProfile);
+      updateUser({ ...user, profileImage: res.data.avatarUrl });
+      toast.success('Profile image updated!');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Image upload failed');
+    } finally { setAvatarUploading(false); }
+  };
+
+  const handleAvatarRemove = async () => {
+    setAvatarUploading(true);
+    try {
+      await axios.delete('/api/profile/avatar');
+      const nextProfile = { ...profile, profileImage: '' };
+      setProfile(nextProfile);
+      updateUser({ ...user, profileImage: '' });
+      toast.success('Profile image removed');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Could not remove image');
+    } finally { setAvatarUploading(false); }
   };
 
   // ── Change password ──
@@ -124,10 +161,11 @@ export default function Profile() {
         </div>
         <span style={{
           padding: '6px 16px', borderRadius: 20, fontSize: '0.78rem', fontWeight: 700,
-          background: profile?.role === 'admin' ? '#eff6ff' : isStudent ? '#f0fdf4' : '#f5f3ff',
-          color:      profile?.role === 'admin' ? '#1a56db' : isStudent ? '#059669' : '#7c3aed',
+          background: profile?.role === 'admin' ? '#e6eada' : isStudent ? '#f0fdf4' : '#f5f3ff',
+          color:      profile?.role === 'admin' ? '#1f5c3a' : isStudent ? '#6fb58c' : '#6b4a9a',
         }}>
-          {profile?.role === 'admin' ? '🛡️ Admin' : isStudent ? '🎓 Student' : '👁️ Viewer'}
+          <i className={`bi ${profile?.role === 'admin' ? 'bi-shield-check' : isStudent ? 'bi-mortarboard-fill' : 'bi-eye-fill'} me-1`}></i>
+          {profile?.role === 'admin' ? 'Admin' : isStudent ? 'Student' : 'Viewer'}
         </span>
       </div>
 
@@ -138,15 +176,37 @@ export default function Profile() {
 
           {/* Avatar card */}
           <div className="form-card text-center mb-3">
-            <div style={{
-              width: 84, height: 84, borderRadius: '50%',
-              background: 'linear-gradient(135deg,#1a56db,#06b6d4)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: '2rem', fontWeight: 800, color: '#fff',
-              margin: '0 auto 1rem', fontFamily: 'Syne,sans-serif',
-              boxShadow: '0 8px 24px rgba(26,86,219,0.25)',
-            }}>
-              {initials}
+            <div style={{ position: 'relative', width: 96, height: 96, margin: '0 auto 1rem' }}>
+              <div style={{
+                width: 96, height: 96, borderRadius: '50%', overflow: 'hidden',
+                background: 'linear-gradient(135deg,#1f5c3a,#9fe6be)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '2rem', fontWeight: 800, color: '#fff', fontFamily: 'Syne,sans-serif',
+                boxShadow: '0 8px 24px rgba(31,92,58,0.22)', border: '3px solid #fff',
+              }}>
+                {profile?.profileImage ? (
+                  <img src={`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${profile.profileImage}`} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : initials}
+              </div>
+              <label htmlFor="profile-image-upload" title="Change profile image" style={{
+                position: 'absolute', right: -2, bottom: -2, width: 30, height: 30,
+                borderRadius: '50%', background: '#1f5c3a', color: '#fff',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: avatarUploading ? 'wait' : 'pointer', border: '3px solid #fff',
+              }}>
+                <i className={avatarUploading ? 'bi bi-arrow-repeat' : 'bi bi-camera-fill'}></i>
+                <input id="profile-image-upload" type="file" accept="image/png,image/jpeg,image/webp" onChange={handleAvatarUpload} disabled={avatarUploading} style={{ display: 'none' }} />
+              </label>
+            </div>
+            <div className="d-flex justify-content-center gap-2 mb-3">
+              <label htmlFor="profile-image-upload" className="btn btn-sm btn-outline-primary" style={{ cursor: avatarUploading ? 'wait' : 'pointer' }}>
+                <i className="bi bi-camera me-1"></i>{profile?.profileImage ? 'Change photo' : 'Add photo'}
+              </label>
+              {profile?.profileImage && (
+                <button type="button" className="btn btn-sm btn-outline-danger" onClick={handleAvatarRemove} disabled={avatarUploading}>
+                  <i className="bi bi-trash3 me-1"></i>Remove
+                </button>
+              )}
             </div>
             <h5 style={{ fontFamily: 'Syne,sans-serif', fontWeight: 800, marginBottom: 4 }}>{profile?.name}</h5>
             <p style={{ color: '#64748b', fontSize: '0.85rem', marginBottom: 16 }}>{profile?.email}</p>
@@ -155,7 +215,7 @@ export default function Profile() {
             {isStudent && (
               <div className="row g-2">
                 {[
-                  { l: 'Branch',  v: student.branch,      color: '#1a56db'                                       },
+                  { l: 'Branch',  v: student.branch,      color: '#1f5c3a'                                       },
                   { l: 'Batch',   v: student.batch                                                                },
                   { l: 'CGPA',    v: student.cgpa,        color: cgpaColor(student.cgpa)                         },
                   { l: 'Status',  v: student.isPlaced ? '✓ Placed' : '○ Unplaced',
@@ -197,12 +257,12 @@ export default function Profile() {
                   width: '100%', border: 'none', borderRadius: 8,
                   padding: '10px 14px', marginBottom: 3, cursor: 'pointer',
                   textAlign: 'left', fontWeight: 600, fontSize: '0.855rem',
-                  background: activeTab === t.key ? '#eff6ff' : 'transparent',
-                  color:      activeTab === t.key ? '#1a56db' : '#64748b',
+                  background: activeTab === t.key ? '#e6eada' : 'transparent',
+                  color:      activeTab === t.key ? '#1f5c3a' : '#647861',
                   display: 'flex', alignItems: 'center', gap: 10,
                   transition: 'all 0.15s',
                 }}>
-                <i className={`bi ${t.icon}`} style={{ color: activeTab === t.key ? '#1a56db' : '#94a3b8', fontSize: '0.95rem' }}></i>
+                <i className={`bi ${t.icon}`} style={{ color: activeTab === t.key ? '#1f5c3a' : '#94a3b8', fontSize: '0.95rem' }}></i>
                 {t.label}
                 {/* Resume uploaded badge */}
                 {t.key === 'resume' && student?.resume && (
@@ -213,7 +273,7 @@ export default function Profile() {
                 {/* Placed badge */}
                 {t.key === 'placement' && student?.isPlaced && (
                   <span style={{ marginLeft: 'auto', fontSize: '0.62rem', background: '#fffbeb', color: '#92400e', padding: '2px 8px', borderRadius: 10, fontWeight: 700 }}>
-                    🏆 Placed
+                    <i className="bi bi-trophy-fill me-1"></i>Placed
                   </span>
                 )}
               </button>
@@ -313,7 +373,7 @@ export default function Profile() {
               <div className="row g-3 mb-4">
                 {[
                   { l: 'Roll No',   v: student.rollNo                                            },
-                  { l: 'Branch',    v: student.branch,         color: '#1a56db'                  },
+                  { l: 'Branch',    v: student.branch,         color: '#1f5c3a'                  },
                   { l: 'Batch',     v: student.batch                                             },
                   { l: 'CGPA',      v: student.cgpa,           color: cgpaColor(student.cgpa)    },
                   { l: '10th %',    v: student.tenthPercent   ? `${student.tenthPercent}%`   : '—' },
@@ -354,7 +414,7 @@ export default function Profile() {
                     {student.skills.map((s, i) => (
                       <span key={i} style={{
                         padding: '5px 14px', borderRadius: 20, fontSize: '0.78rem',
-                        background: '#eff6ff', color: '#1a56db',
+                        background: '#e6eada', color: '#1f5c3a',
                         border: '1px solid #bfdbfe', fontWeight: 600,
                       }}>{s}</span>
                     ))}
@@ -378,7 +438,7 @@ export default function Profile() {
                 <div className="text-center p-4 mb-4" style={{ background: '#f0fdf4', borderRadius: 12, border: '1px solid #bbf7d0' }}>
                   <i className="bi bi-file-earmark-check-fill" style={{ fontSize: '3.5rem', color: '#059669' }}></i>
                   <h6 style={{ fontFamily: 'Syne,sans-serif', fontWeight: 700, marginTop: 12, color: '#166534' }}>
-                    Resume Uploaded ✅
+                    <i className="bi bi-check-circle-fill me-1"></i>Resume Uploaded
                   </h6>
                   <p style={{ fontSize: '0.8rem', color: '#4ade80', marginBottom: 16 }}>Your resume is saved and visible to admin</p>
                   <div className="d-flex gap-2 justify-content-center">
@@ -410,13 +470,13 @@ export default function Profile() {
                 }}>
                   <i className="bi bi-cloud-arrow-up-fill" style={{ fontSize: '2.5rem', color: uploading ? '#059669' : '#94a3b8' }}></i>
                   <h6 style={{ marginTop: 12, marginBottom: 4, fontWeight: 700 }}>
-                    {uploading ? 'Uploading...' : student.resume ? '🔄 Replace Resume' : '📄 Upload Resume'}
+                    {uploading ? 'Uploading...' : student.resume ? 'Replace Resume' : 'Upload Resume'}
                   </h6>
                   <p style={{ fontSize: '0.78rem', color: '#94a3b8', marginBottom: 16 }}>
                     PDF only · Maximum 5MB
                   </p>
                   <span style={{
-                    background: '#1a56db', color: '#fff', padding: '8px 24px',
+                    background: '#1f5c3a', color: '#fff', padding: '8px 24px',
                     borderRadius: 8, fontWeight: 600, fontSize: '0.875rem',
                     opacity: uploading ? 0.7 : 1,
                   }}>
@@ -444,11 +504,11 @@ export default function Profile() {
                 <>
                   {/* Placed banner */}
                   <div className="text-center mb-4 p-4" style={{
-                    background: 'linear-gradient(135deg,#0f172a,#1e3a5f)',
+                    background: 'linear-gradient(135deg,#153f28,#1f5c3a)',
                     borderRadius: 12, color: '#fff',
                   }}>
                     <div style={{ fontSize: '0.75rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Package Offered</div>
-                    <div style={{ fontFamily: 'Syne,sans-serif', fontWeight: 800, fontSize: '3.5rem', color: '#06b6d4', lineHeight: 1, marginTop: 4 }}>
+                    <div style={{ fontFamily: 'Syne,sans-serif', fontWeight: 800, fontSize: '3.5rem', color: '#9fe6be', lineHeight: 1, marginTop: 4 }}>
                       ₹{student.placementDetails.package}
                     </div>
                     <div style={{ fontSize: '0.85rem', color: '#94a3b8' }}>LPA</div>
@@ -458,7 +518,7 @@ export default function Profile() {
                       padding: '6px 20px', borderRadius: 20,
                       fontSize: '0.8rem', fontWeight: 700,
                     }}>
-                      🎉 Congratulations! You are Placed
+                      <i className="bi bi-check-circle-fill me-1"></i>Congratulations! You are Placed
                     </span>
                   </div>
 
@@ -491,7 +551,7 @@ export default function Profile() {
                     Not Placed Yet
                   </h6>
                   <p style={{ fontSize: '0.85rem', color: '#94a3b8', maxWidth: 280, margin: '8px auto 0' }}>
-                    Keep working hard! Your placement offer is on the way 💪
+                    Keep working hard! Your placement offer is on the way.
                   </p>
                 </div>
               )}

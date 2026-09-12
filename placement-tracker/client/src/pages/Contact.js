@@ -20,8 +20,8 @@ const handleSubmit = async (e) => {
   const contactCards = [
     {
       icon: 'bi-geo-alt-fill',
-      color: '#1a56db',
-      bg: '#eff6ff',
+      color: '#1f5c3a',
+      bg: '#e6eada',
       title: 'Address',
       lines: [
         'Sahyadri College of Engineering & Management',
@@ -133,7 +133,7 @@ const handleSubmit = async (e) => {
               ].map((s, i) => (
                 <div key={i} className="col-6">
                   <div style={{ background: 'rgba(255,255,255,0.07)', borderRadius: 10, padding: '0.75rem', textAlign: 'center' }}>
-                    <div style={{ fontFamily: 'Syne,sans-serif', fontWeight: 800, fontSize: '1.4rem', color: '#06b6d4' }}>{s.val}</div>
+                    <div style={{ fontFamily: 'Syne,sans-serif', fontWeight: 800, fontSize: '1.4rem', color: '#9fe6be' }}>{s.val}</div>
                     <div style={{ fontSize: '0.68rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{s.label}</div>
                   </div>
                 </div>
@@ -242,10 +242,10 @@ const handleSubmit = async (e) => {
                     textDecoration: 'none', color: '#1e293b',
                     transition: 'all 0.15s',
                   }}
-                  onMouseOver={e => { e.currentTarget.style.background = '#eff6ff'; e.currentTarget.style.borderColor = '#bfdbfe'; }}
+                  onMouseOver={e => { e.currentTarget.style.background = '#e6eada'; e.currentTarget.style.borderColor = '#b8c8ae'; }}
                   onMouseOut={e => { e.currentTarget.style.background = '#f8fafc'; e.currentTarget.style.borderColor = '#e2e8f0'; }}>
-                  <div style={{ width: 36, height: 36, borderRadius: 8, background: '#eff6ff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <i className={`bi ${link.icon}`} style={{ color: '#1a56db', fontSize: '1rem' }}></i>
+                  <div style={{ width: 36, height: 36, borderRadius: 8, background: '#e6eada', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <i className={`bi ${link.icon}`} style={{ color: '#1f5c3a', fontSize: '1rem' }}></i>
                   </div>
                   <span style={{ fontWeight: 600, fontSize: '0.875rem' }}>{link.label}</span>
                   <i className="bi bi-arrow-up-right ms-auto" style={{ color: '#94a3b8', fontSize: '0.8rem' }}></i>
@@ -282,12 +282,12 @@ const handleSubmit = async (e) => {
           </div>
 
           {/* Emergency contacts */}
-          <div className="form-card" style={{ background: 'linear-gradient(135deg,#eff6ff,#f0fdf4)', border: '1px solid #bfdbfe' }}>
+          <div className="form-card" style={{ background: 'linear-gradient(135deg,#e6eada,#f0fdf4)', border: '1px solid #b8c8ae' }}>
             <h6 style={{ fontFamily: 'Syne,sans-serif', fontWeight: 700, marginBottom: '1rem', paddingBottom: '0.75rem', borderBottom: '1px solid #bfdbfe' }}>
               <i className="bi bi-headset text-primary me-2"></i>Helpline Numbers
             </h6>
             {[
-              { label: 'Admission Helpline', number: '+91-824-2277799', icon: 'bi-mortarboard', color: '#1a56db' },
+              { label: 'Admission Helpline', number: '+91-824-2277799', icon: 'bi-mortarboard', color: '#1f5c3a' },
               { label: 'Placement Cell', number: '+91-824-2277788', icon: 'bi-briefcase-fill', color: '#059669' },
               { label: 'Student Grievance', number: '+91-824-2277777', icon: 'bi-shield-check', color: '#d97706' },
             ].map((h, i) => (
@@ -337,7 +337,7 @@ const handleSubmit = async (e) => {
                   <td style={{ fontWeight: 600, fontSize: '0.875rem' }}>{dept.name}</td>
                   <td style={{ fontSize: '0.855rem', color: '#475569' }}>{dept.hod}</td>
                   <td>
-                    <a href={`mailto:${dept.email}`} style={{ fontSize: '0.8rem', color: '#1a56db', textDecoration: 'none' }}>
+                    <a href={`mailto:${dept.email}`} style={{ fontSize: '0.8rem', color: '#1f5c3a', textDecoration: 'none' }}>
                       {dept.email}
                     </a>
                   </td>
