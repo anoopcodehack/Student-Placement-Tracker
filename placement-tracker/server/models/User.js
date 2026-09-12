@@ -38,6 +38,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true, minlength: 6 },
   role: { type: String, enum: ['admin', 'viewer'], default: 'viewer' },
   profileImage: { type: String, default: '' },
+  rollNo: { type: String, trim: true, uppercase: true, default: '' },
 
   // ── Student link ──
   // If this viewer is also a student, link their Student document here

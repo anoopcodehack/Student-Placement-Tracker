@@ -43,9 +43,20 @@ router.get('/', protect, async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select('-password');
     let studentData = null;
-    if (user.isStudent && user.studentRef) {
-      studentData = await Student.findById(user.studentRef)
+    if (user.isStudent) {
+      let studentRef = user.studentRef;
+      if (!studentRef && user.rollNo) {
+        const matchingStudent = await Student.findOne({ rollNo: user.rollNo });
+        if (matchingStudent) {
+          studentRef = matchingStudent._id;
+          user.studentRef = matchingStudent._id;
+          await user.save();
+        }
+      }
+      if (studentRef) {
+        studentData = await Student.findById(studentRef)
         .populate('placementDetails.company', 'name industry');
+      }
     }
     res.json({ success: true, data: { user, student: studentData } });
   } catch (err) {

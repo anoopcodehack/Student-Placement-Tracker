@@ -70,31 +70,36 @@ router.post('/register', async (req, res) => {
     let isStudent = false;
     let studentRef = null;
 
-    // ── If rollNo provided → Student signup ──
+    let normalizedRollNo = '';
+
+    // A roll number makes this a student account. It may be linked now or
+    // connected to an admin-created Student record later.
     if (rollNo && rollNo.trim() !== '') {
+      normalizedRollNo = rollNo.trim().toUpperCase();
+      const pendingAccount = await User.findOne({ rollNo: normalizedRollNo, isStudent: true });
+      if (pendingAccount) {
+        return res.status(400).json({
+          success: false,
+          message: 'This roll number is already registered. Please sign in or contact the placement admin.'
+        });
+      }
       const student = await Student.findOne({
-        rollNo: rollNo.trim().toUpperCase()
+        rollNo: normalizedRollNo
       });
 
-      // Roll number not found in database
-      if (!student) {
-        return res.status(400).json({
-          success: false,
-          message: `Roll number "${rollNo.toUpperCase()}" not found! Make sure your admin has added you as a student first.`
-        });
+      if (student) {
+        // Check if this student is already linked to another account
+        const alreadyLinked = await User.findOne({ studentRef: student._id });
+        if (alreadyLinked) {
+          return res.status(400).json({
+            success: false,
+            message: 'This roll number is already linked to another account!'
+          });
+        }
+        studentRef = student._id;
       }
 
-      // Check if this student is already linked to another account
-      const alreadyLinked = await User.findOne({ studentRef: student._id });
-      if (alreadyLinked) {
-        return res.status(400).json({
-          success: false,
-          message: 'This roll number is already linked to another account!'
-        });
-      }
-
-      isStudent  = true;
-      studentRef = student._id;
+      isStudent = true;
     }
 
     // Create user
@@ -105,6 +110,7 @@ router.post('/register', async (req, res) => {
       role: 'viewer', // always viewer, admin is set manually
       isStudent,
       studentRef,
+      rollNo: normalizedRollNo,
     });
 
     // Return response with isStudent flag
@@ -117,6 +123,7 @@ router.post('/register', async (req, res) => {
         email:     user.email,
         role:      user.role,
         isStudent: user.isStudent,
+        rollNo:    user.rollNo,
       }
     });
 
@@ -150,6 +157,7 @@ router.post('/login', async (req, res) => {
         email:     user.email,
         role:      user.role,
         isStudent: user.isStudent, // ✅ send isStudent in login too
+        rollNo:    user.rollNo,
       }
     });
 

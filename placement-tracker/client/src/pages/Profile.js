@@ -133,10 +133,11 @@ export default function Profile() {
   );
 
   const initials  = profile?.name?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || 'U';
-  const isStudent = profile?.isStudent && student; // true only if linked student
+  const isStudent = profile?.isStudent === true;
+  const hasStudentDetails = Boolean(student);
 
   // ── Tabs based on role ──
- const tabs = isStudent
+ const tabs = hasStudentDetails
   ? [
       { key: 'profile',        icon: 'bi-person-fill',          label: 'Profile'        },
       { key: 'academic',       icon: 'bi-mortarboard-fill',      label: 'Academic'       },
@@ -212,7 +213,7 @@ export default function Profile() {
             <p style={{ color: '#64748b', fontSize: '0.85rem', marginBottom: 16 }}>{profile?.email}</p>
 
             {/* Quick student stats */}
-            {isStudent && (
+            {hasStudentDetails && (
               <div className="row g-2">
                 {[
                   { l: 'Branch',  v: student.branch,      color: '#1f5c3a'                                       },
@@ -232,7 +233,7 @@ export default function Profile() {
             )}
 
             {/* Social links */}
-            {isStudent && (student.linkedin || student.github) && (
+            {hasStudentDetails && (student.linkedin || student.github) && (
               <div className="d-flex gap-2 justify-content-center mt-3">
                 {student.linkedin && (
                   <a href={student.linkedin} target="_blank" rel="noreferrer" className="btn btn-sm btn-outline-primary">
@@ -295,6 +296,13 @@ export default function Profile() {
               </h6>
               <form onSubmit={handleSaveProfile}>
                 <div className="row g-3">
+                  {isStudent && !hasStudentDetails && (
+                    <div className="col-md-6">
+                      <label className="form-label">Roll number</label>
+                      <input className="form-control" value={profile?.rollNo || 'Pending'} disabled
+                        style={{ background: '#f8fafc', color: '#94a3b8' }} />
+                    </div>
+                  )}
                   <div className="col-md-6">
                     <label className="form-label">Full Name</label>
                     <input className="form-control" value={editForm.name}
@@ -319,7 +327,7 @@ export default function Profile() {
                   </div>
 
                   {/* Extra fields for student viewers */}
-                  {isStudent && (
+                  {hasStudentDetails && (
                     <>
                       <div className="col-md-6">
                         <label className="form-label">Phone</label>
