@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../utils/runtimeConfig';
 
 export default function ATSScorer({ student }) {
   const [jd, setJd] = useState('');
@@ -32,7 +33,7 @@ export default function ATSScorer({ student }) {
       } else {
         // fetch existing resume and convert to file
         const res = await fetch(
-          `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${student.resume}`
+          `${API_BASE_URL}${student.resume}`
         );
         const blob = await res.blob();
         formData.append('resume', blob, 'resume.pdf');

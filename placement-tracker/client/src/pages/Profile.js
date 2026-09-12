@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
 import ATSScorer from '../components/ATSScorer';
 import MockInterview from '../components/MockInterview';
+import { API_BASE_URL } from '../utils/runtimeConfig';
 
 const cgpaColor = c => c >= 8 ? '#059669' : c >= 6 ? '#d97706' : '#dc2626';
 
@@ -186,7 +187,7 @@ export default function Profile() {
                 boxShadow: '0 8px 24px rgba(31,92,58,0.22)', border: '3px solid #fff',
               }}>
                 {profile?.profileImage ? (
-                  <img src={`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${profile.profileImage}`} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={`${API_BASE_URL}${profile.profileImage}`} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : initials}
               </div>
               <label htmlFor="profile-image-upload" title="Change profile image" style={{
@@ -450,11 +451,11 @@ export default function Profile() {
                   </h6>
                   <p style={{ fontSize: '0.8rem', color: '#4ade80', marginBottom: 16 }}>Your resume is saved and visible to admin</p>
                   <div className="d-flex gap-2 justify-content-center">
-                    <a href={`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${student.resume}`}
+                    <a href={`${API_BASE_URL}${student.resume}`}
                       target="_blank" rel="noreferrer" className="btn btn-success btn-sm px-3">
                       <i className="bi bi-eye me-1"></i>View Resume
                     </a>
-                    <a href={`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${student.resume}`}
+                    <a href={`${API_BASE_URL}${student.resume}`}
                       download className="btn btn-outline-success btn-sm px-3">
                       <i className="bi bi-download me-1"></i>Download
                     </a>

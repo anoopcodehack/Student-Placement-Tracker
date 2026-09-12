@@ -5,6 +5,7 @@ import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import NotificationBell from './NotificationBell';
+import { API_BASE_URL } from '../utils/runtimeConfig';
 
 const mainNav = [
   { to: '/', icon: 'bi-speedometer2', label: 'Dashboard', end: true },
@@ -158,7 +159,7 @@ export default function Layout() {
             >
               {user?.profileImage ? (
                 <img
-                  src={`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${user.profileImage}`}
+                  src={`${API_BASE_URL}${user.profileImage}`}
                   alt="Profile"
                   style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
                 />

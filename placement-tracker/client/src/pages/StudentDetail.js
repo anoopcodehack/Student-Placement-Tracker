@@ -4,6 +4,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
 import ConfirmModal from '../components/ConfirmModal';
+import { API_BASE_URL } from '../utils/runtimeConfig';
 
 
 const cgpaColor = c => c>=8?'#059669':c>=6?'#d97706':'#dc2626';
@@ -147,7 +148,7 @@ export default function StudentDetail() {
               </h6>
               <div className="d-flex gap-2">
                 <a 
-                  href={`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${student.resume}`} 
+                  href={`${API_BASE_URL}${student.resume}`} 
                   target="_blank" 
                   rel="noreferrer"
                   className="btn btn-outline-primary btn-sm w-100"
@@ -155,7 +156,7 @@ export default function StudentDetail() {
                   <i className="bi bi-eye me-1"></i>View
                 </a>
                 <a 
-                  href={`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${student.resume}`} 
+                  href={`${API_BASE_URL}${student.resume}`} 
                   download
                   className="btn btn-primary btn-sm w-100"
                 >

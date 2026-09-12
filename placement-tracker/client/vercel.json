@@ -1,8 +1,17 @@
 {
   "rewrites": [
     {
+      "source": "/api/:path*",
+      "destination": "https://student-placement-tracker-1-m4i6.onrender.com/api/:path*"
+    },
+    {
+      "source": "/uploads/:path*",
+      "destination": "https://student-placement-tracker-1-m4i6.onrender.com/uploads/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
   ]
 }
+
