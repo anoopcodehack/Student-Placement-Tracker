@@ -1,7 +1,7 @@
 
 
-import React, { useState } from 'react'; // ← add useState
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import NotificationBell from './NotificationBell';
@@ -28,12 +28,63 @@ export default function Layout() {
   const { user, logout, isAdmin } = useAuth();
   const { isDark, toggleTheme } = useTheme();
   const navigate = useNavigate();
-  const [collapsed, setCollapsed] = useState(false); // ← ADD
+  const location = useLocation();
+  const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const initials = user?.name?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || 'U';
 
+  // Automatically close mobile menu when path changes
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
+
   return (
-    <div>
-      <aside className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
+    <div className="layout-root">
+      {/* Mobile Topbar */}
+      <header className="mobile-topbar">
+        <button
+          type="button"
+          className="mobile-toggle-btn"
+          onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label="Toggle navigation"
+        >
+          <i className="bi bi-list"></i>
+        </button>
+
+        <div className="mobile-brand-wrap" onClick={() => navigate('/')}>
+          <img src="/Sayhadri-Logo-02.jpg" alt="Sahyadri logo" className="mobile-brand-logo" />
+          <div className="mobile-brand-title">PlaceTrack</div>
+        </div>
+
+        <div className="mobile-top-actions">
+          <NotificationBell />
+          <div
+            className="user-avatar"
+            title="My Profile"
+            onClick={() => navigate('/profile')}
+            style={{ width: 34, height: 34, fontSize: '0.8rem', cursor: 'pointer' }}
+          >
+            {user?.profileImage ? (
+              <img
+                src={`${API_BASE_URL}${user.profileImage}`}
+                alt="Profile"
+                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
+              />
+            ) : initials}
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile Backdrop Overlay */}
+      {mobileOpen && (
+        <div
+          className="mobile-sidebar-backdrop"
+          onClick={() => setMobileOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
+      <aside className={`sidebar ${collapsed ? 'collapsed' : ''} ${mobileOpen ? 'mobile-open' : ''}`}>
 
         {/* Brand */}
         <div className="sidebar-brand">
@@ -47,11 +98,19 @@ export default function Layout() {
               <img src="/Sayhadri-Logo-02.jpg" alt="Sahyadri College logo" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 8, background: '#fff', padding: 2 }} />
             </div>
             {!collapsed && (
-              <div>
+              <div style={{ flex: 1, minWidth: 0 }}>
                 <div className="brand-name">PlaceTrack</div>
                 <div className="brand-sub">Placement Portal</div>
               </div>
             )}
+            <button
+              type="button"
+              className="mobile-close-sidebar-btn"
+              onClick={() => setMobileOpen(false)}
+              aria-label="Close menu"
+            >
+              <i className="bi bi-x-lg"></i>
+            </button>
           </div>
         </div>
 
@@ -64,6 +123,7 @@ export default function Layout() {
               to={item.to}
               end={item.end}
               title={item.label}
+              onClick={() => setMobileOpen(false)}
               className={({ isActive }) => `nav-item-custom ${isActive ? 'active' : ''}`}
             >
               <i className={`bi ${item.icon} nav-icon`}></i>
@@ -79,6 +139,7 @@ export default function Layout() {
                   key={item.to}
                   to={item.to}
                   title={item.label}
+                  onClick={() => setMobileOpen(false)}
                   className={({ isActive }) => `nav-item-custom ${isActive ? 'active' : ''}`}
                 >
                   <i className={`bi ${item.icon} nav-icon`}></i>
@@ -92,6 +153,7 @@ export default function Layout() {
           <NavLink
             to="/profile"
             title="My Profile"
+            onClick={() => setMobileOpen(false)}
             className={({ isActive }) => `nav-item-custom ${isActive ? 'active' : ''}`}
           >
             <i className="bi bi-person-circle nav-icon"></i>
@@ -154,7 +216,7 @@ export default function Layout() {
             <div
               className="user-avatar"
               title="View Profile"
-              onClick={() => navigate('/profile')}
+              onClick={() => { setMobileOpen(false); navigate('/profile'); }}
               style={{ cursor: 'pointer' }}
             >
               {user?.profileImage ? (
@@ -179,7 +241,7 @@ export default function Layout() {
             <button
               className="logout-btn"
               title="Logout"
-              onClick={() => { logout(); navigate('/login'); }}
+              onClick={() => { setMobileOpen(false); logout(); navigate('/login'); }}
             >
               <i className="bi bi-box-arrow-right"></i>
             </button>

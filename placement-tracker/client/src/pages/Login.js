@@ -525,6 +525,7 @@ function TextInput(props) {
   return (
     <input
       {...props}
+      className={`pt-text-input ${props.className || ''}`}
       onFocus={(e) => { setFocused(true); props.onFocus?.(e); }}
       onBlur={(e) => { setFocused(false); props.onBlur?.(e); }}
       style={{
@@ -662,9 +663,129 @@ export default function Login() {
         .pt-submit-btn { transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease; }
         .pt-submit-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(31,92,58,0.2); }
         .pt-feature-row:hover { background: rgba(255,255,255,0.05); }
+
+        .pt-mobile-brand-bar { display: none; }
+        .pt-form-wrapper {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 2rem clamp(1.25rem, 4vw, 3rem);
+          background: ${C.paperDeep};
+          min-height: 100vh;
+        }
+        .pt-form-card {
+          width: 100%;
+          max-width: 440px;
+          background: #fff;
+          border: 1px solid ${C.hairline};
+          border-radius: 14px;
+          padding: clamp(1.5rem, 4vw, 2.25rem);
+          box-shadow: 0 20px 50px rgba(19, 26, 16, 0.08);
+        }
+        .pt-demo-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 8px;
+        }
+        .pt-account-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 8px;
+        }
+
         @media (max-width: 900px) {
-          .pt-login-grid { grid-template-columns: 1fr !important; }
+          .pt-login-grid { grid-template-columns: 1fr !important; min-height: 100vh; }
           .pt-left-panel { display: none !important; }
+          .pt-mobile-brand-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.85rem;
+            border-bottom: 1px solid ${C.hairline};
+          }
+          .pt-mobile-back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: ${C.green};
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 4px 6px 4px 0;
+          }
+          .pt-mobile-live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #dcfce7;
+            color: #166534;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+          }
+          .pt-mobile-live-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #16a34a;
+            display: inline-block;
+            animation: pt-livedot 1.6s infinite;
+          }
+        }
+
+        @media (max-width: 600px) {
+          .pt-form-wrapper {
+            padding: 1.25rem 0.85rem !important;
+            align-items: flex-start !important;
+          }
+          .pt-form-card {
+            padding: 1.35rem 1.1rem !important;
+            border-radius: 14px !important;
+            box-shadow: 0 10px 30px rgba(19, 26, 16, 0.06) !important;
+          }
+          .pt-text-input {
+            font-size: 16px !important; /* Prevents auto-zoom in iOS Safari */
+            padding-top: 13px !important;
+            padding-bottom: 13px !important;
+            min-height: 48px !important;
+          }
+          .pt-google-btn {
+            min-height: 48px !important;
+            font-size: 0.9rem !important;
+          }
+          .pt-submit-btn {
+            min-height: 48px !important;
+            font-size: 0.95rem !important;
+          }
+          .pt-demo-btn {
+            min-height: 44px !important;
+            padding: 8px 6px !important;
+          }
+          .pt-tab {
+            min-height: 44px !important;
+            padding: 11px 0 !important;
+            font-size: 0.9rem !important;
+          }
+        }
+
+        @media (max-width: 380px) {
+          .pt-form-wrapper {
+            padding: 0.75rem 0.5rem !important;
+          }
+          .pt-form-card {
+            padding: 1.1rem 0.85rem !important;
+            border-radius: 12px !important;
+          }
+          .pt-demo-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .pt-account-grid {
+            grid-template-columns: 1fr !important;
+          }
         }
       `}</style>
 
@@ -760,14 +881,23 @@ export default function Login() {
       </div>
 
       {/* ============ RIGHT — FORM PANEL ============ */}
-      <div style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem clamp(1.25rem,4vw,3rem)',
-        background: C.paperDeep,
+      <div className="pt-form-wrapper" style={{
         opacity: mounted ? 1 : 0,
         transform: mounted ? 'translateY(0)' : 'translateY(16px)',
         transition: 'all 0.7s cubic-bezier(0.16,1,0.3,1) 0.1s',
       }}>
-        <div style={{ width: '100%', maxWidth: 440, background: '#fff', border: `1px solid ${C.hairline}`, borderRadius: 12, padding: 'clamp(1.5rem,4vw,2.25rem)', boxShadow: '0 20px 50px rgba(19,26,16,0.08)' }}>
+        <div className="pt-form-card">
+
+          {/* mobile back & live pill header */}
+          <div className="pt-mobile-brand-bar">
+            <div onClick={() => goTo('/')} className="pt-mobile-back-link">
+              <ArrowLeft size={14} /> Back to portal
+            </div>
+            <div className="pt-mobile-live-badge">
+              <span className="pt-mobile-live-dot" />
+              <span>2024–25 Live</span>
+            </div>
+          </div>
 
           {/* header */}
           <div style={{ marginBottom: '1.75rem' }}>
