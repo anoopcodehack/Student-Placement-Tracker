@@ -19,7 +19,10 @@ A full-stack MERN web application that digitizes campus placement management. It
 
 Dashboard · Students · Analytics · Profile · Landing Page
 
-<img width="1897" height="857" alt="Dashboard preview" src="https://github.com/user-attachments/assets/ed8bf8d0-a068-4bd9-84e4-3a82f72a80ef" />
+<img width="1897" height="832" alt="image" src="https://github.com/user-attachments/assets/b2daa243-e651-435f-b044-f553a38ff205" />
+<img width="1712" height="873" alt="image" src="https://github.com/user-attachments/assets/3b9c76ac-8101-4647-917a-9d767ddc8378" />
+
+
 
 ---
 
