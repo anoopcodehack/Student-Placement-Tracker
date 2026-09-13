@@ -496,8 +496,8 @@ const FEATURES = [
 
 const STATS = [
   { v: '78', l: 'Placed' },
-  { v: '63%', l: 'Rate' },
-  { v: '₹43L', l: 'Highest' },
+  { v: '90%', l: 'Rate' },
+  { v: '₹47L', l: 'Highest' },
   { v: '14', l: 'Companies' },
 ];
 
