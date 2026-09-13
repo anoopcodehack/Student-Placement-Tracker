@@ -28,7 +28,8 @@ Dashboard · Students · Analytics · Profile · Landing Page
 
 ## System Flow
 
-<img width="1536" height="1024" alt="System flow diagram" src="https://github.com/user-attachments/assets/39c909e0-5f0d-42ea-a68e-532c5788b9a6" />
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/a0cb43c6-0f82-4c24-8541-8be07d4e8068" />
+
 
 ---
 
