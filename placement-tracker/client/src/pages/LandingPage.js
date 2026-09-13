@@ -53,9 +53,9 @@ const body = "'Work Sans', sans-serif";
    Data — unchanged from the original PlaceTrack build
    ============================================================ */
 const PLACED_STUDENTS = [
-  { name: "Aditya Kumar", company: "Google", pkg: "₹47.00 LPA", branch: "CSE" },
+  { name: "Aditya Kumar", company: "Belc", pkg: "₹47.00 LPA", branch: "CSE" },
   { name: "Sneha Verma", company: "Amazon", pkg: "₹31.71 LPA", branch: "ISE" },
-  { name: "Rohan Shetty", company: "Microsoft", pkg: "₹30.45 LPA", branch: "CSE" },
+  { name: "Rohan Shetty", company: "Microsoft", pkg: "₹40.45 LPA", branch: "CSE" },
   { name: "Priya Nair", company: "PhonePe", pkg: "₹21.7 LPA", branch: "AIDS" },
   { name: "Karan Mehta", company: "Swiggy", pkg: "₹19.5 LPA", branch: "CSE" },
   { name: "Divya Rao", company: "Amazon", pkg: "₹28.4 LPA", branch: "AIML" },
