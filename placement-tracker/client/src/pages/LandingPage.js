@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   FileSearch, Mic, Bell, BarChart3, ShieldCheck, CalendarDays,
   ArrowUpRight, Menu, X,
@@ -161,82 +162,26 @@ function useReveal(threshold = 0.15) {
 }
 
 /* ============================================================
-   Preloader — crest drops in with a bounce, the wordmark rises
-   in beneath it, then the whole screen lifts away into the page.
-   ============================================================ */
-function Preloader({ onCurtainUp, onFinished }) {
-  const [stage, setStage] = useState("logo"); // logo -> text -> exit
-
-  useEffect(() => {
-    const reduced = typeof window !== "undefined" && window.matchMedia &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (reduced) {
-      const t1 = setTimeout(() => { setStage("exit"); onCurtainUp(); }, 250);
-      const t2 = setTimeout(onFinished, 700);
-      return () => { clearTimeout(t1); clearTimeout(t2); };
-    }
-
-    const t1 = setTimeout(() => setStage("text"), 850);
-    const t2 = setTimeout(() => { setStage("exit"); onCurtainUp(); }, 2150);
-    const t3 = setTimeout(onFinished, 2800);
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
-  }, [onCurtainUp, onFinished]);
-
-  return (
-    <div style={{
-      position: "fixed", inset: 0, zIndex: 999,
-      background: `radial-gradient(120% 120% at 50% 30%, ${C.greenDeep} 0%, ${C.ink} 72%)`,
-      display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-      opacity: stage === "exit" ? 0 : 1,
-      transform: stage === "exit" ? "translateY(-3%) scale(1.02)" : "translateY(0) scale(1)",
-      transition: "opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1)",
-      pointerEvents: stage === "exit" ? "none" : "all",
-    }}>
-      <img src={PUBLIC_LOGO_IMG} alt="Sahyadri crest" style={{
-        width: 76, height: "auto", display: "block",
-        animation: "pt-crest-drop 1s cubic-bezier(0.34,1.35,0.64,1) both",
-      }} />
-      <div style={{ marginTop: 20, overflow: "hidden", height: "1.7rem" }}>
-        <div style={{
-          fontFamily: display, fontWeight: 600, fontSize: "1.4rem", color: "#fff",
-          letterSpacing: "0.01em", textAlign: "center",
-          transform: stage === "logo" ? "translateY(115%)" : "translateY(0)",
-          transition: "transform 0.6s cubic-bezier(0.16,1,0.3,1)",
-        }}>PlaceTrack</div>
-      </div>
-      <div style={{
-        marginTop: 10, fontSize: "0.66rem", letterSpacing: "0.16em", textTransform: "uppercase",
-        color: "rgba(241,243,234,0.5)", textAlign: "center",
-        opacity: stage === "logo" ? 0 : 1,
-        transition: "opacity 0.6s ease 0.1s",
-      }}>Sahyadri College of Engineering &amp; Management</div>
-
-      <div style={{
-        position: "absolute", bottom: 48, width: 148, height: 2,
-        background: "rgba(241,243,234,0.14)", borderRadius: 2, overflow: "hidden",
-      }}>
-        <div style={{
-          height: "100%", background: "#9FE6BE", borderRadius: 2,
-          width: stage === "logo" ? "20%" : stage === "text" ? "70%" : "100%",
-          transition: "width 0.7s cubic-bezier(0.4,0,0.2,1)",
-        }} />
-      </div>
-    </div>
-  );
-}
-
-/* ============================================================
    Page
    ============================================================ */
 export default function LandingPage() {
+  const navigate = useNavigate();
   const [scrollY, setScrollY] = useState(0);
-  const [heroIn, setHeroIn] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [heroIn] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const [statsStarted, setStatsStarted] = useState(false);
   const [inquirySent, setInquirySent] = useState(false);
   const statsRef = useRef(null);
+
+  const [isSlidingLogin, setIsSlidingLogin] = useState(false);
+
+  const goToLogin = () => {
+    if (isSlidingLogin) return;
+    setIsSlidingLogin(true);
+    setTimeout(() => {
+      navigate('/login');
+    }, 200);
+  };
 
   const [aboutTextRef, aboutTextShown] = useReveal();
   const [aboutImgRef, aboutImgShown] = useReveal();
@@ -247,16 +192,84 @@ export default function LandingPage() {
   const [ctaRef, ctaShown] = useReveal();
 
   useEffect(() => {
-    if (loading) document.body.style.overflow = "hidden";
-    else document.body.style.overflow = "";
-    return () => { document.body.style.overflow = ""; };
-  }, [loading]);
-
-  useEffect(() => {
     const onScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Gesture detection: Mouse swipe / swap left -> Go to Login
+  useEffect(() => {
+    let startX = 0;
+    let startY = 0;
+    let isDown = false;
+
+    // Pointer events (handles mouse click-and-drag and touch smoothly)
+    const onPointerDown = (e) => {
+      const tag = e.target?.tagName?.toLowerCase();
+      if (tag === 'input' || tag === 'textarea' || tag === 'select' || tag === 'button' || e.target?.closest('button') || e.target?.closest('a') || e.target?.closest('form')) {
+        return;
+      }
+      startX = e.clientX;
+      startY = e.clientY;
+      isDown = true;
+    };
+
+    const onPointerUp = (e) => {
+      if (!isDown) return;
+      isDown = false;
+      const deltaX = e.clientX - startX;
+      const deltaY = e.clientY - startY;
+
+      // Mouse swap left (dragged left > 35px)
+      if (deltaX < -35 && Math.abs(deltaX) > Math.abs(deltaY) * 0.9) {
+        goToLogin();
+      }
+    };
+
+    // Trackpad / Horizontal mouse wheel swipe
+    let wheelAcc = 0;
+    let wheelTimer = null;
+    const onWheel = (e) => {
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY) && Math.abs(e.deltaX) > 15) {
+        wheelAcc += e.deltaX;
+        clearTimeout(wheelTimer);
+        wheelTimer = setTimeout(() => { wheelAcc = 0; }, 250);
+
+        if (wheelAcc > 35) {
+          wheelAcc = 0;
+          goToLogin();
+        }
+      }
+    };
+
+    // Keyboard arrow
+    const onKeyDown = (e) => {
+      const tag = document.activeElement?.tagName?.toLowerCase();
+      if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+      if (e.key === 'ArrowRight') {
+        goToLogin();
+      }
+    };
+
+    // Prevent default ghost image drag so mouse swap isn't interrupted
+    const onDragStart = (e) => {
+      if (isDown) e.preventDefault();
+    };
+
+    window.addEventListener('pointerdown', onPointerDown);
+    window.addEventListener('pointerup', onPointerUp);
+    window.addEventListener('wheel', onWheel, { passive: true });
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('dragstart', onDragStart);
+
+    return () => {
+      window.removeEventListener('pointerdown', onPointerDown);
+      window.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('wheel', onWheel);
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('dragstart', onDragStart);
+    };
+  }, [isSlidingLogin]);
 
   useEffect(() => {
     const obs = new IntersectionObserver(
@@ -281,7 +294,12 @@ export default function LandingPage() {
   };
 
   return (
-    <div style={{ background: C.paper, color: C.text, fontFamily: body, overflowX: "hidden" }}>
+    <div style={{
+      background: C.paper, color: C.text, fontFamily: body, overflowX: "hidden",
+      transform: isSlidingLogin ? 'translateX(-100%)' : 'translateX(0)',
+      opacity: isSlidingLogin ? 0.2 : 1,
+      transition: isSlidingLogin ? 'transform 0.22s ease-in, opacity 0.22s ease-in' : 'none',
+    }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap');
         html { scroll-behavior: smooth; }
@@ -313,6 +331,7 @@ export default function LandingPage() {
         .pt-row-light:hover { background: rgba(19,26,16,0.03); }
         .pt-desktop-links { display: flex; align-items: center; gap: 36px; }
         .pt-hamburger { display: none; }
+
         @media (max-width: 880px) {
           .pt-desktop-links { display: none; }
           .pt-hamburger { display: flex; }
@@ -321,13 +340,6 @@ export default function LandingPage() {
           .pt-student-rail { animation: none !important; }
         }
       `}</style>
-
-      {loading && (
-        <Preloader
-          onCurtainUp={() => setHeroIn(true)}
-          onFinished={() => setLoading(false)}
-        />
-      )}
 
       {/* ============ NAV ============ */}
       <nav style={{
@@ -351,6 +363,7 @@ export default function LandingPage() {
           </div>
         </div>
 
+        {/* Desktop links with ONLY ONE slider switch */}
         <div className="pt-desktop-links">
           {navLinks.map(l => (
             <span key={l.id}
@@ -362,7 +375,7 @@ export default function LandingPage() {
               }}
             >{l.label}</span>
           ))}
-          <button onClick={() => goTo("/login")} style={{
+          <button onClick={goToLogin} style={{
             background: scrollY > 40 ? C.green : "#fff",
             color: scrollY > 40 ? "#fff" : C.ink,
             border: "none", borderRadius: 4, padding: "10px 22px",
@@ -403,11 +416,11 @@ export default function LandingPage() {
               borderBottom: `1px solid ${C.hairlineDark}`,
             }}>{l.label}</div>
           ))}
-          <button onClick={() => goTo("/login")} style={{
+          <button onClick={goToLogin} style={{
             marginTop: 16, background: C.green, color: "#fff", border: "none",
             borderRadius: 4, padding: "12px 22px", fontFamily: body, fontWeight: 600,
             fontSize: "0.9rem", cursor: "pointer",
-          }}>Login</button>
+          }}>Go to Login →</button>
         </div>
       </div>
 
@@ -722,7 +735,7 @@ export default function LandingPage() {
           <p style={{ color: "rgba(255,255,255,0.82)", marginBottom: 30, fontSize: "0.95rem", lineHeight: 1.7, maxWidth: 440, marginLeft: "auto", marginRight: "auto" }}>
             Login with your college credentials and start your placement journey today.
           </p>
-          <button onClick={() => goTo("/login")} style={{
+          <button onClick={goToLogin} style={{
             background: "#fff", color: C.ink, border: "none", borderRadius: 4,
             padding: "14px 34px", fontFamily: body, fontWeight: 600, fontSize: "0.95rem",
             cursor: "pointer", transition: "transform 0.2s",

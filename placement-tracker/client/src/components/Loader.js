@@ -7,17 +7,16 @@ export default function Loader({ message = '' }) {
     <div style={styles.overlay}>
       <style>{`
         @keyframes letterDrop {
-          0%   { transform: translateY(-120px) scaleY(1.4); opacity: 0; }
-          55%  { transform: translateY(10px)   scaleY(0.85); opacity: 1; }
-          70%  { transform: translateY(-18px)  scaleY(1.1); }
-          82%  { transform: translateY(6px)    scaleY(0.95); }
-          91%  { transform: translateY(-6px)   scaleY(1.03); }
-          100% { transform: translateY(0)      scaleY(1); opacity: 1; }
+          0%   { transform: translateY(-100px) scaleY(1.3); opacity: 0; }
+          60%  { transform: translateY(8px)   scaleY(0.88); opacity: 1; }
+          75%  { transform: translateY(-12px) scaleY(1.06); }
+          88%  { transform: translateY(4px)   scaleY(0.97); }
+          100% { transform: translateY(0)     scaleY(1); opacity: 1; }
         }
 
         @keyframes logoReveal {
-          0%   { opacity: 0; transform: scale(0.6) translateY(20px); }
-          60%  { transform: scale(1.08) translateY(-4px); opacity: 1; }
+          0%   { opacity: 0; transform: scale(0.6) translateY(16px); }
+          65%  { transform: scale(1.06) translateY(-2px); opacity: 1; }
           100% { transform: scale(1) translateY(0); opacity: 1; }
         }
 
@@ -34,7 +33,7 @@ export default function Loader({ message = '' }) {
         .drop-letter {
           display: inline-block;
           opacity: 0;
-          animation: letterDrop 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+          animation: letterDrop 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
           transform-origin: bottom center;
           font-family: 'Syne', sans-serif;
           font-weight: 800;
@@ -46,31 +45,31 @@ export default function Loader({ message = '' }) {
 
         .logo-pop {
           opacity: 0;
-          animation: logoReveal 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+          animation: logoReveal 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
         .loader-bar {
-          animation: barGrow 2.2s ease forwards;
+          animation: barGrow 1.6s ease forwards;
           background: linear-gradient(90deg, #9fe6be, #1f5c3a, #9fe6be);
           background-size: 200% 100%;
         }
 
         .msg-fade {
-          animation: fadeMsg 0.5s ease forwards;
+          animation: fadeMsg 0.4s ease forwards;
         }
       `}</style>
 
       {/* Letter drop row */}
       <div style={styles.wordRow}>
         {WORD.split('').map((char, i) => {
-          // Delay each letter — first half green, second half white accent
+          // Delay each letter — first half white, second half green accent
           const isAccent = i >= 5;
           return (
             <span
               key={i}
               className="drop-letter"
               style={{
-                animationDelay: `${i * 0.07}s`,
+                animationDelay: `${i * 0.05}s`,
                 color: isAccent ? '#9fe6be' : '#ffffff',
                 textShadow: isAccent
                   ? '0 0 24px rgba(159,230,190,0.5)'
@@ -83,11 +82,11 @@ export default function Loader({ message = '' }) {
         })}
       </div>
 
-      {/* Sahyadri logo — pops in after all letters land */}
+      {/* Sahyadri logo — pops in after letters land */}
       <div
         className="logo-pop"
         style={{
-          animationDelay: `${WORD.length * 0.07 + 0.4}s`,
+          animationDelay: `${WORD.length * 0.05 + 0.25}s`,
           marginTop: '1.5rem',
         }}
       >
@@ -104,7 +103,7 @@ export default function Loader({ message = '' }) {
           className="loader-bar"
           style={{
             ...styles.bar,
-            animationDelay: `${WORD.length * 0.07 + 0.2}s`,
+            animationDelay: `${WORD.length * 0.05 + 0.15}s`,
           }}
         />
       </div>
@@ -115,7 +114,7 @@ export default function Loader({ message = '' }) {
           className="msg-fade"
           style={{
             ...styles.msg,
-            animationDelay: `${WORD.length * 0.07 + 0.9}s`,
+            animationDelay: `${WORD.length * 0.05 + 0.7}s`,
           }}
         >
           {message}

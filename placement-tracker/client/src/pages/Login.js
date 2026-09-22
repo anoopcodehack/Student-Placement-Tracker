@@ -639,10 +639,104 @@ export default function Login() {
   const passMatch = signupForm.confirmPassword && signupForm.password === signupForm.confirmPassword;
   const passMismatch = signupForm.confirmPassword && signupForm.password !== signupForm.confirmPassword;
 
+  const [isSlidingHome, setIsSlidingHome] = useState(false);
+
+  const goHome = () => {
+    if (isSlidingHome) return;
+    setIsSlidingHome(true);
+    setTimeout(() => {
+      navigate('/');
+    }, 200);
+  };
+
+  // Gesture detection: Mouse swap / swipe right -> Go to Home
+  useEffect(() => {
+    let startX = 0;
+    let startY = 0;
+    let isDown = false;
+
+    // Pointer events (handles mouse drag swap and touch smoothly)
+    const onPointerDown = (e) => {
+      const tag = e.target?.tagName?.toLowerCase();
+      if (tag === 'input' || tag === 'textarea' || tag === 'select' || tag === 'button' || e.target?.closest('button') || e.target?.closest('a') || e.target?.closest('.pt-demo-btn')) {
+        return;
+      }
+      startX = e.clientX;
+      startY = e.clientY;
+      isDown = true;
+    };
+
+    const onPointerUp = (e) => {
+      if (!isDown) return;
+      isDown = false;
+      const deltaX = e.clientX - startX;
+      const deltaY = e.clientY - startY;
+
+      // Mouse swap right (dragged right > 35px) -> goes to home page
+      if (deltaX > 35 && Math.abs(deltaX) > Math.abs(deltaY) * 0.9) {
+        goHome();
+      }
+      // Mouse swap left (dragged left > 35px) -> switch to signup if on login
+      else if (deltaX < -35 && Math.abs(deltaX) > Math.abs(deltaY) * 0.9) {
+        if (tab === 'login') setTab('signup');
+      }
+    };
+
+    // Trackpad / Horizontal mouse wheel swipe
+    let wheelAcc = 0;
+    let wheelTimer = null;
+    const onWheel = (e) => {
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY) && Math.abs(e.deltaX) > 15) {
+        wheelAcc += e.deltaX;
+        clearTimeout(wheelTimer);
+        wheelTimer = setTimeout(() => { wheelAcc = 0; }, 250);
+
+        // Trackpad swipe right (negative deltaX) -> goes Home
+        if (wheelAcc < -35) {
+          wheelAcc = 0;
+          goHome();
+        }
+      }
+    };
+
+    // Keyboard navigation: ArrowLeft goes to Home if not focused on an input
+    const onKeyDown = (e) => {
+      const tag = document.activeElement?.tagName?.toLowerCase();
+      if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+      if (e.key === 'ArrowLeft') {
+        goHome();
+      } else if (e.key === 'ArrowRight') {
+        if (tab === 'login') setTab('signup');
+      }
+    };
+
+    // Prevent default ghost image drag so mouse swap isn't interrupted
+    const onDragStart = (e) => {
+      if (isDown) e.preventDefault();
+    };
+
+    window.addEventListener('pointerdown', onPointerDown);
+    window.addEventListener('pointerup', onPointerUp);
+    window.addEventListener('wheel', onWheel, { passive: true });
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('dragstart', onDragStart);
+
+    return () => {
+      window.removeEventListener('pointerdown', onPointerDown);
+      window.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('wheel', onWheel);
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('dragstart', onDragStart);
+    };
+  }, [tab, isSlidingHome]);
+
   return (
     <div style={{
       minHeight: '100vh', display: 'grid', gridTemplateColumns: '1.05fr 1fr',
       fontFamily: body, background: C.paper, color: C.text,
+      transform: isSlidingHome ? 'translateX(100%)' : 'translateX(0)',
+      opacity: isSlidingHome ? 0.2 : 1,
+      transition: isSlidingHome ? 'transform 0.22s ease-in, opacity 0.22s ease-in' : 'none',
     }} className="pt-login-grid">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap');
@@ -808,7 +902,7 @@ export default function Login() {
 
         <div style={{ position: 'relative', zIndex: 1, height: '100%', display: 'flex', flexDirection: 'column', padding: 'clamp(2rem,4vw,3.25rem)' }}>
           {/* back link */}
-          <div onClick={() => goTo('/')} style={{
+          <div onClick={goHome} style={{
             display: 'inline-flex', alignItems: 'center', gap: 8, color: 'rgba(241,243,234,0.75)',
             fontSize: '0.82rem', cursor: 'pointer', width: 'fit-content', marginBottom: 'clamp(1.5rem,4vh,3rem)',
           }}>
@@ -890,7 +984,7 @@ export default function Login() {
 
           {/* mobile back & live pill header */}
           <div className="pt-mobile-brand-bar">
-            <div onClick={() => goTo('/')} className="pt-mobile-back-link">
+            <div onClick={goHome} className="pt-mobile-back-link">
               <ArrowLeft size={14} /> Back to portal
             </div>
             <div className="pt-mobile-live-badge">
