@@ -325,9 +325,117 @@ export default function LandingPage() {
         @keyframes pt-student-rail { from { transform: translateX(0); } to { transform: translateX(-50%); } }
         .pt-ticker-track:hover { animation-play-state: paused; }
         .pt-student-rail:hover { animation-play-state: paused; }
-        .pt-row { transition: background 0.2s ease; }
-        .pt-row:hover { background: rgba(255,255,255,0.03); }
-        .pt-row:hover .pt-company-logo { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,0.18); }
+
+        /* Coder.com-inspired interactive Spotlight Cards */
+        .coder-spotlight-card {
+          position: relative;
+          background: #ffffff;
+          border: 1px solid rgba(19, 26, 16, 0.09);
+          border-radius: 12px;
+          padding: 24px;
+          overflow: hidden;
+          transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s ease;
+          cursor: default;
+        }
+        .coder-spotlight-card::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          border-radius: inherit;
+          background: radial-gradient(350px circle at var(--mouse-x, -999px) var(--mouse-y, -999px), rgba(31, 92, 58, 0.12), transparent 70%);
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          pointer-events: none;
+          z-index: 1;
+        }
+        .coder-spotlight-card:hover {
+          transform: translateY(-4px);
+          border-color: rgba(31, 92, 58, 0.35);
+          box-shadow: 0 16px 36px -10px rgba(31, 92, 58, 0.16), 0 4px 12px rgba(19, 26, 16, 0.04);
+        }
+        .coder-spotlight-card:hover::before {
+          opacity: 1;
+        }
+        .coder-spotlight-card .coder-icon-box {
+          transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+        }
+        .coder-spotlight-card:hover .coder-icon-box {
+          transform: scale(1.1) rotate(2deg);
+        }
+
+        /* Coder.com-inspired Recruiter Interactive Rows */
+        .pt-row {
+          position: relative;
+          transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background 0.25s ease, padding 0.25s ease;
+          border-radius: 8px;
+        }
+        .pt-row::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 15%;
+          bottom: 15%;
+          width: 3px;
+          border-radius: 3px;
+          background: #9FE6BE;
+          opacity: 0;
+          transform: scaleY(0.3);
+          transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .pt-row:hover {
+          background: linear-gradient(90deg, rgba(31, 92, 58, 0.22) 0%, rgba(255, 255, 255, 0.03) 100%);
+          transform: translateX(8px);
+          padding-left: 14px !important;
+        }
+        .pt-row:hover::before {
+          opacity: 1;
+          transform: scaleY(1);
+        }
+        .pt-row:hover .pt-company-logo {
+          transform: translateY(-2px) scale(1.08);
+          box-shadow: 0 0 20px rgba(159, 230, 190, 0.35), 0 8px 18px rgba(0,0,0,0.25);
+          border-color: #9FE6BE;
+        }
+
+        /* Coder.com-inspired Button Shimmer & Elevation */
+        .coder-btn {
+          position: relative;
+          overflow: hidden;
+          transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, opacity 0.2s ease;
+        }
+        .coder-btn::after {
+          content: "";
+          position: absolute;
+          top: -50%;
+          left: -80%;
+          width: 50%;
+          height: 200%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+          transform: rotate(25deg);
+          transition: left 0.65s ease;
+          pointer-events: none;
+        }
+        .coder-btn:hover::after {
+          left: 140%;
+        }
+        .coder-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(31, 92, 58, 0.25);
+        }
+        .coder-btn:active {
+          transform: translateY(0);
+        }
+
+        /* Student Rail Card Hover */
+        .pt-student-card {
+          transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease, border-color 0.28s ease;
+        }
+        .pt-student-card:hover {
+          transform: translateY(-6px) scale(1.02);
+          box-shadow: 0 20px 42px rgba(19, 26, 16, 0.16);
+          border-color: rgba(31, 92, 58, 0.35);
+        }
+
         .pt-row-light:hover { background: rgba(19,26,16,0.03); }
         .pt-desktop-links { display: flex; align-items: center; gap: 36px; }
         .pt-hamburger { display: none; }
@@ -375,16 +483,12 @@ export default function LandingPage() {
               }}
             >{l.label}</span>
           ))}
-          <button onClick={goToLogin} style={{
+          <button onClick={goToLogin} className="coder-btn" style={{
             background: scrollY > 40 ? C.green : "#fff",
             color: scrollY > 40 ? "#fff" : C.ink,
-            border: "none", borderRadius: 4, padding: "10px 22px",
+            border: "none", borderRadius: 6, padding: "10px 22px",
             fontFamily: body, fontWeight: 600, fontSize: "0.85rem", cursor: "pointer",
-            transition: "opacity 0.2s",
-          }}
-            onMouseOver={e => e.currentTarget.style.opacity = 0.85}
-            onMouseOut={e => e.currentTarget.style.opacity = 1}
-          >Login</button>
+          }}>Login</button>
         </div>
 
         <button
@@ -416,9 +520,9 @@ export default function LandingPage() {
               borderBottom: `1px solid ${C.hairlineDark}`,
             }}>{l.label}</div>
           ))}
-          <button onClick={goToLogin} style={{
+          <button onClick={goToLogin} className="coder-btn" style={{
             marginTop: 16, background: C.green, color: "#fff", border: "none",
-            borderRadius: 4, padding: "12px 22px", fontFamily: body, fontWeight: 600,
+            borderRadius: 6, padding: "12px 22px", fontFamily: body, fontWeight: 600,
             fontSize: "0.9rem", cursor: "pointer",
           }}>Go to Login →</button>
         </div>
@@ -471,22 +575,16 @@ export default function LandingPage() {
               Track placements, analyze trends, and get AI-powered career tools — all in one place built for Sahyadri students.
             </p>
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <button onClick={() => goTo("/login")} style={{
-                background: "#fff", color: C.ink, border: "none", borderRadius: 4,
+              <button onClick={() => goTo("/login")} className="coder-btn" style={{
+                background: "#fff", color: C.ink, border: "none", borderRadius: 6,
                 padding: "13px 28px", fontFamily: body, fontWeight: 600, fontSize: "0.9rem",
-                cursor: "pointer", transition: "transform 0.2s",
-              }}
-                onMouseOver={e => e.currentTarget.style.transform = "translateY(-2px)"}
-                onMouseOut={e => e.currentTarget.style.transform = "translateY(0)"}
-              >Get Started</button>
-              <button onClick={() => scrollToId("numbers")} style={{
-                background: "transparent", color: "#fff", border: "1px solid rgba(255,255,255,0.5)",
-                borderRadius: 4, padding: "13px 24px", fontFamily: body, fontWeight: 600, fontSize: "0.9rem",
-                cursor: "pointer", transition: "border-color 0.2s",
-              }}
-                onMouseOver={e => e.currentTarget.style.borderColor = "#fff"}
-                onMouseOut={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.5)"}
-              >View Numbers</button>
+                cursor: "pointer",
+              }}>Get Started</button>
+              <button onClick={() => scrollToId("numbers")} className="coder-btn" style={{
+                background: "rgba(255,255,255,0.08)", color: "#fff", border: "1px solid rgba(255,255,255,0.4)",
+                borderRadius: 6, padding: "13px 24px", fontFamily: body, fontWeight: 600, fontSize: "0.9rem",
+                cursor: "pointer", backdropFilter: "blur(6px)",
+              }}>View Numbers</button>
             </div>
           </div>
         </div>
@@ -572,27 +670,35 @@ export default function LandingPage() {
         {/* feature list */}
         <div ref={featuresRef} style={{
           marginTop: "clamp(3.5rem,7vw,5rem)",
-          display: "grid", gridTemplateColumns: "1fr 1fr", columnGap: 48,
-        }} className="pt-grid-2">
+          display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 20,
+        }}>
           {FEATURES.map((f, i) => (
-            <div key={i} className="pt-row-light" style={{
-              display: "flex", gap: 18, padding: "26px 4px",
-              borderTop: `1px solid ${C.hairline}`,
-              borderBottom: i >= FEATURES.length - 2 ? `1px solid ${C.hairline}` : "none",
-              opacity: featuresShown ? 1 : 0,
-              transform: featuresShown ? "translateY(0)" : "translateY(18px)",
-              transition: `opacity 0.6s cubic-bezier(0.16,1,0.3,1) ${0.06 * i}s, transform 0.6s cubic-bezier(0.16,1,0.3,1) ${0.06 * i}s`,
-            }}>
-              <div style={{
-                width: 42, height: 42, borderRadius: "50%", flexShrink: 0,
-                background: f.color + "16", border: `1px solid ${f.color}40`,
+            <div
+              key={i}
+              className="coder-spotlight-card"
+              onMouseMove={(e) => {
+                const r = e.currentTarget.getBoundingClientRect();
+                e.currentTarget.style.setProperty('--mouse-x', `${e.clientX - r.left}px`);
+                e.currentTarget.style.setProperty('--mouse-y', `${e.clientY - r.top}px`);
+              }}
+              style={{
+                display: "flex", gap: 18,
+                opacity: featuresShown ? 1 : 0,
+                transform: featuresShown ? "translateY(0)" : "translateY(18px)",
+                transition: `opacity 0.6s cubic-bezier(0.16,1,0.3,1) ${0.06 * i}s, transform 0.6s cubic-bezier(0.16,1,0.3,1) ${0.06 * i}s`,
+              }}
+            >
+              <div className="coder-icon-box" style={{
+                width: 44, height: 44, borderRadius: 10, flexShrink: 0,
+                background: f.color + "14", border: `1px solid ${f.color}35`,
                 display: "flex", alignItems: "center", justifyContent: "center",
+                position: "relative", zIndex: 2,
               }}>
-                <f.Icon size={19} color={f.color} strokeWidth={1.75} />
+                <f.Icon size={20} color={f.color} strokeWidth={1.8} />
               </div>
-              <div>
-                <div style={{ fontFamily: display, fontWeight: 600, fontSize: "1.05rem", marginBottom: 6 }}>{f.title}</div>
-                <div style={{ fontSize: "0.86rem", color: C.muted, lineHeight: 1.65, maxWidth: 380 }}>{f.desc}</div>
+              <div style={{ position: "relative", zIndex: 2 }}>
+                <div style={{ fontFamily: display, fontWeight: 600, fontSize: "1.05rem", marginBottom: 6, color: C.text }}>{f.title}</div>
+                <div style={{ fontSize: "0.86rem", color: C.muted, lineHeight: 1.65 }}>{f.desc}</div>
               </div>
             </div>
           ))}
@@ -617,7 +723,7 @@ export default function LandingPage() {
         <div style={{ overflow: "hidden", maskImage: "linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)", WebkitMaskImage: "linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)" }}>
           <div className="pt-student-rail" style={{ display: "flex", gap: 20, width: "max-content", animation: "pt-student-rail 32s linear infinite" }}>
             {[...STUDENT_IMAGES, ...STUDENT_IMAGES].map((image, index) => (
-              <div key={`${image}-${index}`} style={{ width: "clamp(280px,38vw,460px)", flexShrink: 0, background: C.paper, border: `1px solid ${C.hairline}`, borderRadius: 8, padding: 10, boxShadow: "0 16px 34px rgba(19,26,16,0.1)" }}>
+              <div key={`${image}-${index}`} className="pt-student-card" style={{ width: "clamp(280px,38vw,460px)", flexShrink: 0, background: C.paper, border: `1px solid ${C.hairline}`, borderRadius: 8, padding: 10, boxShadow: "0 16px 34px rgba(19,26,16,0.1)", cursor: "pointer" }}>
                 <img src={image} alt={`Sahyadri placement achievers ${index % STUDENT_IMAGES.length + 1}`} style={{ width: "100%", display: "block", aspectRatio: "1.75 / 1", objectFit: "cover", borderRadius: 4 }} />
               </div>
             ))}
@@ -735,14 +841,11 @@ export default function LandingPage() {
           <p style={{ color: "rgba(255,255,255,0.82)", marginBottom: 30, fontSize: "0.95rem", lineHeight: 1.7, maxWidth: 440, marginLeft: "auto", marginRight: "auto" }}>
             Login with your college credentials and start your placement journey today.
           </p>
-          <button onClick={goToLogin} style={{
-            background: "#fff", color: C.ink, border: "none", borderRadius: 4,
+          <button onClick={goToLogin} className="coder-btn" style={{
+            background: "#fff", color: C.ink, border: "none", borderRadius: 6,
             padding: "14px 34px", fontFamily: body, fontWeight: 600, fontSize: "0.95rem",
-            cursor: "pointer", transition: "transform 0.2s",
-          }}
-            onMouseOver={e => e.currentTarget.style.transform = "translateY(-2px)"}
-            onMouseOut={e => e.currentTarget.style.transform = "translateY(0)"}
-          >Get Started — It's Free</button>
+            cursor: "pointer",
+          }}>Get Started — It's Free</button>
         </div>
       </section>
 

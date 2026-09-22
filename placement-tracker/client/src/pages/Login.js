@@ -754,9 +754,46 @@ export default function Login() {
         .pt-account-opt:hover { transform: translateY(-1px); }
         .pt-google-btn { transition: all 0.2s ease; }
         .pt-google-btn:hover { border-color: ${C.green} !important; box-shadow: 0 4px 14px rgba(31,92,58,0.12); }
-        .pt-submit-btn { transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease; }
-        .pt-submit-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(31,92,58,0.2); }
-        .pt-feature-row:hover { background: rgba(255,255,255,0.05); }
+        .pt-submit-btn {
+          position: relative;
+          overflow: hidden;
+          transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, opacity 0.2s ease;
+        }
+        .pt-submit-btn::after {
+          content: "";
+          position: absolute;
+          top: -50%;
+          left: -80%;
+          width: 50%;
+          height: 200%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+          transform: rotate(25deg);
+          transition: left 0.65s ease;
+          pointer-events: none;
+        }
+        .pt-submit-btn:hover:not(:disabled)::after {
+          left: 140%;
+        }
+        .pt-submit-btn:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 24px rgba(31,92,58,0.25);
+        }
+        .pt-feature-row {
+          position: relative;
+          transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease;
+        }
+        .pt-feature-row:hover {
+          background: rgba(255,255,255,0.08);
+          transform: translateX(4px);
+        }
+        .pt-feature-row .pt-feature-icon {
+          transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+        }
+        .pt-feature-row:hover .pt-feature-icon {
+          transform: scale(1.1);
+          background: rgba(159, 230, 190, 0.2);
+          border-color: #9FE6BE;
+        }
 
         .pt-mobile-brand-bar { display: none; }
         .pt-form-wrapper {
@@ -768,6 +805,7 @@ export default function Login() {
           min-height: 100vh;
         }
         .pt-form-card {
+          position: relative;
           width: 100%;
           max-width: 440px;
           background: #fff;
@@ -775,6 +813,30 @@ export default function Login() {
           border-radius: 14px;
           padding: clamp(1.5rem, 4vw, 2.25rem);
           box-shadow: 0 20px 50px rgba(19, 26, 16, 0.08);
+          overflow: hidden;
+          transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease, border-color 0.28s ease;
+        }
+        .pt-form-card::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          border-radius: inherit;
+          background: radial-gradient(420px circle at var(--mouse-x, -999px) var(--mouse-y, -999px), rgba(31, 92, 58, 0.08), transparent 70%);
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          pointer-events: none;
+          z-index: 0;
+        }
+        .pt-form-card:hover {
+          border-color: rgba(31, 92, 58, 0.3);
+          box-shadow: 0 24px 60px rgba(31, 92, 58, 0.12), 0 4px 14px rgba(19, 26, 16, 0.04);
+        }
+        .pt-form-card:hover::before {
+          opacity: 1;
+        }
+        .pt-form-card > * {
+          position: relative;
+          z-index: 1;
         }
         .pt-demo-grid {
           display: grid;
@@ -950,9 +1012,9 @@ export default function Login() {
             {FEATURES.map((f, i) => (
               <div key={i} className="pt-feature-row" style={{
                 display: 'flex', alignItems: 'center', gap: 12, padding: '10px 8px',
-                borderRadius: 6,
+                borderRadius: 6, cursor: 'default',
               }}>
-                <div style={{
+                <div className="pt-feature-icon" style={{
                   width: 30, height: 30, borderRadius: '50%', flexShrink: 0,
                   background: 'rgba(241,243,234,0.08)', border: '1px solid rgba(241,243,234,0.15)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -980,7 +1042,14 @@ export default function Login() {
         transform: mounted ? 'translateY(0)' : 'translateY(16px)',
         transition: 'all 0.7s cubic-bezier(0.16,1,0.3,1) 0.1s',
       }}>
-        <div className="pt-form-card">
+        <div
+          className="pt-form-card"
+          onMouseMove={(e) => {
+            const r = e.currentTarget.getBoundingClientRect();
+            e.currentTarget.style.setProperty('--mouse-x', `${e.clientX - r.left}px`);
+            e.currentTarget.style.setProperty('--mouse-y', `${e.clientY - r.top}px`);
+          }}
+        >
 
           {/* mobile back & live pill header */}
           <div className="pt-mobile-brand-bar">
