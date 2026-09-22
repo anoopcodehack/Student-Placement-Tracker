@@ -6,6 +6,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { NotificationProvider } from './context/NotificationProvider';
 import Layout from './components/Layout';
+import Loader from './components/Loader';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Students from './pages/Students';
@@ -48,21 +49,8 @@ const AppRoutes = () => {
   const { user, loading } = useAuth();
 
   // Show loader while checking auth
-  if (loading) return (
-    <div style={{
-      height: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: '#0a0f1e',
-      flexDirection: 'column',
-      gap: 16
-    }}>
-      <div className="spinner-border text-primary"
-        style={{ width: '3rem', height: '3rem' }} />
-      <p style={{ color: '#94a3b8', margin: 0 }}>Loading PlaceTrack...</p>
-    </div>
-  );
+  if (loading) return <Loader />;
+
 
   return (
     <Routes>

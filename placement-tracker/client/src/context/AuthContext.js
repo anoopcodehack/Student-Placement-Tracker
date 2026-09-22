@@ -21,7 +21,9 @@ export const AuthProvider = ({ children }) => {
       setUser(JSON.parse(savedUser));
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     }
-    setLoading(false);
+    // Keep loader visible long enough for the animation to fully play
+    const minDelay = new Promise(res => setTimeout(res, 2500));
+    minDelay.then(() => setLoading(false));
   }, []);
 
   // ── Login ──
