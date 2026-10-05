@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const Student = require('../models/Student');
+const { ensureStudentForUser } = require('../utils/studentHelper');
 const { protect } = require('../middleware/auth');
 const multer = require('multer');
 const path = require('path');
@@ -41,23 +42,18 @@ const uploadProfileImage = multer({
 // GET /api/profile — get my profile
 router.get('/', protect, async (req, res) => {
   try {
-    const user = await User.findById(req.user._id).select('-password');
+    let user = await User.findById(req.user._id).select('-password');
     let studentData = null;
-    if (user.isStudent) {
-      let studentRef = user.studentRef;
-      if (!studentRef && user.rollNo) {
-        const matchingStudent = await Student.findOne({ rollNo: user.rollNo });
-        if (matchingStudent) {
-          studentRef = matchingStudent._id;
-          user.studentRef = matchingStudent._id;
-          await user.save();
-        }
+
+    if (user.isStudent || (user.rollNo && user.rollNo.trim() !== '') || user.role === 'student') {
+      const student = await ensureStudentForUser(user);
+      if (student) {
+        studentData = await Student.findById(student._id)
+          .populate('placementDetails.company', 'name industry');
       }
-      if (studentRef) {
-        studentData = await Student.findById(studentRef)
-        .populate('placementDetails.company', 'name industry');
-      }
+      user = await User.findById(req.user._id).select('-password');
     }
+
     res.json({ success: true, data: { user, student: studentData } });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -75,8 +71,11 @@ router.put('/', protect, async (req, res) => {
     ).select('-password');
 
     // if student, update their profile too
-    if (user.isStudent && user.studentRef) {
-      await Student.findByIdAndUpdate(user.studentRef, { phone, linkedin, github });
+    if (user.isStudent || user.role === 'student' || user.rollNo) {
+      const student = await ensureStudentForUser(user);
+      if (student) {
+        await Student.findByIdAndUpdate(student._id, { phone, linkedin, github });
+      }
     }
     res.json({ success: true, data: user });
   } catch (err) {
@@ -87,12 +86,16 @@ router.put('/', protect, async (req, res) => {
 // POST /api/profile/resume — upload resume
 router.post('/resume', protect, upload.single('resume'), async (req, res) => {
   try {
-    if (!req.user.isStudent || !req.user.studentRef) {
-      return res.status(400).json({ success: false, message: 'Resume upload is only allowed for linked student accounts' });
+    if (!req.user.isStudent && req.user.role !== 'student' && !req.user.rollNo) {
+      return res.status(400).json({ success: false, message: 'Resume upload is only allowed for student accounts' });
+    }
+    const student = await ensureStudentForUser(req.user);
+    if (!student) {
+      return res.status(400).json({ success: false, message: 'Could not link student profile' });
     }
     if (!req.file) return res.status(400).json({ success: false, message: 'No file uploaded' });
     const resumeUrl = `/uploads/resumes/${req.file.filename}`;
-    await Student.findByIdAndUpdate(req.user.studentRef, { resume: resumeUrl });
+    await Student.findByIdAndUpdate(student._id, { resume: resumeUrl });
     res.json({ success: true, resumeUrl, message: 'Resume uploaded!' });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });

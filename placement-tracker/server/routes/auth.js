@@ -7,6 +7,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const crypto = require('crypto');
 const User = require('../models/User');
 const Student = require('../models/Student'); // ✅ added for rollNo linking
+const { ensureStudentForUser } = require('../utils/studentHelper');
 const { protect } = require('../middleware/auth');
 
 const generateToken = (id) => {
@@ -106,15 +107,19 @@ router.post('/register', async (req, res) => {
     }
 
     // Create user
-    const user = await User.create({
+    let user = await User.create({
       name,
       email,
       password,
-      role: 'viewer', // always viewer, admin is set manually
+      role: isStudent ? 'student' : 'viewer',
       isStudent,
       studentRef,
       rollNo: normalizedRollNo,
     });
+
+    if (isStudent) {
+      await ensureStudentForUser(user);
+    }
 
     // Return response with isStudent flag
     res.status(201).json({
@@ -152,6 +157,11 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ success: false, message: 'Invalid email or password' });
     }
 
+    // Ensure student role and linked Student record are fully synced
+    if (user.isStudent || (user.rollNo && user.rollNo.trim() !== '') || user.role === 'student') {
+      await ensureStudentForUser(user);
+    }
+
     res.json({
       success: true,
       token: generateToken(user._id),
@@ -162,6 +172,7 @@ router.post('/login', async (req, res) => {
         role:      user.role,
         isStudent: user.isStudent, // ✅ send isStudent in login too
         rollNo:    user.rollNo,
+        profileImage: user.profileImage,
       }
     });
 

@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }) => {
       updateUser, // ✅ expose updateUser
       loading,
       isAdmin:   user?.role === 'admin',
-      isStudent: user?.isStudent === true, // ✅ expose isStudent globally
+      isStudent: Boolean(user?.isStudent === true || user?.role === 'student' || user?.rollNo), // ✅ expose isStudent globally
     }}>
       {children}
     </AuthContext.Provider>
