@@ -248,9 +248,6 @@ export default function Profile() {
                 )}
               </div>
             )}
-                
-              </div>
-            )}
           </div>
 
           {/* Tab navigation */}
