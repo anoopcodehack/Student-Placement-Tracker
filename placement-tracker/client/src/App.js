@@ -25,6 +25,7 @@ import Contact from './pages/Contact';
 import Notifications from './pages/Notifications';
 import LandingPage from './pages/LandingPage';
 import CampusDrives from './pages/CampusDrives';
+import CompanyPrepHub from './pages/CompanyPrepHub';
 
 
 const ThemedToast = () => {
@@ -64,6 +65,7 @@ const AppRoutes = () => {
         {/* These only render when user is logged in (Layout renders Outlet) */}
         <Route index element={<Dashboard />} />
         <Route path="drives" element={<CampusDrives />} />
+        <Route path="prep" element={<CompanyPrepHub />} />
         <Route path="students" element={<Students />} />
         <Route path="students/:id" element={<StudentDetail />} />
         <Route path="students/add" element={<AddStudent />} />

@@ -60,6 +60,9 @@ export default function Companies() {
           <p className="page-sub">{companies.length} companies · {totalHired} total hires</p>
         </div>
         <div className="d-flex align-items-center gap-2">
+          <Link to="/prep" className="btn btn-outline-primary d-inline-flex align-items-center gap-1">
+            <i className="bi bi-journal-code"></i> Prep Hub & Questions
+          </Link>
           <Link to="/drives" className="btn btn-outline-success d-inline-flex align-items-center gap-1">
             <i className="bi bi-clipboard-check-fill"></i> Campus Drives & Apply
           </Link>

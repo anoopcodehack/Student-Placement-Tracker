@@ -174,7 +174,15 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-        <div>
+        <div className="d-flex align-items-center gap-2">
+          <button
+            type="button"
+            className="btn btn-sm btn-outline-success d-inline-flex align-items-center gap-1"
+            onClick={() => navigate('/prep')}
+          >
+            <i className="bi bi-journal-code"></i>
+            <span>Prep Hub & Questions</span>
+          </button>
           <button
             type="button"
             className="btn btn-sm btn-primary d-inline-flex align-items-center gap-1"

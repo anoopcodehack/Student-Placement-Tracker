@@ -190,6 +190,9 @@ export default function CampusDrives() {
           </p>
         </div>
         <div className="d-flex align-items-center gap-2">
+          <Link to="/prep" className="btn btn-outline-success btn-sm d-inline-flex align-items-center gap-1">
+            <i className="bi bi-journal-code"></i> Company Prep Hub
+          </Link>
           {isAdmin ? (
             <>
               <Link to="/companies/add" className="btn btn-primary d-inline-flex align-items-center gap-1">
