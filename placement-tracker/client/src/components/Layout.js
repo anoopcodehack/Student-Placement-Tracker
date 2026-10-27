@@ -5,6 +5,7 @@ import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import NotificationBell from './NotificationBell';
+import NAACReportModal from './NAACReportModal';
 import { API_BASE_URL } from '../utils/runtimeConfig';
 
 const mainNav = [
@@ -33,6 +34,7 @@ export default function Layout() {
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [showNAACModal, setShowNAACModal] = useState(false);
   const initials = user?.name?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || 'U';
 
   // Automatically close mobile menu when path changes
@@ -151,6 +153,27 @@ export default function Layout() {
             </>
           )}
 
+          {!collapsed && (
+            <div style={{ padding: '0.6rem 1.25rem 0.2rem' }}>
+              <button
+                type="button"
+                className="btn btn-sm w-100 d-flex align-items-center justify-content-center gap-2"
+                style={{
+                  background: 'rgba(159, 230, 190, 0.15)',
+                  color: '#9fe6be',
+                  border: '1px solid rgba(159, 230, 190, 0.25)',
+                  fontSize: '0.8rem',
+                  borderRadius: 8,
+                  padding: '6px 10px',
+                }}
+                onClick={() => { setShowNAACModal(true); setMobileOpen(false); }}
+              >
+                <i className="bi bi-file-earmark-check-fill"></i>
+                <span>NAAC Audit PDF</span>
+              </button>
+            </div>
+          )}
+
           {!collapsed && <div className="nav-section-label" style={{ marginTop: '0.5rem' }}>Account</div>}
           <NavLink
             to="/profile"
@@ -254,6 +277,11 @@ export default function Layout() {
       <main className={`main-content ${collapsed ? 'collapsed' : ''}`}>
         <Outlet />
       </main>
+
+      <NAACReportModal
+        show={showNAACModal}
+        onClose={() => setShowNAACModal(false)}
+      />
     </div>
   );
 }

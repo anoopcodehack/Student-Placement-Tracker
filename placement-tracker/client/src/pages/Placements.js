@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
 import ConfirmModal from '../components/ConfirmModal';
+import NAACReportModal from '../components/NAACReportModal';
 
 const pkgColor = p => p>=20?'#6b4a9a':p>=10?'#1f5c3a':p>=5?'#6fb58c':'#647861';
 const COMPANY_LOGOS = {
@@ -18,6 +19,7 @@ export default function Placements() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState({ offerType:'', status:'' });
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [showNAACModal, setShowNAACModal] = useState(false);
   const { isAdmin } = useAuth();
 
   const fetchPlacements = async () => {
@@ -55,11 +57,20 @@ export default function Placements() {
           <h1 className="page-title">Placements</h1>
           <p className="page-sub">{placements.length} records · Avg ₹{avgPkg} LPA · Max ₹{maxPkg} LPA</p>
         </div>
-        {isAdmin && (
-          <Link to="/placements/add" className="btn btn-primary">
-            <i className="bi bi-award-fill me-2"></i>Add Placement
-          </Link>
-        )}
+        <div className="d-flex align-items-center gap-2">
+          <button
+            type="button"
+            className="btn btn-outline-success d-inline-flex align-items-center gap-1"
+            onClick={() => setShowNAACModal(true)}
+          >
+            <i className="bi bi-file-earmark-pdf-fill"></i> NAAC Audit Report
+          </button>
+          {isAdmin && (
+            <Link to="/placements/add" className="btn btn-primary d-inline-flex align-items-center gap-1">
+              <i className="bi bi-award-fill"></i> Add Placement
+            </Link>
+          )}
+        </div>
       </div>
 
       {/* Quick stats */}
@@ -197,6 +208,11 @@ export default function Placements() {
         onConfirm={handleDelete}
         onCancel={()=>setDeleteTarget(null)}
         confirmText="Remove"
+      />
+
+      <NAACReportModal
+        show={showNAACModal}
+        onClose={() => setShowNAACModal(false)}
       />
     </div>
   );

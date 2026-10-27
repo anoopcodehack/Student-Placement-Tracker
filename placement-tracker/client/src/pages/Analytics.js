@@ -8,6 +8,7 @@ import {
 } from 'chart.js';
 import { toast } from 'react-toastify';
 import { exportToExcel, exportToPDF } from '../utils/exportUtils';
+import NAACReportModal from '../components/NAACReportModal';
 
 ChartJS.register(CategoryScale,LinearScale,BarElement,PointElement,LineElement,ArcElement,RadialLinearScale,Title,Tooltip,Legend,Filler);
 
@@ -22,6 +23,7 @@ export default function Analytics() {
   const [batches, setBatches]       = useState([]);
   const [batch, setBatch]           = useState('');
   const [loading, setLoading]       = useState(true);
+  const [showNAACModal, setShowNAACModal] = useState(false);
 
   const fetchAll = async (b='') => {
     setLoading(true);
@@ -152,22 +154,33 @@ export default function Analytics() {
           <option value="">All Batches</option>
           {batches.map(b=><option key={b} value={b}>Batch {b}</option>)}
         </select>
-        <div className="dropdown">
-          <button className="btn btn-outline-primary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown">
-            <i className="bi bi-download me-2"></i>Export Summary
+        <div className="d-flex align-items-center gap-2">
+          <button
+            type="button"
+            className="btn btn-primary btn-sm d-inline-flex align-items-center gap-1 shadow-sm"
+            style={{ background: '#1F5C3A', borderColor: '#1F5C3A' }}
+            onClick={() => setShowNAACModal(true)}
+          >
+            <i className="bi bi-file-earmark-check-fill"></i>
+            <span>Official NAAC Report</span>
           </button>
-          <ul className="dropdown-menu dropdown-menu-end shadow-sm border-0">
-            <li>
-              <button className="dropdown-item d-flex align-items-center gap-2 py-2" onClick={() => handleExportSummary('excel')}>
-                <i className="bi bi-file-earmark-excel-fill text-success"></i> Export to Excel
-              </button>
-            </li>
-            <li>
-              <button className="dropdown-item d-flex align-items-center gap-2 py-2" onClick={() => handleExportSummary('pdf')}>
-                <i className="bi bi-file-earmark-pdf-fill text-danger"></i> Export to PDF
-              </button>
-            </li>
-          </ul>
+          <div className="dropdown">
+            <button className="btn btn-outline-primary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown">
+              <i className="bi bi-download me-2"></i>Export Summary
+            </button>
+            <ul className="dropdown-menu dropdown-menu-end shadow-sm border-0">
+              <li>
+                <button className="dropdown-item d-flex align-items-center gap-2 py-2" onClick={() => handleExportSummary('excel')}>
+                  <i className="bi bi-file-earmark-excel-fill text-success"></i> Export to Excel
+                </button>
+              </li>
+              <li>
+                <button className="dropdown-item d-flex align-items-center gap-2 py-2" onClick={() => handleExportSummary('pdf')}>
+                  <i className="bi bi-file-earmark-pdf-fill text-danger"></i> Export to PDF
+                </button>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
 
@@ -365,6 +378,11 @@ export default function Analytics() {
           </table>
         </div>
       </div>
+
+      <NAACReportModal
+        show={showNAACModal}
+        onClose={() => setShowNAACModal(false)}
+      />
     </div>
   );
 }

@@ -7,6 +7,7 @@ import {
 } from 'chart.js';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import NAACReportModal from '../components/NAACReportModal';
 
 const COMPANY_LOGOS = {
   Google: '/Google-Emblema.png', Amazon: '/amazon.webp', Microsoft: '/microsoft.png',
@@ -25,6 +26,7 @@ export default function Dashboard() {
   const [batches, setBatches] = useState([]);
   const [selectedBatch, setSelectedBatch] = useState('');
   const [loading, setLoading] = useState(true);
+  const [showNAACModal, setShowNAACModal] = useState(false);
   const navigate = useNavigate();
 
   const fetchAll = async (batch='') => {
@@ -103,6 +105,15 @@ export default function Dashboard() {
             <option value="">All Batches</option>
             {batches.map(b=><option key={b} value={b}>Batch {b}</option>)}
           </select>
+          <button
+            type="button"
+            className="btn btn-outline-success btn-sm d-inline-flex align-items-center gap-1"
+            onClick={() => setShowNAACModal(true)}
+            title="Generate official NAAC Criterion 5.2.1 Audit Report"
+          >
+            <i className="bi bi-file-earmark-pdf-fill"></i>
+            <span>NAAC Report</span>
+          </button>
           <span style={{
             display:'inline-flex',alignItems:'center',gap:5,fontSize:'0.75rem',fontWeight:600,
             padding:'4px 12px',borderRadius:20,background:'#dcfce7',color:'#166534'
@@ -305,6 +316,11 @@ export default function Dashboard() {
           </tbody>
         </table>
       </div>
+
+      <NAACReportModal
+        show={showNAACModal}
+        onClose={() => setShowNAACModal(false)}
+      />
     </div>
   );
 }
