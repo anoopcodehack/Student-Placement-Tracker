@@ -9,6 +9,7 @@ import { API_BASE_URL } from '../utils/runtimeConfig';
 
 const mainNav = [
   { to: '/', icon: 'bi-speedometer2', label: 'Dashboard', end: true },
+  { to: '/drives', icon: 'bi-clipboard-check-fill', label: 'Campus Drives' },
   { to: '/students', icon: 'bi-people-fill', label: 'Students' },
   { to: '/companies', icon: 'bi-building-fill', label: 'Companies' },
   { to: '/placements', icon: 'bi-briefcase-fill', label: 'Placements' },

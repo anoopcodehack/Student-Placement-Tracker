@@ -149,6 +149,43 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* Quick Action Banner for Campus Drives */}
+      <div
+        className="card border-0 shadow-sm p-3 mb-4 d-flex flex-row align-items-center justify-content-between flex-wrap gap-3"
+        style={{
+          borderRadius: 14,
+          background: 'linear-gradient(135deg, rgba(31, 92, 58, 0.08) 0%, rgba(159, 230, 190, 0.18) 100%)',
+          borderLeft: '4px solid #1F5C3A'
+        }}
+      >
+        <div className="d-flex align-items-center gap-3">
+          <div
+            className="rounded-3 d-flex align-items-center justify-content-center text-white shadow-sm"
+            style={{ width: 44, height: 44, background: '#1F5C3A', fontSize: '1.2rem' }}
+          >
+            <i className="bi bi-clipboard-check-fill"></i>
+          </div>
+          <div>
+            <div className="fw-bold text-dark" style={{ fontSize: '0.95rem' }}>
+              Campus Recruitment Drives & 1-Click Apply
+            </div>
+            <div className="text-muted" style={{ fontSize: '0.8rem' }}>
+              Live eligibility verification (CGPA, backlogs, branch) with 1-click student registration and Excel export.
+            </div>
+          </div>
+        </div>
+        <div>
+          <button
+            type="button"
+            className="btn btn-sm btn-primary d-inline-flex align-items-center gap-1"
+            onClick={() => navigate('/drives')}
+          >
+            <span>Explore Campus Drives</span>
+            <i className="bi bi-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
       {/* KPI cards */}
       <div className="row g-3 mb-4">
         {[

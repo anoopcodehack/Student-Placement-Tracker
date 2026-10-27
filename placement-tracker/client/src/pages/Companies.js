@@ -59,11 +59,16 @@ export default function Companies() {
           <h1 className="page-title">Companies</h1>
           <p className="page-sub">{companies.length} companies · {totalHired} total hires</p>
         </div>
-        {isAdmin && (
-          <Link to="/companies/add" className="btn btn-primary">
-            <i className="bi bi-plus-circle-fill me-2"></i>Add Company
+        <div className="d-flex align-items-center gap-2">
+          <Link to="/drives" className="btn btn-outline-success d-inline-flex align-items-center gap-1">
+            <i className="bi bi-clipboard-check-fill"></i> Campus Drives & Apply
           </Link>
-        )}
+          {isAdmin && (
+            <Link to="/companies/add" className="btn btn-primary d-inline-flex align-items-center gap-1">
+              <i className="bi bi-plus-circle-fill"></i> Add Company
+            </Link>
+          )}
+        </div>
       </div>
 
       {/* Filters */}
