@@ -253,7 +253,7 @@ export default function Interviews() {
 
       {/* Not a student — info box */}
       {!isStudent && (
-        <div className="mb-3 p-3" style={{ background: '#e6eada', borderRadius: 10, border: '1px solid #b8c8ae', fontSize: '0.85rem', color: '#153f28' }}>
+        <div className="mb-3 p-3" style={{ background: 'rgba(31, 92, 58, 0.08)', borderRadius: 10, border: '1px solid rgba(31, 92, 58, 0.2)', fontSize: '0.85rem', color: 'var(--text)' }}>
           <i className="bi bi-info-circle me-2"></i>
           Only placed students can share experiences. Sign up with your roll number to contribute!
         </div>

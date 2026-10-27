@@ -213,21 +213,21 @@ export default function Students() {
                       <td onClick={e=>e.stopPropagation()}>
                         <div className="d-flex align-items-center gap-2">
                           <div className="avatar" style={{
-                            width:36,height:36,fontSize:'0.72rem',
-                            background:s.isPlaced?'linear-gradient(135deg,#1f5c3a,#9fe6be)':'#d9e1d2',
-                            color:s.isPlaced?'#fff':'#64748b'
+                            width:36,height:36,fontSize:'0.75rem',fontWeight:700,
+                            background:s.isPlaced?'linear-gradient(135deg,#1f5c3a,#9fe6be)':'linear-gradient(135deg,#64748b,#94a3b8)',
+                            color:'#fff',boxShadow:'0 2px 5px rgba(0,0,0,0.08)'
                           }}>
                             {s.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase()}
                           </div>
                           <div>
-                            <div style={{fontWeight:600,fontSize:'0.875rem',color:'#1e293b',cursor:'pointer'}}
+                            <div className="fw-bold text-dark" style={{fontSize:'0.875rem',cursor:'pointer'}}
                               onClick={()=>navigate(`/students/${s._id}`)}>
                               {s.name}
                             </div>
-                            <div style={{fontSize:'0.72rem',color:'#94a3b8', display:'flex', alignItems:'center'}}>
-                              {s.email}
+                            <div className="text-muted d-flex align-items-center gap-1" style={{fontSize:'0.72rem'}}>
+                              <span>{s.email}</span>
                               {s.resume && (
-                                <span className="ms-2" title="Resume Uploaded" style={{color:'#dc2626'}}>
+                                <span title="Resume Verified" className="text-danger ms-1">
                                   <i className="bi bi-file-earmark-pdf-fill"></i>
                                 </span>
                               )}
@@ -235,28 +235,50 @@ export default function Students() {
                           </div>
                         </div>
                       </td>
-                      <td><code style={{fontSize:'0.78rem',color:'#475569',background:'#f8fafc',padding:'2px 6px',borderRadius:4}}>{s.rollNo}</code></td>
-                      <td><span className="badge badge-branch rounded-pill px-2">{s.branch}</span></td>
-                      <td style={{fontWeight:600,fontSize:'0.875rem'}}>{s.batch}</td>
+                      <td>
+                        <span className="badge bg-light text-dark border font-monospace" style={{fontSize:'0.78rem',fontWeight:600}}>
+                          {s.rollNo}
+                        </span>
+                      </td>
+                      <td><span className="badge bg-secondary-subtle text-secondary px-2 py-1">{s.branch}</span></td>
+                      <td className="fw-semibold text-muted" style={{fontSize:'0.85rem'}}>{s.batch}</td>
                       <td>
                         <span style={{fontWeight:800,color:cgpaCol(s.cgpa),fontSize:'0.9rem'}}>{s.cgpa}</span>
-                        <span style={{fontSize:'0.7rem',color:'#94a3b8'}}>/10</span>
+                        <span className="text-muted" style={{fontSize:'0.7rem'}}>/10</span>
                       </td>
                       <td>
                         <span style={{
-                          fontWeight:600,fontSize:'0.875rem',
+                          fontWeight:700,fontSize:'0.85rem',
                           color:s.backlogs>0?'#dc2626':'#059669'
                         }}>{s.backlogs ?? 0}</span>
                       </td>
                       <td>
-                        <span className={`badge rounded-pill px-2 py-1 ${s.isPlaced?'badge-placed':'badge-unplaced'}`} style={{fontSize:'0.68rem'}}>
-                          {s.isPlaced?'✓ Placed':'○ Unplaced'}
+                        <span
+                          className="d-inline-flex align-items-center gap-1 px-2 py-1 rounded-pill"
+                          style={{
+                            fontSize: '0.72rem',
+                            fontWeight: 600,
+                            background: s.isPlaced ? 'rgba(5, 150, 105, 0.1)' : 'rgba(220, 38, 38, 0.1)',
+                            color: s.isPlaced ? '#059669' : '#dc2626',
+                            border: `1px solid ${s.isPlaced ? 'rgba(5, 150, 105, 0.25)' : 'rgba(220, 38, 38, 0.25)'}`
+                          }}
+                        >
+                          <span
+                            style={{
+                              width: 6,
+                              height: 6,
+                              borderRadius: '50%',
+                              background: s.isPlaced ? '#059669' : '#dc2626',
+                              display: 'inline-block'
+                            }}
+                          />
+                          <span>{s.isPlaced ? 'Placed' : 'Unplaced'}</span>
                         </span>
                       </td>
                       <td>
                         {s.isPlaced && s.placementDetails?.package
-                          ? <span style={{fontWeight:800,color:'#1f5c3a',fontSize:'0.875rem'}}>₹{s.placementDetails.package} <span style={{fontSize:'0.7rem',color:'#94a3b8',fontWeight:400}}>LPA</span></span>
-                          : <span style={{color:'#cbd5e1'}}>—</span>}
+                          ? <span style={{fontWeight:800,color:'#1f5c3a',fontSize:'0.875rem'}}>₹{s.placementDetails.package} <span className="text-muted" style={{fontSize:'0.7rem',fontWeight:500}}>LPA</span></span>
+                          : <span className="text-muted opacity-50">—</span>}
                       </td>
                       <td onClick={e=>e.stopPropagation()}>
                         <div className="d-flex gap-1">

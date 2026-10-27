@@ -128,16 +128,18 @@ export default function Dashboard() {
       <div className="hero-banner mb-4">
         <div className="row align-items-center" style={{position:'relative',zIndex:1}}>
           <div className="col-md-6">
-            <div style={{fontSize:'0.72rem',color:'#64748b',textTransform:'uppercase',letterSpacing:'0.1em'}}>Placement Rate</div>
-            <div style={{fontFamily:'Syne,sans-serif',fontWeight:800,fontSize:'4rem',lineHeight:1,marginTop:4}}>
+            <div style={{fontSize:'0.75rem',color:'rgba(159, 230, 190, 0.9)',textTransform:'uppercase',letterSpacing:'0.1em',fontWeight:600}}>
+              <i className="bi bi-graph-up-arrow me-1"></i> Placement Rate
+            </div>
+            <div style={{fontFamily:'Syne,sans-serif',fontWeight:800,fontSize:'4rem',lineHeight:1,marginTop:4,letterSpacing:'-0.03em'}}>
               {overview?.placementRate}%
             </div>
-            <div style={{fontSize:'0.875rem',color:'#94a3b8',marginTop:8}}>
+            <div style={{fontSize:'0.9rem',color:'rgba(255,255,255,0.85)',marginTop:8}}>
               {overview?.placedStudents} of {overview?.totalStudents} students placed
             </div>
-            <div style={{marginTop:16,height:8,background:'rgba(255,255,255,0.1)',borderRadius:8,overflow:'hidden'}}>
+            <div style={{marginTop:16,height:8,background:'rgba(255,255,255,0.12)',borderRadius:8,overflow:'hidden'}}>
               <div style={{width:`${overview?.placementRate}%`,height:'100%',
-                background:'linear-gradient(90deg,#9fe6be,#d7e36f)',borderRadius:8,transition:'width 1s ease'}}/>
+                background:'linear-gradient(90deg,#9fe6be,#6fb58c)',borderRadius:8,transition:'width 1s ease'}}/>
             </div>
           </div>
           <div className="col-md-6 mt-3 mt-md-0">
@@ -149,9 +151,9 @@ export default function Dashboard() {
                 { label:'Total Offers', val:overview?.totalOffers },
               ].map((s,i)=>(
                 <div key={i} className="col-6">
-                  <div style={{background:'rgba(255,255,255,0.06)',borderRadius:10,padding:'0.75rem'}}>
-                    <div style={{fontFamily:'Syne,sans-serif',fontWeight:800,fontSize:'1.25rem'}}>{s.val}</div>
-                    <div style={{fontSize:'0.7rem',color:'#64748b',textTransform:'uppercase',letterSpacing:'0.06em'}}>{s.label}</div>
+                  <div style={{background:'rgba(255,255,255,0.08)',backdropFilter:'blur(8px)',border:'1px solid rgba(255,255,255,0.12)',borderRadius:12,padding:'0.85rem'}}>
+                    <div style={{fontFamily:'Syne,sans-serif',fontWeight:800,fontSize:'1.35rem',letterSpacing:'-0.02em'}}>{s.val}</div>
+                    <div style={{fontSize:'0.7rem',color:'rgba(255,255,255,0.7)',textTransform:'uppercase',letterSpacing:'0.06em',fontWeight:600,marginTop:2}}>{s.label}</div>
                   </div>
                 </div>
               ))}

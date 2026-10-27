@@ -85,7 +85,7 @@ export default function StudentDetail() {
               ].map((item,i)=>(
                 <div key={i} className="col-6">
                   <div className="metric-box">
-                    <div style={{fontWeight:700,fontSize:'0.85rem',color:'#1e293b'}}>{item.v}</div>
+                    <div className="fw-bold text-dark" style={{fontSize:'0.85rem'}}>{item.v}</div>
                     <div className="metric-lbl">{item.l}</div>
                   </div>
                 </div>
@@ -108,7 +108,7 @@ export default function StudentDetail() {
                 {student.skills.map((s, i) => (
                   <span key={i} style={{
                     fontSize: '0.75rem', padding: '4px 12px', borderRadius: 20,
-                    background: '#e6eada', color: '#1f5c3a', border: '1px solid #b8c8ae', fontWeight: 600
+                    background: 'rgba(31, 92, 58, 0.08)', color: '#1f5c3a', border: '1px solid rgba(31, 92, 58, 0.2)', fontWeight: 600
                   }}>{s}</span>
                 ))}
               </div>

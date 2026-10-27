@@ -118,7 +118,7 @@ export default function Companies() {
                         {logo ? <img src={logo} alt={`${c.name} logo`} style={{width:'100%',height:'100%',objectFit:'contain'}} /> : c.name.slice(0,2).toUpperCase()}
                       </div>
                       <div>
-                        <div style={{fontWeight:700,fontSize:'0.95rem',color:'#1e293b'}}>{c.name}</div>
+                        <div className="fw-bold text-dark" style={{fontSize:'1rem'}}>{c.name}</div>
                         <span style={{
                           fontSize:'0.65rem',fontWeight:600,padding:'2px 8px',borderRadius:20,
                           background:`${color}15`,color:color
