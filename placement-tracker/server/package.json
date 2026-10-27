@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "seed": "node seed/seed.js"
+    "seed": "node seed/seed.js",
+    "test": "node tests/fullFlowTest.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

@@ -65,6 +65,9 @@ const prepQuestionSchema = new mongoose.Schema({
 // Index for search & filter optimization
 prepQuestionSchema.index({ topic: 1, difficulty: 1 });
 prepQuestionSchema.index({ companies: 1 });
-prepQuestionSchema.index({ title: 'text', question: 'text', subTopic: 'text' });
+prepQuestionSchema.index(
+  { title: 'text', question: 'text', subTopic: 'text' },
+  { default_language: 'none', language_override: 'textSearchLanguage' }
+);
 
 module.exports = mongoose.model('PrepQuestion', prepQuestionSchema);
